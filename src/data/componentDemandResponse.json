@@ -1,0 +1,512 @@
+{
+  "success": true,
+  "message": "Component Category Demand Model dashboard fetched successfully",
+  "result": {
+    "metadata": {
+      "model_name": "component_category_demand",
+      "model_version": "v1.0.0",
+      "forecast_run_date": "2026-06-24",
+      "forecast_period": "2026-06-24 to 2026-09-21",
+      "granularity": "weekly",
+      "generated_timestamp": "2026-06-24T02:15:00",
+      "generated_timestamp_relative": "6h ago",
+      "confidence_level": "80%",
+      "forecast_horizons": [30, 60, 90],
+      "input_dataset_ref": "gold_component_demand_v20260624",
+      "dependent_model": "job_volume_prediction_v1.0.0",
+      "model_run_id": "RUN-CD-20260624-001"
+    },
+
+    "summary": {
+      "total_categories_forecasted": 6,
+      "total_units_forecast_30d": 12840,
+      "total_units_forecast_60d": 24990,
+      "total_units_forecast_90d": 36280,
+      "total_cost_forecast_30d_inr": 18420000.00,
+      "total_cost_forecast_60d_inr": 35760000.00,
+      "total_cost_forecast_90d_inr": 51880000.00,
+      "highest_demand_category": "Engine",
+      "highest_demand_category_units_30d": 4120,
+      "categories_with_stockout_risk": 2,
+      "mape_last_30d": 11.2,
+      "wape_last_30d": 9.8,
+      "forecast_accuracy_pct": 88.8,
+      "model_confidence_avg": 0.83,
+      "model_confidence_avg_pct": "83%",
+      "yoy_demand_growth_pct": 9.6,
+      "mom_demand_growth_pct": 3.2,
+      "total_branches_forecasted": 12,
+      "data_freshness": "2026-06-24T01:50:00",
+      "data_freshness_relative": "6h 10m ago"
+    },
+
+    "graph_data": {
+
+      "category_demand_trend_lines": {
+        "Engine": [
+          { "period_date": "2026-06-24", "predicted_qty": 412, "predicted_qty_p10": 360, "predicted_qty_p90": 464, "actual_qty": 398, "is_forecast": false },
+          { "period_date": "2026-07-01", "predicted_qty": 428, "predicted_qty_p10": 374, "predicted_qty_p90": 482, "actual_qty": null, "is_forecast": true },
+          { "period_date": "2026-07-08", "predicted_qty": 455, "predicted_qty_p10": 398, "predicted_qty_p90": 512, "actual_qty": null, "is_forecast": true },
+          { "period_date": "2026-07-15", "predicted_qty": 470, "predicted_qty_p10": 411, "predicted_qty_p90": 529, "actual_qty": null, "is_forecast": true },
+          { "period_date": "2026-07-22", "predicted_qty": 442, "predicted_qty_p10": 387, "predicted_qty_p90": 497, "actual_qty": null, "is_forecast": true }
+        ],
+        "Hydraulics": [
+          { "period_date": "2026-06-24", "predicted_qty": 318, "predicted_qty_p10": 278, "predicted_qty_p90": 358, "actual_qty": 305, "is_forecast": false },
+          { "period_date": "2026-07-01", "predicted_qty": 340, "predicted_qty_p10": 297, "predicted_qty_p90": 383, "actual_qty": null, "is_forecast": true },
+          { "period_date": "2026-07-08", "predicted_qty": 370, "predicted_qty_p10": 323, "predicted_qty_p90": 417, "actual_qty": null, "is_forecast": true },
+          { "period_date": "2026-07-15", "predicted_qty": 385, "predicted_qty_p10": 337, "predicted_qty_p90": 433, "actual_qty": null, "is_forecast": true },
+          { "period_date": "2026-07-22", "predicted_qty": 362, "predicted_qty_p10": 316, "predicted_qty_p90": 408, "actual_qty": null, "is_forecast": true }
+        ],
+        "Undercarriage": [
+          { "period_date": "2026-06-24", "predicted_qty": 248, "predicted_qty_p10": 216, "predicted_qty_p90": 280, "actual_qty": 261, "is_forecast": false },
+          { "period_date": "2026-07-01", "predicted_qty": 255, "predicted_qty_p10": 222, "predicted_qty_p90": 288, "actual_qty": null, "is_forecast": true },
+          { "period_date": "2026-07-08", "predicted_qty": 268, "predicted_qty_p10": 234, "predicted_qty_p90": 302, "actual_qty": null, "is_forecast": true }
+        ],
+        "Electrical": [
+          { "period_date": "2026-06-24", "predicted_qty": 190, "predicted_qty_p10": 166, "predicted_qty_p90": 214, "actual_qty": 184, "is_forecast": false },
+          { "period_date": "2026-07-01", "predicted_qty": 198, "predicted_qty_p10": 173, "predicted_qty_p90": 223, "actual_qty": null, "is_forecast": true }
+        ],
+        "Transmission": [
+          { "period_date": "2026-06-24", "predicted_qty": 145, "predicted_qty_p10": 126, "predicted_qty_p90": 164, "actual_qty": 139, "is_forecast": false },
+          { "period_date": "2026-07-01", "predicted_qty": 151, "predicted_qty_p10": 132, "predicted_qty_p90": 170, "actual_qty": null, "is_forecast": true }
+        ],
+        "Cooling": [
+          { "period_date": "2026-06-24", "predicted_qty": 112, "predicted_qty_p10": 97, "predicted_qty_p90": 127, "actual_qty": 108, "is_forecast": false },
+          { "period_date": "2026-07-01", "predicted_qty": 118, "predicted_qty_p10": 103, "predicted_qty_p90": 133, "actual_qty": null, "is_forecast": true }
+        ]
+      },
+
+      "category_demand_bar_30d": [
+        { "label": "Engine", "value": 4120, "cost_inr": 5150000.00, "pct_of_total": 32.1, "yoy_growth_pct": 11.2, "stockout_risk_score": 0.12, "stockout_risk_pct": "12%" },
+        { "label": "Hydraulics", "value": 3240, "cost_inr": 4860000.00, "pct_of_total": 25.2, "yoy_growth_pct": 14.8, "stockout_risk_score": 0.28, "stockout_risk_pct": "28%" },
+        { "label": "Undercarriage", "value": 2210, "cost_inr": 3870500.00, "pct_of_total": 17.2, "yoy_growth_pct": 8.4, "stockout_risk_score": 0.09, "stockout_risk_pct": "9%" },
+        { "label": "Electrical", "value": 1680, "cost_inr": 1680000.00, "pct_of_total": 13.1, "yoy_growth_pct": 6.1, "stockout_risk_score": 0.06, "stockout_risk_pct": "6%" },
+        { "label": "Transmission", "value": 980, "cost_inr": 1470000.00, "pct_of_total": 7.6, "yoy_growth_pct": 5.2, "stockout_risk_score": 0.31, "stockout_risk_pct": "31%" },
+        { "label": "Cooling", "value": 610, "cost_inr": 1189500.00, "pct_of_total": 4.8, "yoy_growth_pct": 3.8, "stockout_risk_score": 0.08, "stockout_risk_pct": "8%" }
+      ],
+
+      "branch_x_category_heatmap": [
+        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore", "category": "Engine", "predicted_qty_30d": 820, "intensity": "HIGH" },
+        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore", "category": "Hydraulics", "predicted_qty_30d": 640, "intensity": "HIGH" },
+        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore", "category": "Undercarriage", "predicted_qty_30d": 440, "intensity": "MEDIUM" },
+        { "branch_id": "BR-CHN-02", "branch_name": "Chennai", "category": "Engine", "predicted_qty_30d": 710, "intensity": "HIGH" },
+        { "branch_id": "BR-CHN-02", "branch_name": "Chennai", "category": "Hydraulics", "predicted_qty_30d": 580, "intensity": "HIGH" },
+        { "branch_id": "BR-HYD-03", "branch_name": "Hyderabad", "category": "Engine", "predicted_qty_30d": 620, "intensity": "MEDIUM" },
+        { "branch_id": "BR-HYD-03", "branch_name": "Hyderabad", "category": "Hydraulics", "predicted_qty_30d": 510, "intensity": "MEDIUM" },
+        { "branch_id": "BR-DEL-04", "branch_name": "Delhi", "category": "Engine", "predicted_qty_30d": 490, "intensity": "MEDIUM" },
+        { "branch_id": "BR-DEL-04", "branch_name": "Delhi", "category": "Undercarriage", "predicted_qty_30d": 380, "intensity": "MEDIUM" },
+        { "branch_id": "BR-MUM-05", "branch_name": "Mumbai", "category": "Engine", "predicted_qty_30d": 420, "intensity": "MEDIUM" },
+        { "branch_id": "BR-KOL-07", "branch_name": "Kolkata", "category": "Engine", "predicted_qty_30d": 310, "intensity": "LOW" },
+        { "branch_id": "BR-JAI-12", "branch_name": "Jaipur", "category": "Transmission", "predicted_qty_30d": 180, "intensity": "HIGH" }
+      ],
+
+      "forecast_vs_actual_by_category": [
+        { "component_category": "Engine", "actual_qty": 398, "predicted_qty": 412, "mape": 3.5, "bias": 14 },
+        { "component_category": "Hydraulics", "actual_qty": 305, "predicted_qty": 318, "mape": 4.3, "bias": 13 },
+        { "component_category": "Undercarriage", "actual_qty": 261, "predicted_qty": 248, "mape": 5.0, "bias": -13 },
+        { "component_category": "Electrical", "actual_qty": 184, "predicted_qty": 190, "mape": 3.3, "bias": 6 },
+        { "component_category": "Transmission", "actual_qty": 139, "predicted_qty": 145, "mape": 4.3, "bias": 6 },
+        { "component_category": "Cooling", "actual_qty": 108, "predicted_qty": 112, "mape": 3.7, "bias": 4 }
+      ],
+
+      "machine_type_to_category_sankey": [
+        { "from": "Excavator", "to": "Hydraulics", "value": 1280 },
+        { "from": "Excavator", "to": "Engine", "value": 960 },
+        { "from": "Excavator", "to": "Undercarriage", "value": 840 },
+        { "from": "Motor Grader", "to": "Engine", "value": 620 },
+        { "from": "Motor Grader", "to": "Transmission", "value": 420 },
+        { "from": "Bulldozer", "to": "Undercarriage", "value": 760 },
+        { "from": "Bulldozer", "to": "Engine", "value": 480 },
+        { "from": "Wheel Loader", "to": "Engine", "value": 380 },
+        { "from": "Wheel Loader", "to": "Hydraulics", "value": 290 },
+        { "from": "Backhoe Loader", "to": "Electrical", "value": 310 }
+      ],
+
+      "cost_impact_stacked_bar": [
+        { "period_date": "2026-06-24", "Engine": 515000, "Hydraulics": 486000, "Undercarriage": 387000, "Electrical": 168000, "Transmission": 147000, "Cooling": 118000 },
+        { "period_date": "2026-07-01", "Engine": 535000, "Hydraulics": 510000, "Undercarriage": 399000, "Electrical": 172000, "Transmission": 151000, "Cooling": 122000 },
+        { "period_date": "2026-07-08", "Engine": 569000, "Hydraulics": 555000, "Undercarriage": 420000, "Electrical": 185000, "Transmission": 158000, "Cooling": 129000 },
+        { "period_date": "2026-07-15", "Engine": 588000, "Hydraulics": 578000, "Undercarriage": 430000, "Electrical": 189000, "Transmission": 161000, "Cooling": 126000 }
+      ]
+    },
+
+    "forecast_table": {
+      "Engine": [
+        {
+          "prediction_id": "PRED-CD-20260624-BLR-ENG-001",
+          "branch_id": "BR-BLR-01",
+          "branch_name": "Bangalore Branch",
+          "geography_zone": "South",
+          "component_category": "Engine",
+          "machine_type": "Excavator",
+          "customer_segment": "Enterprise",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_qty": 820.0,
+          "predicted_qty_p10": 717.0,
+          "predicted_qty_p90": 923.0,
+          "prediction_confidence": 0.87,
+          "prediction_confidence_pct": "87%",
+          "predicted_cost_inr": 1025000.00,
+          "stockout_risk_score": 0.11,
+          "stockout_risk_pct": "11%",
+          "recommended_reorder_qty": 900,
+          "avg_unit_cost": 1250.00,
+          "model_name": "component_category_demand",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_component_demand_v20260624",
+          "prediction_timestamp": "2026-06-24T02:15:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_create_po": true,
+            "can_export": true
+          }
+        }
+      ],
+      "Hydraulics": [
+        {
+          "prediction_id": "PRED-CD-20260624-BLR-HYD-001",
+          "branch_id": "BR-BLR-01",
+          "branch_name": "Bangalore Branch",
+          "geography_zone": "South",
+          "component_category": "Hydraulics",
+          "machine_type": "Excavator",
+          "customer_segment": "Enterprise",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_qty": 640.0,
+          "predicted_qty_p10": 560.0,
+          "predicted_qty_p90": 720.0,
+          "prediction_confidence": 0.81,
+          "prediction_confidence_pct": "81%",
+          "predicted_cost_inr": 2688000.00,
+          "stockout_risk_score": 0.28,
+          "stockout_risk_pct": "28%",
+          "recommended_reorder_qty": 720,
+          "avg_unit_cost": 4200.00,
+          "model_name": "component_category_demand",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_component_demand_v20260624",
+          "prediction_timestamp": "2026-06-24T02:15:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_create_po": true,
+            "can_export": true
+          }
+        }
+      ],
+      "Undercarriage": [
+        {
+          "prediction_id": "PRED-CD-20260624-BLR-UND-001",
+          "branch_id": "BR-BLR-01",
+          "branch_name": "Bangalore Branch",
+          "geography_zone": "South",
+          "component_category": "Undercarriage",
+          "machine_type": "Bulldozer",
+          "customer_segment": "Fleet",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_qty": 440.0,
+          "predicted_qty_p10": 384.0,
+          "predicted_qty_p90": 496.0,
+          "prediction_confidence": 0.84,
+          "prediction_confidence_pct": "84%",
+          "predicted_cost_inr": 16940000.00,
+          "stockout_risk_score": 0.09,
+          "stockout_risk_pct": "9%",
+          "recommended_reorder_qty": 490,
+          "avg_unit_cost": 38500.00,
+          "model_name": "component_category_demand",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_component_demand_v20260624",
+          "prediction_timestamp": "2026-06-24T02:15:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_create_po": true,
+            "can_export": true
+          }
+        }
+      ],
+      "Electrical": [
+        {
+          "prediction_id": "PRED-CD-20260624-DEL-ELC-001",
+          "branch_id": "BR-DEL-04",
+          "branch_name": "Delhi Branch",
+          "geography_zone": "North",
+          "component_category": "Electrical",
+          "machine_type": "Backhoe Loader",
+          "customer_segment": "Government",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_qty": 340.0,
+          "predicted_qty_p10": 297.0,
+          "predicted_qty_p90": 383.0,
+          "prediction_confidence": 0.88,
+          "prediction_confidence_pct": "88%",
+          "predicted_cost_inr": 210800.00,
+          "stockout_risk_score": 0.06,
+          "stockout_risk_pct": "6%",
+          "recommended_reorder_qty": 380,
+          "avg_unit_cost": 620.00,
+          "model_name": "component_category_demand",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_component_demand_v20260624",
+          "prediction_timestamp": "2026-06-24T02:15:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_create_po": true,
+            "can_export": true
+          }
+        }
+      ],
+      "Transmission": [
+        {
+          "prediction_id": "PRED-CD-20260624-JAI-TRN-001",
+          "branch_id": "BR-JAI-12",
+          "branch_name": "Jaipur Branch",
+          "geography_zone": "North",
+          "component_category": "Transmission",
+          "machine_type": "Motor Grader",
+          "customer_segment": "Fleet",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_qty": 180.0,
+          "predicted_qty_p10": 157.0,
+          "predicted_qty_p90": 203.0,
+          "prediction_confidence": 0.79,
+          "prediction_confidence_pct": "79%",
+          "predicted_cost_inr": 378000.00,
+          "stockout_risk_score": 0.31,
+          "stockout_risk_pct": "31%",
+          "recommended_reorder_qty": 220,
+          "avg_unit_cost": 2100.00,
+          "model_name": "component_category_demand",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_component_demand_v20260624",
+          "prediction_timestamp": "2026-06-24T02:15:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_create_po": true,
+            "can_export": true
+          }
+        },
+        {
+          "prediction_id": "PRED-CD-20260624-MUM-TRN-001",
+          "branch_id": "BR-MUM-05",
+          "branch_name": "Mumbai Branch",
+          "geography_zone": "West",
+          "component_category": "Transmission",
+          "machine_type": "Motor Grader",
+          "customer_segment": "Enterprise",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_qty": 165.0,
+          "predicted_qty_p10": 144.0,
+          "predicted_qty_p90": 186.0,
+          "prediction_confidence": 0.78,
+          "prediction_confidence_pct": "78%",
+          "predicted_cost_inr": 346500.00,
+          "stockout_risk_score": 0.29,
+          "stockout_risk_pct": "29%",
+          "recommended_reorder_qty": 200,
+          "avg_unit_cost": 2100.00,
+          "model_name": "component_category_demand",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_component_demand_v20260624",
+          "prediction_timestamp": "2026-06-24T02:15:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_create_po": true,
+            "can_export": true
+          }
+        }
+      ],
+      "Cooling": [
+        {
+          "prediction_id": "PRED-CD-20260624-KOL-COL-001",
+          "branch_id": "BR-KOL-07",
+          "branch_name": "Kolkata Branch",
+          "geography_zone": "East",
+          "component_category": "Cooling",
+          "machine_type": "Excavator",
+          "customer_segment": "Retail",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_qty": 110.0,
+          "predicted_qty_p10": 96.0,
+          "predicted_qty_p90": 124.0,
+          "prediction_confidence": 0.85,
+          "prediction_confidence_pct": "85%",
+          "predicted_cost_inr": 203500.00,
+          "stockout_risk_score": 0.08,
+          "stockout_risk_pct": "8%",
+          "recommended_reorder_qty": 130,
+          "avg_unit_cost": 1850.00,
+          "model_name": "component_category_demand",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_component_demand_v20260624",
+          "prediction_timestamp": "2026-06-24T02:15:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_create_po": false,
+            "can_export": true
+          }
+        },
+        {
+          "prediction_id": "PRED-CD-20260624-PUN-COL-001",
+          "branch_id": "BR-PUN-06",
+          "branch_name": "Pune Branch",
+          "geography_zone": "West",
+          "component_category": "Cooling",
+          "machine_type": "Wheel Loader",
+          "customer_segment": "Fleet",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_qty": 98.0,
+          "predicted_qty_p10": 85.0,
+          "predicted_qty_p90": 111.0,
+          "prediction_confidence": 0.86,
+          "prediction_confidence_pct": "86%",
+          "predicted_cost_inr": 181300.00,
+          "stockout_risk_score": 0.07,
+          "stockout_risk_pct": "7%",
+          "recommended_reorder_qty": 115,
+          "avg_unit_cost": 1850.00,
+          "model_name": "component_category_demand",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_component_demand_v20260624",
+          "prediction_timestamp": "2026-06-24T02:15:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_create_po": false,
+            "can_export": true
+          }
+        }
+      ]
+    },
+
+    "stockout_risk_alerts": [
+      {
+        "alert_id": "ALT-CD-001",
+        "component_category": "Transmission",
+        "branch_id": "BR-JAI-12",
+        "branch_name": "Jaipur Branch",
+        "stockout_risk_score": 0.31,
+        "stockout_risk_pct": "31%",
+        "severity": "HIGH",
+        "message": "Transmission parts at 31% stockout risk for July 2026. Current reorder level insufficient.",
+        "recommended_reorder_qty": 220,
+        "avg_lead_time_days": 7,
+        "generated_at": "2026-06-24T02:20:00",
+        "generated_at_relative": "6h ago"
+      },
+      {
+        "alert_id": "ALT-CD-002",
+        "component_category": "Hydraulics",
+        "branch_id": "BR-BLR-01",
+        "branch_name": "Bangalore Branch",
+        "stockout_risk_score": 0.28,
+        "stockout_risk_pct": "28%",
+        "severity": "HIGH",
+        "message": "Hydraulics seal kits at 28% stockout risk driven by monsoon-season breakdown surge.",
+        "recommended_reorder_qty": 720,
+        "avg_lead_time_days": 10,
+        "generated_at": "2026-06-24T02:20:00",
+        "generated_at_relative": "6h ago"
+      }
+    ],
+
+    "model_performance": {
+      "mape": 11.2,
+      "wape": 9.8,
+      "rmse": 18.6,
+      "forecast_bias": 1.4,
+      "accuracy_pct": 88.8,
+      "accuracy_pct_str": "88.8%",
+      "evaluation_period_start": "2026-05-01",
+      "evaluation_period_end": "2026-06-23",
+      "drift_score": 0.06,
+      "retrain_triggered_flag": false,
+      "retrain_trigger_reason": null,
+      "evaluated_at": "2026-06-24T01:30:00",
+      "evaluated_at_relative": "6h 30m ago",
+      "mape_by_category": {
+        "Engine": 7.2,
+        "Hydraulics": 9.4,
+        "Undercarriage": 11.8,
+        "Electrical": 6.9,
+        "Transmission": 14.2,
+        "Cooling": 8.1
+      }
+    },
+
+    "filter_definitions": {
+      "component_category_options": [
+        { "value": "ALL", "label": "All Categories" },
+        { "value": "Engine", "label": "Engine" },
+        { "value": "Hydraulics", "label": "Hydraulics" },
+        { "value": "Undercarriage", "label": "Undercarriage" },
+        { "value": "Electrical", "label": "Electrical" },
+        { "value": "Transmission", "label": "Transmission" },
+        { "value": "Cooling", "label": "Cooling System" }
+      ],
+      "branch_options": [
+        { "value": "ALL", "label": "All Branches" },
+        { "value": "BR-BLR-01", "label": "Bangalore Branch" },
+        { "value": "BR-CHN-02", "label": "Chennai Branch" },
+        { "value": "BR-HYD-03", "label": "Hyderabad Branch" }
+      ],
+      "machine_type_options": [
+        { "value": "ALL", "label": "All Machine Types" },
+        { "value": "Excavator", "label": "Excavator" },
+        { "value": "Motor Grader", "label": "Motor Grader" },
+        { "value": "Bulldozer", "label": "Bulldozer" }
+      ],
+      "horizon_options": [
+        { "value": 30, "label": "30 Days" },
+        { "value": 60, "label": "60 Days" },
+        { "value": 90, "label": "90 Days" }
+      ],
+      "stockout_risk_options": [
+        { "value": "ALL", "label": "All" },
+        { "value": "HIGH", "label": "High Risk (>25%)" },
+        { "value": "MEDIUM", "label": "Medium Risk (10–25%)" },
+        { "value": "LOW", "label": "Low Risk (<10%)" }
+      ]
+    },
+
+    "applied_filters": {
+      "component_category": "ALL",
+      "branch_id": "ALL",
+      "machine_type": "ALL",
+      "forecast_horizon_days": 30,
+      "stockout_risk": "ALL",
+      "date_range": "next_30_days"
+    },
+
+    "pagination": {
+      "total": 72,
+      "page": 1,
+      "page_size": 20,
+      "total_pages": 4,
+      "has_next": true,
+      "has_prev": false
+    }
+  }
+}

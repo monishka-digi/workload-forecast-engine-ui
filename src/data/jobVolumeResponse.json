@@ -1,0 +1,520 @@
+{
+  "success": true,
+  "message": "Job Volume Prediction Model dashboard fetched successfully",
+  "result": {
+    "metadata": {
+      "model_name": "job_volume_prediction",
+      "model_version": "v1.0.0",
+      "forecast_run_date": "2026-06-24",
+      "forecast_period": "2026-06-24 to 2026-09-21",
+      "granularity": "weekly",
+      "generated_timestamp": "2026-06-24T02:00:00",
+      "generated_timestamp_relative": "6h ago",
+      "confidence_level": "80%",
+      "forecast_horizons": [30, 60, 90],
+      "input_dataset_ref": "gold_job_volume_v20260624",
+      "model_run_id": "RUN-JV-20260624-001"
+    },
+
+    "summary": {
+      "total_predicted_jobs_30d": 4820,
+      "total_predicted_jobs_60d": 9340,
+      "total_predicted_jobs_90d": 13560,
+      "avg_daily_jobs_30d": 160.7,
+      "avg_daily_jobs_60d": 155.7,
+      "avg_daily_jobs_90d": 150.7,
+      "total_branches_forecasted": 12,
+      "branches_at_high_load": 3,
+      "branches_at_critical_load": 1,
+      "mape_last_30d": 8.4,
+      "wape_last_30d": 7.2,
+      "forecast_accuracy_pct": 91.6,
+      "model_confidence_avg": 0.87,
+      "model_confidence_avg_pct": "87%",
+      "peak_demand_week": "2026-07-14",
+      "peak_demand_week_jobs": 1340,
+      "yoy_growth_pct": 12.4,
+      "mom_growth_pct": 4.8,
+      "jobs_vs_capacity_ratio": 0.82,
+      "total_amc_due_30d": 348,
+      "monsoon_impact_flag": true,
+      "quarter_end_flag": false,
+      "capacity_breach_branches": 1,
+      "data_freshness": "2026-06-24T01:45:00",
+      "data_freshness_relative": "6h 15m ago"
+    },
+
+    "graph_data": {
+
+      "forecast_trend_line": [
+        { "period_date": "2026-06-24", "predicted_job_count": 158, "predicted_job_count_p10": 138, "predicted_job_count_p90": 178, "actual_job_count": 152, "is_forecast": false },
+        { "period_date": "2026-07-01", "predicted_job_count": 162, "predicted_job_count_p10": 141, "predicted_job_count_p90": 183, "actual_job_count": 165, "is_forecast": false },
+        { "period_date": "2026-07-08", "predicted_job_count": 171, "predicted_job_count_p10": 149, "predicted_job_count_p90": 193, "actual_job_count": null, "is_forecast": true },
+        { "period_date": "2026-07-15", "predicted_job_count": 188, "predicted_job_count_p10": 164, "predicted_job_count_p90": 212, "actual_job_count": null, "is_forecast": true },
+        { "period_date": "2026-07-22", "predicted_job_count": 195, "predicted_job_count_p10": 170, "predicted_job_count_p90": 220, "actual_job_count": null, "is_forecast": true },
+        { "period_date": "2026-07-29", "predicted_job_count": 180, "predicted_job_count_p10": 157, "predicted_job_count_p90": 203, "actual_job_count": null, "is_forecast": true },
+        { "period_date": "2026-08-05", "predicted_job_count": 175, "predicted_job_count_p10": 153, "predicted_job_count_p90": 197, "actual_job_count": null, "is_forecast": true },
+        { "period_date": "2026-08-12", "predicted_job_count": 168, "predicted_job_count_p10": 147, "predicted_job_count_p90": 189, "actual_job_count": null, "is_forecast": true },
+        { "period_date": "2026-08-19", "predicted_job_count": 172, "predicted_job_count_p10": 150, "predicted_job_count_p90": 194, "actual_job_count": null, "is_forecast": true },
+        { "period_date": "2026-08-26", "predicted_job_count": 165, "predicted_job_count_p10": 144, "predicted_job_count_p90": 186, "actual_job_count": null, "is_forecast": true },
+        { "period_date": "2026-09-02", "predicted_job_count": 159, "predicted_job_count_p10": 139, "predicted_job_count_p90": 179, "actual_job_count": null, "is_forecast": true },
+        { "period_date": "2026-09-09", "predicted_job_count": 154, "predicted_job_count_p10": 134, "predicted_job_count_p90": 174, "actual_job_count": null, "is_forecast": true },
+        { "period_date": "2026-09-16", "predicted_job_count": 150, "predicted_job_count_p10": 131, "predicted_job_count_p90": 169, "actual_job_count": null, "is_forecast": true }
+      ],
+
+      "jobs_by_branch_bar": [
+        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore Branch", "predicted_jobs_30d": 680, "predicted_jobs_60d": 1320, "predicted_jobs_90d": 1910, "capacity_rating": 750, "load_pct": 90.7 },
+        { "branch_id": "BR-CHN-02", "branch_name": "Chennai Branch", "predicted_jobs_30d": 590, "predicted_jobs_60d": 1140, "predicted_jobs_90d": 1650, "capacity_rating": 700, "load_pct": 84.3 },
+        { "branch_id": "BR-HYD-03", "branch_name": "Hyderabad Branch", "predicted_jobs_30d": 510, "predicted_jobs_60d": 980, "predicted_jobs_90d": 1420, "capacity_rating": 500, "load_pct": 102.0 },
+        { "branch_id": "BR-DEL-04", "branch_name": "Delhi Branch", "predicted_jobs_30d": 480, "predicted_jobs_60d": 930, "predicted_jobs_90d": 1340, "capacity_rating": 600, "load_pct": 80.0 },
+        { "branch_id": "BR-MUM-05", "branch_name": "Mumbai Branch", "predicted_jobs_30d": 440, "predicted_jobs_60d": 850, "predicted_jobs_90d": 1230, "capacity_rating": 550, "load_pct": 80.0 },
+        { "branch_id": "BR-PUN-06", "branch_name": "Pune Branch", "predicted_jobs_30d": 380, "predicted_jobs_60d": 740, "predicted_jobs_90d": 1070, "capacity_rating": 450, "load_pct": 84.4 },
+        { "branch_id": "BR-KOL-07", "branch_name": "Kolkata Branch", "predicted_jobs_30d": 350, "predicted_jobs_60d": 680, "predicted_jobs_90d": 980, "capacity_rating": 420, "load_pct": 83.3 },
+        { "branch_id": "BR-AHM-08", "branch_name": "Ahmedabad Branch", "predicted_jobs_30d": 320, "predicted_jobs_60d": 620, "predicted_jobs_90d": 900, "capacity_rating": 400, "load_pct": 80.0 },
+        { "branch_id": "BR-LKN-09", "branch_name": "Lucknow Branch", "predicted_jobs_30d": 290, "predicted_jobs_60d": 560, "predicted_jobs_90d": 810, "capacity_rating": 350, "load_pct": 82.9 },
+        { "branch_id": "BR-NAG-10", "branch_name": "Nagpur Branch", "predicted_jobs_30d": 260, "predicted_jobs_60d": 500, "predicted_jobs_90d": 730, "capacity_rating": 320, "load_pct": 81.3 },
+        { "branch_id": "BR-COI-11", "branch_name": "Coimbatore Branch", "predicted_jobs_30d": 240, "predicted_jobs_60d": 460, "predicted_jobs_90d": 670, "capacity_rating": 300, "load_pct": 80.0 },
+        { "branch_id": "BR-JAI-12", "branch_name": "Jaipur Branch", "predicted_jobs_30d": 280, "predicted_jobs_60d": 560, "predicted_jobs_90d": 810, "capacity_rating": 360, "load_pct": 77.8 }
+      ],
+
+      "job_type_distribution_donut": [
+        { "label": "Breakdown", "value": 1640, "pct": 34.0 },
+        { "label": "PM", "value": 1200, "pct": 24.9 },
+        { "label": "AMC", "value": 984, "pct": 20.4 },
+        { "label": "Overhaul", "value": 530, "pct": 11.0 },
+        { "label": "Warranty", "value": 290, "pct": 6.0 },
+        { "label": "PDI", "value": 176, "pct": 3.7 }
+      ],
+
+      "machine_type_demand_bar": [
+        { "label": "Excavator", "value": 1930, "pct": 40.0 },
+        { "label": "Motor Grader", "value": 868, "pct": 18.0 },
+        { "label": "Bulldozer", "value": 675, "pct": 14.0 },
+        { "label": "Wheel Loader", "value": 530, "pct": 11.0 },
+        { "label": "Backhoe Loader", "value": 434, "pct": 9.0 },
+        { "label": "Motor Scraper", "value": 290, "pct": 6.0 },
+        { "label": "Others", "value": 93, "pct": 2.0 }
+      ],
+
+      "geography_heatmap": [
+        { "region": "South", "branch_count": 3, "total_predicted_jobs_30d": 1780, "avg_load_pct": 92.3, "intensity": "HIGH" },
+        { "region": "North", "branch_count": 3, "total_predicted_jobs_30d": 1050, "avg_load_pct": 80.6, "intensity": "MEDIUM" },
+        { "region": "West", "branch_count": 3, "total_predicted_jobs_30d": 1140, "avg_load_pct": 81.4, "intensity": "MEDIUM" },
+        { "region": "East", "branch_count": 3, "total_predicted_jobs_30d": 850, "avg_load_pct": 78.1, "intensity": "LOW" }
+      ],
+
+      "forecast_vs_actual_accuracy": [
+        { "period_date": "2026-05-01", "actual_job_count": 148, "predicted_job_count": 152, "abs_error": 4, "pct_error": 2.7 },
+        { "period_date": "2026-05-08", "actual_job_count": 162, "predicted_job_count": 158, "abs_error": 4, "pct_error": 2.5 },
+        { "period_date": "2026-05-15", "actual_job_count": 170, "predicted_job_count": 181, "abs_error": 11, "pct_error": 6.5 },
+        { "period_date": "2026-05-22", "actual_job_count": 155, "predicted_job_count": 149, "abs_error": 6, "pct_error": 3.9 },
+        { "period_date": "2026-05-29", "actual_job_count": 142, "predicted_job_count": 138, "abs_error": 4, "pct_error": 2.8 },
+        { "period_date": "2026-06-05", "actual_job_count": 159, "predicted_job_count": 163, "abs_error": 4, "pct_error": 2.5 },
+        { "period_date": "2026-06-12", "actual_job_count": 165, "predicted_job_count": 162, "abs_error": 3, "pct_error": 1.8 }
+      ],
+
+      "amc_demand_signal_line": [
+        { "period_date": "2026-06-24", "amc_due_count_30d": 348, "predicted_job_contribution": 71 },
+        { "period_date": "2026-07-01", "amc_due_count_30d": 362, "predicted_job_contribution": 74 },
+        { "period_date": "2026-07-08", "amc_due_count_30d": 410, "predicted_job_contribution": 84 },
+        { "period_date": "2026-07-15", "amc_due_count_30d": 385, "predicted_job_contribution": 79 },
+        { "period_date": "2026-07-22", "amc_due_count_30d": 371, "predicted_job_contribution": 76 },
+        { "period_date": "2026-07-29", "amc_due_count_30d": 290, "predicted_job_contribution": 59 },
+        { "period_date": "2026-08-05", "amc_due_count_30d": 310, "predicted_job_contribution": 63 }
+      ],
+
+      "customer_segment_stacked_bar": [
+        { "period_date": "2026-06-24", "Enterprise": 63, "Fleet": 44, "Government": 32, "Retail": 19 },
+        { "period_date": "2026-07-01", "Enterprise": 65, "Fleet": 46, "Government": 33, "Retail": 18 },
+        { "period_date": "2026-07-08", "Enterprise": 71, "Fleet": 50, "Government": 37, "Retail": 23 },
+        { "period_date": "2026-07-15", "Enterprise": 78, "Fleet": 55, "Government": 40, "Retail": 15 },
+        { "period_date": "2026-07-22", "Enterprise": 80, "Fleet": 57, "Government": 38, "Retail": 20 }
+      ],
+
+      "monsoon_impact_overlay": [
+        { "period_date": "2026-06-24", "is_monsoon_season": 1, "rainfall_mm_7d_avg": 34.2, "predicted_job_count": 162, "baseline_without_monsoon": 148 },
+        { "period_date": "2026-07-01", "is_monsoon_season": 1, "rainfall_mm_7d_avg": 48.6, "predicted_job_count": 171, "baseline_without_monsoon": 150 },
+        { "period_date": "2026-07-08", "is_monsoon_season": 1, "rainfall_mm_7d_avg": 62.1, "predicted_job_count": 188, "baseline_without_monsoon": 155 },
+        { "period_date": "2026-07-15", "is_monsoon_season": 1, "rainfall_mm_7d_avg": 71.4, "predicted_job_count": 195, "baseline_without_monsoon": 158 },
+        { "period_date": "2026-07-22", "is_monsoon_season": 1, "rainfall_mm_7d_avg": 58.9, "predicted_job_count": 180, "baseline_without_monsoon": 154 }
+      ],
+
+      "horizon_comparison_bar": [
+        { "label": "30-Day Forecast", "total_jobs": 4820, "avg_confidence": 0.89, "avg_confidence_pct": "89%", "mape": 8.4 },
+        { "label": "60-Day Forecast", "total_jobs": 9340, "avg_confidence": 0.84, "avg_confidence_pct": "84%", "mape": 10.1 },
+        { "label": "90-Day Forecast", "total_jobs": 13560, "avg_confidence": 0.79, "avg_confidence_pct": "79%", "mape": 12.7 }
+      ]
+    },
+
+    "forecast_table": {
+      "CRITICAL": [
+        {
+          "prediction_id": "PRED-JV-20260624-HYD-001",
+          "branch_id": "BR-HYD-03",
+          "branch_name": "Hyderabad Branch",
+          "geography_zone": "South",
+          "machine_type": "Excavator",
+          "customer_segment": "Enterprise",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 174.0,
+          "predicted_job_count_p10": 152.0,
+          "predicted_job_count_p90": 196.0,
+          "prediction_confidence": 0.81,
+          "prediction_confidence_pct": "81%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_job_volume_v20260624",
+          "prediction_timestamp": "2026-06-24T02:00:00",
+          "prediction_timestamp_relative": "6h ago",
+          "branch_capacity_rating": 170,
+          "load_status": "CRITICAL",
+          "load_pct": 102.4,
+          "capacity_breach_flag": true,
+          "is_monsoon_season": true,
+          "amc_due_count_30d": 62,
+          "repeat_breakdown_rate_30d": 0.18,
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_trigger_alert": true,
+            "can_export": true
+          }
+        }
+      ],
+      "HIGH": [
+        {
+          "prediction_id": "PRED-JV-20260624-BLR-001",
+          "branch_id": "BR-BLR-01",
+          "branch_name": "Bangalore Branch",
+          "geography_zone": "South",
+          "machine_type": "Excavator",
+          "customer_segment": "Enterprise",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 228.0,
+          "predicted_job_count_p10": 199.0,
+          "predicted_job_count_p90": 257.0,
+          "prediction_confidence": 0.88,
+          "prediction_confidence_pct": "88%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_job_volume_v20260624",
+          "prediction_timestamp": "2026-06-24T02:00:00",
+          "prediction_timestamp_relative": "6h ago",
+          "branch_capacity_rating": 250,
+          "load_status": "HIGH",
+          "load_pct": 91.2,
+          "capacity_breach_flag": false,
+          "is_monsoon_season": true,
+          "amc_due_count_30d": 84,
+          "repeat_breakdown_rate_30d": 0.14,
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_trigger_alert": true,
+            "can_export": true
+          }
+        },
+        {
+          "prediction_id": "PRED-JV-20260624-CHN-001",
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai Branch",
+          "geography_zone": "South",
+          "machine_type": "Motor Grader",
+          "customer_segment": "Government",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 201.0,
+          "predicted_job_count_p10": 175.0,
+          "predicted_job_count_p90": 227.0,
+          "prediction_confidence": 0.85,
+          "prediction_confidence_pct": "85%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_job_volume_v20260624",
+          "prediction_timestamp": "2026-06-24T02:00:00",
+          "prediction_timestamp_relative": "6h ago",
+          "branch_capacity_rating": 230,
+          "load_status": "HIGH",
+          "load_pct": 87.4,
+          "capacity_breach_flag": false,
+          "is_monsoon_season": true,
+          "amc_due_count_30d": 71,
+          "repeat_breakdown_rate_30d": 0.12,
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_trigger_alert": true,
+            "can_export": true
+          }
+        }
+      ],
+      "MEDIUM": [
+        {
+          "prediction_id": "PRED-JV-20260624-DEL-001",
+          "branch_id": "BR-DEL-04",
+          "branch_name": "Delhi Branch",
+          "geography_zone": "North",
+          "machine_type": "Bulldozer",
+          "customer_segment": "Fleet",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 160.0,
+          "predicted_job_count_p10": 140.0,
+          "predicted_job_count_p90": 180.0,
+          "prediction_confidence": 0.90,
+          "prediction_confidence_pct": "90%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_job_volume_v20260624",
+          "prediction_timestamp": "2026-06-24T02:00:00",
+          "prediction_timestamp_relative": "6h ago",
+          "branch_capacity_rating": 200,
+          "load_status": "MEDIUM",
+          "load_pct": 80.0,
+          "capacity_breach_flag": false,
+          "is_monsoon_season": false,
+          "amc_due_count_30d": 48,
+          "repeat_breakdown_rate_30d": 0.09,
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_trigger_alert": false,
+            "can_export": true
+          }
+        },
+        {
+          "prediction_id": "PRED-JV-20260624-MUM-001",
+          "branch_id": "BR-MUM-05",
+          "branch_name": "Mumbai Branch",
+          "geography_zone": "West",
+          "machine_type": "Wheel Loader",
+          "customer_segment": "Enterprise",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 148.0,
+          "predicted_job_count_p10": 129.0,
+          "predicted_job_count_p90": 167.0,
+          "prediction_confidence": 0.87,
+          "prediction_confidence_pct": "87%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_job_volume_v20260624",
+          "prediction_timestamp": "2026-06-24T02:00:00",
+          "prediction_timestamp_relative": "6h ago",
+          "branch_capacity_rating": 183,
+          "load_status": "MEDIUM",
+          "load_pct": 80.9,
+          "capacity_breach_flag": false,
+          "is_monsoon_season": true,
+          "amc_due_count_30d": 42,
+          "repeat_breakdown_rate_30d": 0.10,
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_trigger_alert": false,
+            "can_export": true
+          }
+        }
+      ],
+      "LOW": [
+        {
+          "prediction_id": "PRED-JV-20260624-KOL-001",
+          "branch_id": "BR-KOL-07",
+          "branch_name": "Kolkata Branch",
+          "geography_zone": "East",
+          "machine_type": "Backhoe Loader",
+          "customer_segment": "Retail",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 98.0,
+          "predicted_job_count_p10": 85.0,
+          "predicted_job_count_p90": 111.0,
+          "prediction_confidence": 0.92,
+          "prediction_confidence_pct": "92%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_job_volume_v20260624",
+          "prediction_timestamp": "2026-06-24T02:00:00",
+          "prediction_timestamp_relative": "6h ago",
+          "branch_capacity_rating": 140,
+          "load_status": "LOW",
+          "load_pct": 70.0,
+          "capacity_breach_flag": false,
+          "is_monsoon_season": false,
+          "amc_due_count_30d": 28,
+          "repeat_breakdown_rate_30d": 0.07,
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_trigger_alert": false,
+            "can_export": true
+          }
+        },
+        {
+          "prediction_id": "PRED-JV-20260624-JAI-001",
+          "branch_id": "BR-JAI-12",
+          "branch_name": "Jaipur Branch",
+          "geography_zone": "North",
+          "machine_type": "Motor Scraper",
+          "customer_segment": "Fleet",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 88.0,
+          "predicted_job_count_p10": 77.0,
+          "predicted_job_count_p90": 99.0,
+          "prediction_confidence": 0.91,
+          "prediction_confidence_pct": "91%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0.0",
+          "input_dataset_ref": "gold_job_volume_v20260624",
+          "prediction_timestamp": "2026-06-24T02:00:00",
+          "prediction_timestamp_relative": "6h ago",
+          "branch_capacity_rating": 120,
+          "load_status": "LOW",
+          "load_pct": 73.3,
+          "capacity_breach_flag": false,
+          "is_monsoon_season": false,
+          "amc_due_count_30d": 21,
+          "repeat_breakdown_rate_30d": 0.06,
+          "actions": {
+            "can_view_detail": true,
+            "can_override": true,
+            "can_trigger_alert": false,
+            "can_export": true
+          }
+        }
+      ]
+    },
+
+    "top_branches_by_demand": [
+      { "rank": 1, "branch_id": "BR-HYD-03", "branch_name": "Hyderabad Branch", "predicted_jobs_30d": 510, "load_pct": 102.0, "status": "CRITICAL" },
+      { "rank": 2, "branch_id": "BR-BLR-01", "branch_name": "Bangalore Branch", "predicted_jobs_30d": 680, "load_pct": 90.7, "status": "HIGH" },
+      { "rank": 3, "branch_id": "BR-CHN-02", "branch_name": "Chennai Branch", "predicted_jobs_30d": 590, "load_pct": 84.3, "status": "HIGH" },
+      { "rank": 4, "branch_id": "BR-PUN-06", "branch_name": "Pune Branch", "predicted_jobs_30d": 380, "load_pct": 84.4, "status": "HIGH" },
+      { "rank": 5, "branch_id": "BR-KOL-07", "branch_name": "Kolkata Branch", "predicted_jobs_30d": 350, "load_pct": 83.3, "status": "MEDIUM" }
+    ],
+
+    "alerts": [
+      {
+        "alert_id": "ALT-JV-001",
+        "alert_type": "CAPACITY_BREACH",
+        "severity": "CRITICAL",
+        "branch_id": "BR-HYD-03",
+        "branch_name": "Hyderabad Branch",
+        "message": "Hyderabad Branch predicted to exceed 100% capacity for w/c 08-Jul-2026. Predicted 174 jobs vs capacity of 170.",
+        "generated_at": "2026-06-24T02:05:00",
+        "generated_at_relative": "6h ago",
+        "recommended_action": "Initiate inter-branch reallocation from Bangalore or Chennai"
+      },
+      {
+        "alert_id": "ALT-JV-002",
+        "alert_type": "MONSOON_SURGE",
+        "severity": "HIGH",
+        "branch_id": "BR-BLR-01",
+        "branch_name": "Bangalore Branch",
+        "message": "Monsoon-driven demand surge expected +18% above baseline for July 2026 in South region.",
+        "generated_at": "2026-06-24T02:05:00",
+        "generated_at_relative": "6h ago",
+        "recommended_action": "Pre-position spare parts and ensure technician availability for breakdown-heavy weeks"
+      },
+      {
+        "alert_id": "ALT-JV-003",
+        "alert_type": "AMC_SURGE",
+        "severity": "MEDIUM",
+        "branch_id": "BR-CHN-02",
+        "branch_name": "Chennai Branch",
+        "message": "71 AMC visits due in next 30 days — 24% above monthly average.",
+        "generated_at": "2026-06-24T02:05:00",
+        "generated_at_relative": "6h ago",
+        "recommended_action": "Schedule AMC jobs in advance to avoid week-end bunching"
+      }
+    ],
+
+    "model_performance": {
+      "mape": 8.4,
+      "wape": 7.2,
+      "rmse": 14.2,
+      "forecast_bias": -0.8,
+      "accuracy_pct": 91.6,
+      "accuracy_pct_str": "91.6%",
+      "evaluation_period_start": "2026-05-01",
+      "evaluation_period_end": "2026-06-23",
+      "drift_score": 0.04,
+      "retrain_triggered_flag": false,
+      "retrain_trigger_reason": null,
+      "evaluated_at": "2026-06-24T01:30:00",
+      "evaluated_at_relative": "6h 30m ago",
+      "mape_by_horizon": {
+        "30_day": 8.4,
+        "60_day": 10.1,
+        "90_day": 12.7
+      }
+    },
+
+    "filter_definitions": {
+      "branch_options": [
+        { "value": "ALL", "label": "All Branches" },
+        { "value": "BR-BLR-01", "label": "Bangalore Branch" },
+        { "value": "BR-CHN-02", "label": "Chennai Branch" },
+        { "value": "BR-HYD-03", "label": "Hyderabad Branch" },
+        { "value": "BR-DEL-04", "label": "Delhi Branch" },
+        { "value": "BR-MUM-05", "label": "Mumbai Branch" }
+      ],
+      "geography_zone_options": [
+        { "value": "ALL", "label": "All Regions" },
+        { "value": "South", "label": "South" },
+        { "value": "North", "label": "North" },
+        { "value": "West", "label": "West" },
+        { "value": "East", "label": "East" }
+      ],
+      "machine_type_options": [
+        { "value": "ALL", "label": "All Machine Types" },
+        { "value": "Excavator", "label": "Excavator" },
+        { "value": "Motor Grader", "label": "Motor Grader" },
+        { "value": "Bulldozer", "label": "Bulldozer" },
+        { "value": "Wheel Loader", "label": "Wheel Loader" },
+        { "value": "Backhoe Loader", "label": "Backhoe Loader" }
+      ],
+      "customer_segment_options": [
+        { "value": "ALL", "label": "All Segments" },
+        { "value": "Enterprise", "label": "Enterprise" },
+        { "value": "Fleet", "label": "Fleet" },
+        { "value": "Government", "label": "Government" },
+        { "value": "Retail", "label": "Retail" }
+      ],
+      "horizon_options": [
+        { "value": 30, "label": "30 Days" },
+        { "value": 60, "label": "60 Days" },
+        { "value": 90, "label": "90 Days" }
+      ],
+      "load_status_options": [
+        { "value": "ALL", "label": "All" },
+        { "value": "CRITICAL", "label": "Critical (>100%)" },
+        { "value": "HIGH", "label": "High (85–100%)" },
+        { "value": "MEDIUM", "label": "Medium (70–85%)" },
+        { "value": "LOW", "label": "Low (<70%)" }
+      ]
+    },
+
+    "applied_filters": {
+      "branch_id": "ALL",
+      "geography_zone": "ALL",
+      "machine_type": "ALL",
+      "customer_segment": "ALL",
+      "forecast_horizon_days": 30,
+      "load_status": "ALL",
+      "date_range": "next_30_days"
+    },
+
+    "pagination": {
+      "total": 48,
+      "page": 1,
+      "page_size": 20,
+      "total_pages": 3,
+      "has_next": true,
+      "has_prev": false
+    }
+  }
+}

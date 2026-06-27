@@ -1,0 +1,48 @@
+.categoryChart{
+display:flex;
+flex-direction:column;
+gap:22px;
+margin-top:12px;
+}
+
+.categoryRow{
+display:grid;
+grid-template-columns:110px 1fr 70px;
+align-items:center;
+gap:16px;
+}
+
+.categoryName{
+font-size:17px;
+color:#ffffff;
+font-weight:500;
+}
+
+.categoryProgress{
+height:10px;
+background:#232938;
+border-radius:20px;
+overflow:hidden;
+position:relative;
+}
+
+.categoryFill{
+height:100%;
+border-radius:20px;
+
+background:linear-gradient(
+90deg,
+#36d7c2 0%,
+#8bcf67 40%,
+#f5b400 100%
+);
+
+transition:width .5s ease;
+}
+
+.categoryValue{
+text-align:right;
+font-size:16px;
+font-weight:600;
+color:white;
+}

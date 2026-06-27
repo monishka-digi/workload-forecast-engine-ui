@@ -1,0 +1,151 @@
+.predictionCard {
+  background: #171c24;
+
+  border: 1px solid #2a3140;
+
+  border-radius: 12px;
+
+  padding: 22px;
+
+  margin-top: 20px;
+}
+
+.tableHeader {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 18px;
+}
+
+.tableHeader h3 {
+  font-size: 24px;
+
+  font-weight: 600;
+
+  color: white;
+}
+
+.tableHeader span {
+  font-size: 12px;
+
+  color: #7d8799;
+}
+
+.tableWrapper {
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+thead tr {
+  border-bottom: 1px solid #2a3140;
+}
+
+th {
+  padding: 16px 14px;
+
+  text-align: left;
+
+  font-size: 12px;
+
+  letter-spacing: 1px;
+
+  color: #7d8799;
+
+  font-weight: 600;
+}
+
+tbody tr {
+  border-bottom: 1px solid #262d38;
+
+  transition: 0.2s;
+}
+
+tbody tr:hover {
+  background: #1b222d;
+}
+
+td {
+  padding: 18px 14px;
+
+  font-size: 15px;
+
+  color: white;
+
+  white-space: nowrap;
+}
+
+.confidenceCell {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.confidenceTrack {
+  width: 80px;
+
+  height: 7px;
+
+  background: #2a3140;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+.confidenceFill {
+  height: 100%;
+
+  background: #37d8c3;
+
+  border-radius: 20px;
+}
+
+.approveBtn {
+  background: #183f37;
+
+  color: #37d8c3;
+
+  border: 1px solid #2b6d61;
+
+  padding: 7px 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  margin-right: 8px;
+
+  font-weight: 600;
+}
+
+.editBtn {
+  background: transparent;
+
+  border: 1px solid #394251;
+
+  color: #8d95a5;
+
+  padding: 7px 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.approveBtn:hover {
+  background: #21594e;
+}
+
+.editBtn:hover {
+  background: #2a3140;
+}

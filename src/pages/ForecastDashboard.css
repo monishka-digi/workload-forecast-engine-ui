@@ -1,0 +1,43 @@
+.forecast-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tab-header {
+  display: flex;
+  position: relative;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: #475569;
+  transition: color 0.2s;
+}
+
+.tab-button:hover {
+  color: #1e293b;
+}
+
+.tab-button.active {
+  color: #0f172a;
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: -2px;
+  height: 2px;
+  width: 50%;
+  background-color: #0f172a;
+  transition: left 0.3s ease;
+}
+
+.tab-content {
+  padding: 1rem 0;
+}

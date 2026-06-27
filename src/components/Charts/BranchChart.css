@@ -1,0 +1,43 @@
+.branchCard{
+
+height:380px;
+
+background:#171c24;
+
+border-radius:10px;
+
+padding:20px;
+
+border:1px solid #2a3140;
+
+}
+
+.branchBody{
+
+height:290px;
+
+}
+
+.cardHeader{
+
+display:flex;
+
+justify-content:space-between;
+
+margin-bottom:20px;
+
+}
+
+.cardHeader h3{
+
+font-size:18px;
+
+}
+
+.cardHeader span{
+
+color:#8b93a3;
+
+font-size:12px;
+
+}

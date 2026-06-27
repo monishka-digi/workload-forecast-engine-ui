@@ -1,0 +1,131 @@
+.heatmapContainer {
+  display: flex;
+
+  flex-direction: column;
+
+  height: 100%;
+}
+
+.heatmapHeader {
+  display: grid;
+
+  grid-template-columns:
+    2fr
+    1.4fr
+    1fr
+    1.5fr
+    1fr;
+
+  padding: 12px 16px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  color: #8b93a3;
+
+  border-bottom: 1px solid #2a3140;
+}
+
+.heatmapBody {
+  overflow-y: auto;
+
+  flex: 1;
+}
+
+.heatmapRow {
+  display: grid;
+
+  grid-template-columns:
+    2fr
+    1.4fr
+    1fr
+    1.5fr
+    1fr;
+
+  align-items: center;
+
+  padding: 14px 16px;
+
+  border-bottom: 1px solid #242c36;
+
+  transition: 0.2s;
+}
+
+.heatmapRow:hover {
+  background: #1c232d;
+}
+
+.heatmapRow span {
+  color: white;
+
+  font-size: 14px;
+}
+
+.utilization {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.progressTrack {
+  width: 100px;
+
+  height: 8px;
+
+  background: #2a3140;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+
+  border-radius: 20px;
+}
+
+.utilization small {
+  color: #8b93a3;
+
+  font-size: 12px;
+}
+
+.riskBadge {
+  padding: 4px 10px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  text-align: center;
+}
+
+.riskBadge.low {
+  background: #143c32;
+
+  color: #34d399;
+}
+
+.riskBadge.medium {
+  background: #443515;
+
+  color: #f5b400;
+}
+
+.riskBadge.high {
+  background: #4b1f23;
+
+  color: #ef4444;
+}
+
+.riskBadge.critical {
+  background: #4b1f23;
+
+  color: #ef4444;
+}

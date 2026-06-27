@@ -1,0 +1,77 @@
+.gaugeRow {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  padding: 10px 0;
+}
+
+.gaugeTop {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.branchName {
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: #fff;
+}
+
+.loadValue {
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: #fff;
+}
+
+.progressTrack {
+  width: 100%;
+
+  height: 8px;
+
+  background: #2a3140;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+
+  border-radius: 999px;
+
+  transition: width 0.4s ease;
+}
+
+.gaugeBottom {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  font-size: 12px;
+
+  color: #8b93a3;
+}
+
+.breach {
+  padding: 2px 8px;
+
+  border-radius: 12px;
+
+  background: #ef444422;
+
+  color: #ef4444;
+
+  font-weight: 600;
+}

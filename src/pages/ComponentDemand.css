@@ -1,0 +1,21 @@
+.kpiGrid {
+  display: grid;
+
+  grid-template-columns: repeat(5, 1fr);
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1400px) {
+  .kpiGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .kpiGrid {
+    grid-template-columns: 1fr;
+  }
+}
