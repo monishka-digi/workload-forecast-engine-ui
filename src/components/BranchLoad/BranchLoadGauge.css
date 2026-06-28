@@ -1,0 +1,116 @@
+.branchGaugeCard{
+    background:#171c24;
+    border:1px solid #2c3342;
+    border-radius:12px;
+    padding:20px 22px;
+}
+
+.branchGaugeHeader{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+}
+
+.branchGaugeHeader h3{
+    color:#fff;
+    font-size:22px;
+    font-weight:700;
+    margin:0;
+}
+
+.branchGaugeHeader span{
+    color:#7b86a5;
+    font-size:13px;
+}
+
+.branchGaugeBody{
+    display:flex;
+    flex-direction:column;
+}
+
+.gaugeRow{
+    display:grid;
+    grid-template-columns:130px 1fr;
+    gap:18px;
+    align-items:center;
+    padding:18px 0;
+    border-bottom:1px solid #252d3c;
+}
+
+.gaugeRow:last-child{
+    border-bottom:none;
+}
+
+.gaugeInfo h4{
+    margin:0;
+    color:#fff;
+    font-size:15px;
+}
+
+.gaugeInfo p{
+    margin-top:6px;
+    color:#7b86a5;
+    font-size:13px;
+}
+
+.gaugeBarContainer{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.gaugeTrack{
+    position:relative;
+    flex:1;
+    height:12px;
+    background:#2a3242;
+    border-radius:30px;
+    overflow:hidden;
+}
+
+.capacityMarker{
+    position:absolute;
+    left:90%;
+    top:-2px;
+    width:3px;
+    height:16px;
+    background:#6d7692;
+    z-index:2;
+}
+
+.gaugeFill{
+    height:100%;
+    border-radius:30px;
+}
+
+.gaugeFill.normal{
+    background:linear-gradient(
+        90deg,
+        #37d8c3 0%,
+        #ffd000 100%
+    );
+}
+
+.gaugeFill.danger{
+    background:linear-gradient(
+        90deg,
+        #ffc400 0%,
+        #ff8a3d 55%,
+        #ff5d5d 100%
+    );
+}
+
+.normalText{
+    width:58px;
+    text-align:right;
+    color:white;
+    font-weight:600;
+}
+
+.dangerText{
+    width:58px;
+    text-align:right;
+    color:#ff5f5f;
+    font-weight:700;
+}

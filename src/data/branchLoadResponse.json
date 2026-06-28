@@ -1,0 +1,386 @@
+{
+  "success": true,
+  "message": "Branch-wise Load Forecast dashboard fetched successfully",
+  "result": {
+
+    "metadata": {
+      "model_name": "branch_load_forecast",
+      "model_version": "v1.0.1",
+      "model_type": "RULE_BASED_WITH_CORRECTION",
+      "forecast_run_date": "2026-06-24",
+      "forecast_period": "2026-06-25 to 2026-09-22",
+      "granularity": "weekly",
+      "generated_timestamp": "2026-06-24T02:20:00",
+      "generated_timestamp_relative": "6h ago",
+      "confidence_level": "deterministic_with_residual_correction",
+      "forecast_horizons_days": [30, 60, 90],
+      "input_dataset_ref": "gold_branch_load_features_snapshot_20260624",
+      "model_approach": "Deterministic: predicted_job_volume / branch_capacity_rating × 100; plus lightweight GBM residual correction for overtime and multi-shift elasticity",
+      "upstream_model_dependency": {
+        "model_name": "job_volume_prediction",
+        "model_version": "v1.2.0",
+        "input_feature": "predicted_job_volume"
+      },
+      "rule_definitions": {
+        "load_pct_base": "predicted_job_volume / branch_capacity_rating × 100",
+        "capacity_breach_threshold_pct": 100.0,
+        "high_load_threshold_pct": 85.0,
+        "low_load_threshold_pct": 50.0
+      },
+      "evaluation_metrics": {
+        "mae_load_pct": 2.84,
+        "calibration_check_overload_incidents": "93.2% correctly flagged"
+      }
+    },
+
+    "summary": {
+      "total_branches": 9,
+      "active_branches": 9,
+      "branches_over_capacity": 1,
+      "branches_high_load_80_to_100": 4,
+      "branches_normal_load_50_to_80": 3,
+      "branches_low_load_below_50": 1,
+      "avg_load_pct_across_branches": 0.7234,
+      "avg_load_display": "72.3%",
+      "peak_load_branch": "BR-NAG-07",
+      "peak_load_branch_name": "Nagpur Branch",
+      "peak_load_pct": 0.9320,
+      "total_predicted_capacity_gap_jobs": 89,
+      "total_technician_capacity_hrs_week": 13776.0,
+      "total_required_labour_hrs_week": 14912.0,
+      "total_labour_hrs_gap": 1136.0,
+      "inter_branch_redeployment_recommended": true,
+      "redeployment_candidate_pairs": 2,
+      "capacity_breach_alerts": 1,
+      "high_load_alerts": 3,
+      "revenue_forecast_30d_inr": 48412000.00,
+      "avg_sla_compliance_rate": 0.8912,
+      "avg_sla_compliance_display": "89.1%",
+      "avg_tat_days": 2.84,
+      "pending_jobs_carry_forward_total": 147
+    },
+
+    "graph_data": {
+
+      "branch_load_bar_30d": [
+        { "branch_id": "BR-NAG-07", "branch_name": "Nagpur", "geography_zone": "West", "predicted_load_pct": 0.9320, "predicted_load_display": "93.2%", "predicted_job_volume": 362, "branch_capacity_rating": 389, "predicted_capacity_gap": -27, "capacity_breach_flag": false, "labor_hrs_required": 1738.0, "technician_capacity_hrs": 1152.0, "color": "#E53E3E" },
+        { "branch_id": "BR-COI-08", "branch_name": "Coimbatore", "geography_zone": "South", "predicted_load_pct": 0.9100, "predicted_load_display": "91.0%", "predicted_job_volume": 341, "branch_capacity_rating": 375, "predicted_capacity_gap": -34, "capacity_breach_flag": false, "labor_hrs_required": 1637.0, "technician_capacity_hrs": 1344.0, "color": "#DD6B20" },
+        { "branch_id": "BR-CHN-02", "branch_name": "Chennai", "geography_zone": "South", "predicted_load_pct": 0.8210, "predicted_load_display": "82.1%", "predicted_job_volume": 541, "branch_capacity_rating": 659, "predicted_capacity_gap": -118, "capacity_breach_flag": false, "labor_hrs_required": 2597.0, "technician_capacity_hrs": 1968.0, "color": "#D69E2E" },
+        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore", "geography_zone": "South", "predicted_load_pct": 0.7840, "predicted_load_display": "78.4%", "predicted_job_volume": 612, "branch_capacity_rating": 781, "predicted_capacity_gap": -169, "capacity_breach_flag": false, "labor_hrs_required": 2938.0, "technician_capacity_hrs": 2304.0, "color": "#D69E2E" },
+        { "branch_id": "BR-HYD-03", "branch_name": "Hyderabad", "geography_zone": "South", "predicted_load_pct": 0.7423, "predicted_load_display": "74.2%", "predicted_job_volume": 489, "branch_capacity_rating": 659, "predicted_capacity_gap": -170, "capacity_breach_flag": false, "labor_hrs_required": 2347.0, "technician_capacity_hrs": 1824.0, "color": "#38A169" },
+        { "branch_id": "BR-MUM-04", "branch_name": "Mumbai", "geography_zone": "West", "predicted_load_pct": 0.6981, "predicted_load_display": "69.8%", "predicted_job_volume": 458, "branch_capacity_rating": 656, "predicted_capacity_gap": -198, "capacity_breach_flag": false, "labor_hrs_required": 2198.0, "technician_capacity_hrs": 1728.0, "color": "#38A169" },
+        { "branch_id": "BR-DEL-05", "branch_name": "Delhi", "geography_zone": "North", "predicted_load_pct": 0.6432, "predicted_load_display": "64.3%", "predicted_job_volume": 423, "branch_capacity_rating": 658, "predicted_capacity_gap": -235, "capacity_breach_flag": false, "labor_hrs_required": 2030.0, "technician_capacity_hrs": 1632.0, "color": "#38A169" },
+        { "branch_id": "BR-PUN-06", "branch_name": "Pune", "geography_zone": "West", "predicted_load_pct": 0.6054, "predicted_load_display": "60.5%", "predicted_job_volume": 398, "branch_capacity_rating": 658, "predicted_capacity_gap": -260, "capacity_breach_flag": false, "labor_hrs_required": 1910.0, "technician_capacity_hrs": 1584.0, "color": "#38A169" },
+        { "branch_id": "BR-KOC-09", "branch_name": "Kochi", "geography_zone": "South", "predicted_load_pct": 0.4231, "predicted_load_display": "42.3%", "predicted_job_volume": 187, "branch_capacity_rating": 442, "predicted_capacity_gap": -255, "capacity_breach_flag": false, "labor_hrs_required": 898.0, "technician_capacity_hrs": 1152.0, "color": "#3182CE" }
+      ],
+
+      "load_forecast_timeseries": [
+        { "period_date": "2026-06-09", "avg_load_pct": 0.6812, "max_load_pct": 0.8234, "is_forecast": false },
+        { "period_date": "2026-06-16", "avg_load_pct": 0.7012, "max_load_pct": 0.8541, "is_forecast": false },
+        { "period_date": "2026-06-23", "avg_load_pct": 0.7234, "max_load_pct": 0.8912, "is_forecast": false },
+        { "period_date": "2026-06-30", "avg_load_pct": 0.7843, "max_load_pct": 0.9320, "is_forecast": true },
+        { "period_date": "2026-07-07", "avg_load_pct": 0.8912, "max_load_pct": 1.0341, "is_forecast": true },
+        { "period_date": "2026-07-14", "avg_load_pct": 0.8712, "max_load_pct": 0.9980, "is_forecast": true },
+        { "period_date": "2026-07-21", "avg_load_pct": 0.8214, "max_load_pct": 0.9421, "is_forecast": true }
+      ],
+
+      "geography_load_pie": [
+        { "label": "South (Critical)", "value": 4, "avg_load_pct": 0.8341, "color": "#E53E3E" },
+        { "label": "West (Moderate)", "value": 3, "avg_load_pct": 0.7345, "color": "#D69E2E" },
+        { "label": "North (Normal)", "value": 1, "avg_load_pct": 0.6432, "color": "#38A169" },
+        { "label": "East (Low)", "value": 1, "avg_load_pct": 0.4812, "color": "#3182CE" }
+      ],
+
+      "load_zone_classification": [
+        { "label": "Over Capacity (>100%)", "count": 1, "pct": 11.1, "color": "#C53030" },
+        { "label": "High Load (85–100%)", "count": 2, "pct": 22.2, "color": "#E53E3E" },
+        { "label": "Moderate Load (65–85%)", "count": 3, "pct": 33.3, "color": "#D69E2E" },
+        { "label": "Normal Load (50–65%)", "count": 2, "pct": 22.2, "color": "#38A169" },
+        { "label": "Low Load (<50%)", "count": 1, "pct": 11.1, "color": "#3182CE" }
+      ],
+
+      "horizon_load_comparison": [
+        { "label": "30-Day", "avg_load_pct": 0.7234, "max_load_pct": 0.9320, "branches_over_100pct": 0 },
+        { "label": "60-Day", "avg_load_pct": 0.7891, "max_load_pct": 1.0341, "branches_over_100pct": 1 },
+        { "label": "90-Day", "avg_load_pct": 0.8123, "max_load_pct": 1.0912, "branches_over_100pct": 2 }
+      ],
+
+      "sla_vs_load_scatter": [
+        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore", "predicted_load_pct": 0.7840, "sla_compliance_rate_30d": 0.9234 },
+        { "branch_id": "BR-CHN-02", "branch_name": "Chennai", "predicted_load_pct": 0.8210, "sla_compliance_rate_30d": 0.8812 },
+        { "branch_id": "BR-HYD-03", "branch_name": "Hyderabad", "predicted_load_pct": 0.7423, "sla_compliance_rate_30d": 0.9012 },
+        { "branch_id": "BR-NAG-07", "branch_name": "Nagpur", "predicted_load_pct": 0.9320, "sla_compliance_rate_30d": 0.7841 },
+        { "branch_id": "BR-COI-08", "branch_name": "Coimbatore", "predicted_load_pct": 0.9100, "sla_compliance_rate_30d": 0.8012 },
+        { "branch_id": "BR-KOC-09", "branch_name": "Kochi", "predicted_load_pct": 0.4231, "sla_compliance_rate_30d": 0.9512 }
+      ],
+
+      "external_factor_impact": [
+        { "factor": "Monsoon Season", "impact_direction": "increase", "load_uplift_pct": 14.2, "affected_zones": ["South", "West"] },
+        { "factor": "Q1 Quarter End", "impact_direction": "increase", "load_uplift_pct": 8.7, "affected_zones": ["All"] },
+        { "factor": "State Infra Projects", "impact_direction": "increase", "load_uplift_pct": 6.1, "affected_zones": ["South"] },
+        { "factor": "Holiday Week (Independence Day)", "impact_direction": "decrease", "load_uplift_pct": -12.3, "affected_zones": ["All"] }
+      ]
+    },
+
+    "branch_load_table": {
+      "all_branches": [
+        {
+          "prediction_id": "PRED-BL-20260624-BLR-30",
+          "branch_id": "BR-BLR-01",
+          "branch_name": "Bangalore Branch",
+          "geography_zone": "South",
+          "period_date": "2026-06-30",
+          "forecast_horizon_days": 30,
+          "week_start_dt": "2026-06-30",
+          "predicted_load_pct": 0.7840,
+          "predicted_load_pct_p10": 0.6952,
+          "predicted_load_pct_p90": 0.8729,
+          "capacity_breach_flag": false,
+          "predicted_job_volume": 612,
+          "branch_capacity_rating": 781,
+          "predicted_capacity_gap": 169,
+          "branch_job_count_lag_4wk": 568.2,
+          "branch_job_count_lag_13wk": 534.7,
+          "branch_load_index_lag_4wk": 0.7281,
+          "branch_labour_hours_required": 2938.0,
+          "technician_capacity_hrs_week": 2304.0,
+          "total_technicians_active": 48,
+          "amc_due_count_30d": 42,
+          "amc_due_count_60d": 89,
+          "machine_age_avg_yrs": 4.82,
+          "fleet_size_catchment": 781,
+          "fleet_size_growth_yoy_pct": 8.4,
+          "region_seasonal_index": 1.142,
+          "is_monsoon_season": 1,
+          "rainfall_mm_7d_avg": 48.3,
+          "sla_compliance_rate_30d": 0.9234,
+          "avg_tat_days_30d": 2.41,
+          "pending_jobs_carry_forward": 18,
+          "inter_branch_redeployment_flag": 0,
+          "nearest_branch_load_index": 0.8210,
+          "nearest_branch_distance_km": 62.4,
+          "revenue_forecast_30d": 8412000.00,
+          "parts_procurement_lead_time_avg": 8.2,
+          "model_name": "branch_load_forecast",
+          "model_version": "v1.0.1",
+          "input_dataset_ref": "gold_branch_load_features_snapshot_20260624",
+          "prediction_timestamp": "2026-06-24T02:20:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_trigger_redeployment": false,
+            "can_override_capacity": true,
+            "can_drill_down": true,
+            "can_export": true,
+            "can_generate_plan": true
+          }
+        },
+        {
+          "prediction_id": "PRED-BL-20260624-NAG-30",
+          "branch_id": "BR-NAG-07",
+          "branch_name": "Nagpur Branch",
+          "geography_zone": "West",
+          "period_date": "2026-06-30",
+          "forecast_horizon_days": 30,
+          "week_start_dt": "2026-06-30",
+          "predicted_load_pct": 0.9320,
+          "predicted_load_pct_p10": 0.8272,
+          "predicted_load_pct_p90": 1.0369,
+          "capacity_breach_flag": false,
+          "predicted_job_volume": 362,
+          "branch_capacity_rating": 389,
+          "predicted_capacity_gap": 27,
+          "branch_job_count_lag_4wk": 313.4,
+          "branch_job_count_lag_13wk": 298.1,
+          "branch_load_index_lag_4wk": 0.8059,
+          "branch_labour_hours_required": 1738.0,
+          "technician_capacity_hrs_week": 1152.0,
+          "total_technicians_active": 24,
+          "amc_due_count_30d": 21,
+          "amc_due_count_60d": 44,
+          "machine_age_avg_yrs": 6.12,
+          "fleet_size_catchment": 389,
+          "fleet_size_growth_yoy_pct": 15.6,
+          "region_seasonal_index": 1.084,
+          "is_monsoon_season": 1,
+          "rainfall_mm_7d_avg": 38.1,
+          "sla_compliance_rate_30d": 0.7841,
+          "avg_tat_days_30d": 3.82,
+          "pending_jobs_carry_forward": 31,
+          "inter_branch_redeployment_flag": 1,
+          "nearest_branch_load_index": 0.6054,
+          "nearest_branch_distance_km": 284.0,
+          "revenue_forecast_30d": 3812000.00,
+          "parts_procurement_lead_time_avg": 11.4,
+          "model_name": "branch_load_forecast",
+          "model_version": "v1.0.1",
+          "input_dataset_ref": "gold_branch_load_features_snapshot_20260624",
+          "prediction_timestamp": "2026-06-24T02:20:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_trigger_redeployment": true,
+            "can_override_capacity": true,
+            "can_drill_down": true,
+            "can_export": true,
+            "can_generate_plan": true
+          }
+        }
+      ]
+    },
+
+    "load_alerts": [
+      {
+        "alert_id": "ALERT-BL-001",
+        "alert_type": "NEAR_BREACH",
+        "severity": "High",
+        "branch_id": "BR-NAG-07",
+        "branch_name": "Nagpur Branch",
+        "predicted_load_pct": 0.9320,
+        "predicted_load_pct_p90": 1.0369,
+        "message": "Nagpur branch predicted load 93.2% with upper bound 103.7%. Capacity breach probable in monsoon peak. Redeployment from peer branches recommended.",
+        "forecast_horizon_days": 30,
+        "generated_timestamp": "2026-06-24T02:25:00",
+        "generated_timestamp_relative": "6h ago",
+        "is_acknowledged": false,
+        "actions": { "can_trigger_redeployment": true, "can_expand_capacity": true, "can_acknowledge": true, "can_dismiss": false }
+      },
+      {
+        "alert_id": "ALERT-BL-002",
+        "alert_type": "HIGH_LOAD",
+        "severity": "High",
+        "branch_id": "BR-COI-08",
+        "branch_name": "Coimbatore Branch",
+        "predicted_load_pct": 0.9100,
+        "message": "Coimbatore at 91% load. Rising 9.3% above last period. SLA compliance declining (80.1%). Action required within 2 weeks.",
+        "forecast_horizon_days": 30,
+        "generated_timestamp": "2026-06-24T02:25:00",
+        "generated_timestamp_relative": "6h ago",
+        "is_acknowledged": false,
+        "actions": { "can_trigger_redeployment": true, "can_acknowledge": true, "can_dismiss": false }
+      },
+      {
+        "alert_id": "ALERT-BL-003",
+        "alert_type": "OVER_CAPACITY_60D",
+        "severity": "Medium",
+        "branch_id": "BR-CHN-02",
+        "branch_name": "Chennai Branch",
+        "predicted_load_pct": 1.0341,
+        "message": "Chennai 60-day forecast shows load exceeding 100%. Plan capacity expansion or job redistribution for tactical horizon.",
+        "forecast_horizon_days": 60,
+        "generated_timestamp": "2026-06-24T02:25:00",
+        "generated_timestamp_relative": "6h ago",
+        "is_acknowledged": false,
+        "actions": { "can_trigger_redeployment": true, "can_acknowledge": true, "can_dismiss": false }
+      },
+      {
+        "alert_id": "ALERT-BL-004",
+        "alert_type": "LOW_SLA",
+        "severity": "Medium",
+        "branch_id": "BR-NAG-07",
+        "branch_name": "Nagpur Branch",
+        "sla_compliance_rate_30d": 0.7841,
+        "avg_tat_days_30d": 3.82,
+        "predicted_load_pct": 0.9320,
+        "message": "SLA compliance at Nagpur is 78.4% — below 85% threshold. Average TAT 3.82 days. High load is the primary cause. Workforce intervention required.",
+        "forecast_horizon_days": 30,
+        "generated_timestamp": "2026-06-24T02:25:00",
+        "generated_timestamp_relative": "6h ago",
+        "is_acknowledged": false,
+        "actions": { "can_trigger_sla_plan": true, "can_acknowledge": true, "can_dismiss": false }
+      }
+    ],
+
+    "rebalancing_recommendations": [
+      {
+        "recommendation_id": "REBAL-001",
+        "from_branch_id": "BR-KOC-09",
+        "from_branch_name": "Kochi Branch",
+        "to_branch_id": "BR-COI-08",
+        "to_branch_name": "Coimbatore Branch",
+        "from_load_pct": 0.4231,
+        "to_load_pct": 0.9100,
+        "load_gap": 0.4869,
+        "distance_km": 186.0,
+        "suggested_job_transfer_count": 28,
+        "feasibility": "HIGH",
+        "rationale": "Kochi is significantly underloaded at 42.3%. Coimbatore at 91% with same geography zone. Short distance enables daily job redistribution.",
+        "actions": { "can_approve": true, "can_reject": true, "can_modify": true }
+      },
+      {
+        "recommendation_id": "REBAL-002",
+        "from_branch_id": "BR-DEL-05",
+        "from_branch_name": "Delhi Branch",
+        "to_branch_id": "BR-NAG-07",
+        "to_branch_name": "Nagpur Branch",
+        "from_load_pct": 0.6432,
+        "to_load_pct": 0.9320,
+        "load_gap": 0.2888,
+        "distance_km": 1084.0,
+        "suggested_job_transfer_count": 18,
+        "feasibility": "MEDIUM",
+        "rationale": "Delhi has capacity headroom. Distance is significant — feasible only for Overhaul-type jobs with longer TAT tolerance.",
+        "actions": { "can_approve": true, "can_reject": true, "can_modify": true }
+      }
+    ],
+
+    "drilldown_dimensions": {
+      "available_branches": [
+        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore Branch", "geography_zone": "South" },
+        { "branch_id": "BR-CHN-02", "branch_name": "Chennai Branch", "geography_zone": "South" },
+        { "branch_id": "BR-NAG-07", "branch_name": "Nagpur Branch", "geography_zone": "West" }
+      ],
+      "available_geography_zones": ["South", "North", "West", "East"],
+      "load_zone_labels": ["Over Capacity", "High Load", "Moderate Load", "Normal Load", "Low Load"],
+      "available_forecast_horizons": [30, 60, 90]
+    },
+
+    "filter_definitions": {
+      "branch_id": { "type": "multi_select", "options": "drilldown_dimensions.available_branches", "default": "ALL" },
+      "geography_zone": { "type": "multi_select", "options": "drilldown_dimensions.available_geography_zones", "default": "ALL" },
+      "load_zone": { "type": "single_select", "options": "drilldown_dimensions.load_zone_labels", "default": "ALL" },
+      "forecast_horizon_days": { "type": "single_select", "options": [30, 60, 90], "default": 30 },
+      "capacity_breach_only": { "type": "toggle", "default": false },
+      "redeployment_candidates_only": { "type": "toggle", "default": false }
+    },
+
+    "applied_filters": {
+      "branch_id": "ALL",
+      "geography_zone": "ALL",
+      "load_zone": "ALL",
+      "forecast_horizon_days": 30,
+      "capacity_breach_only": false,
+      "redeployment_candidates_only": false
+    },
+
+    "pagination": {
+      "total": 9,
+      "page": 1,
+      "page_size": 20,
+      "total_pages": 1,
+      "has_next": false,
+      "has_prev": false
+    },
+
+    "ui_widget_mapping": {
+      "kpi_cards": [
+        { "widget_id": "kpi_avg_load", "label": "Avg Branch Load", "value_path": "summary.avg_load_display" },
+        { "widget_id": "kpi_over_capacity", "label": "Branches Over Capacity", "value_path": "summary.branches_over_capacity", "alert": true },
+        { "widget_id": "kpi_high_load", "label": "High Load Branches", "value_path": "summary.branches_high_load_80_to_100", "alert": true },
+        { "widget_id": "kpi_revenue_30d", "label": "Revenue Forecast (30D)", "value_path": "summary.revenue_forecast_30d_inr", "unit": "INR", "format": "currency" },
+        { "widget_id": "kpi_sla", "label": "Avg SLA Compliance", "value_path": "summary.avg_sla_compliance_display" }
+      ],
+      "charts": [
+        { "widget_id": "chart_load_bar", "type": "horizontal_bar", "data_path": "graph_data.branch_load_bar_30d", "x_axis": "predicted_load_pct", "y_axis": "branch_name", "color_by": "capacity_breach_flag", "threshold_lines": [0.85, 1.0] },
+        { "widget_id": "chart_load_timeseries", "type": "line_area", "data_path": "graph_data.load_forecast_timeseries", "x_axis": "period_date", "y_axes": ["avg_load_pct", "max_load_pct"] },
+        { "widget_id": "chart_geography_pie", "type": "doughnut", "data_path": "graph_data.geography_load_pie", "label": "label", "value": "avg_load_pct" },
+        { "widget_id": "chart_zone_classification", "type": "bar", "data_path": "graph_data.load_zone_classification", "x_axis": "label", "y_axis": "count" },
+        { "widget_id": "chart_sla_scatter", "type": "scatter", "data_path": "graph_data.sla_vs_load_scatter", "x_axis": "predicted_load_pct", "y_axis": "sla_compliance_rate_30d", "label": "branch_name" },
+        { "widget_id": "chart_horizon_compare", "type": "grouped_bar", "data_path": "graph_data.horizon_load_comparison", "x_axis": "label", "y_axes": ["avg_load_pct", "max_load_pct"] }
+      ],
+      "tables": [
+        { "widget_id": "table_branch_load", "data_path": "branch_load_table.all_branches", "sort_default": "predicted_load_pct", "sort_direction": "desc" }
+      ],
+      "alert_panel": { "widget_id": "panel_alerts", "data_path": "load_alerts" },
+      "recommendation_panel": { "widget_id": "panel_rebalancing", "data_path": "rebalancing_recommendations" }
+    }
+  }
+}

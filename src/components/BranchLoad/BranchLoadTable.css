@@ -1,0 +1,114 @@
+.branchTableCard {
+  background: #171c24;
+  border: 1px solid #2a3243;
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.branchTableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.branchTableHeader h3 {
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.branchTableHeader span {
+  color: #7083a5;
+  font-size: 13px;
+  font-family: monospace;
+}
+
+.branchTableWrapper {
+  overflow-x: auto;
+}
+
+.branchTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.branchTable th {
+  color: #6f82a5;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: left;
+  padding: 18px 14px;
+  border-bottom: 1px solid #2b3446;
+}
+
+.branchTable td {
+  padding: 20px 14px;
+  color: white;
+  border-bottom: 1px solid #222b39;
+  font-size: 15px;
+}
+
+.branchTable tbody tr:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+.positiveGap {
+  color: #ff6868;
+  font-weight: 600;
+}
+
+.negativeGap {
+  color: white;
+}
+
+.statusBadge {
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.statusBadge.ok {
+  background: rgba(31, 207, 145, .15);
+  color: #2fe7b0;
+}
+
+.statusBadge.breach {
+  background: rgba(255, 70, 70, .18);
+  color: #ff6262;
+}
+
+.reallocateBtn {
+  border: 1px solid #20d9b8;
+  background: transparent;
+  color: #20d9b8;
+  border-radius: 6px;
+  padding: 8px 15px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: .2s;
+}
+
+.reallocateBtn:hover {
+  background: #20d9b8;
+  color: black;
+}
+
+.viewBtn {
+  border: 1px solid #3a4458;
+  background: transparent;
+  color: #94a3bd;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.viewBtn:hover {
+  background: #283142;
+}
+
+.branchTable td:last-child {
+  white-space: nowrap;
+}

@@ -1,0 +1,30 @@
+.branchTrendCard{
+    background:#171c24;
+    border:1px solid #2b3446;
+    border-radius:14px;
+    padding:20px;
+    height:100%;
+}
+
+.branchTrendHeader{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.branchTrendHeader h3{
+    color:white;
+    font-size:22px;
+    font-weight:700;
+}
+
+.branchTrendHeader span{
+    color:#7083a5;
+    font-family:monospace;
+    font-size:13px;
+}
+
+.branchTrendBody{
+    height:340px;
+}
