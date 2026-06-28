@@ -11,12 +11,15 @@ export default function Topbar() {
     },
     "/component-demand": {
       title: "Component Category Demand",
-      subtitle:
-        "Parts consumption forecast driven by job-volume model",
+      subtitle: "Parts consumption forecast driven by job-volume model",
     },
     "/branch-load": {
       title: "Branch-wise Load Forecast",
       subtitle: "Workload as % of rated branch capacity",
+    },
+    "/bay-utilization": {
+      title: "Bay Utilization Forecast",
+      subtitle: "Bay occupancy by branch and bay type",
     },
   };
 

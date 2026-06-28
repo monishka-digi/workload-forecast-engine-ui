@@ -1,0 +1,389 @@
+{
+  "success": true,
+  "message": "Bay Utilization Forecast (Rule-Based) dashboard fetched successfully",
+  "result": {
+    "metadata": {
+      "model_name": "bay_utilization_forecast",
+      "model_type": "RULE_BASED",
+      "model_version": "v1.0.0",
+      "forecast_run_date": "2026-06-24",
+      "forecast_period": "2026-06-24 to 2026-09-21",
+      "granularity": "daily",
+      "generated_timestamp": "2026-06-24T02:45:00",
+      "generated_timestamp_relative": "6h ago",
+      "forecast_horizons": [30, 60, 90],
+      "rule_engine_ref": "bay_utilization_rules_v1.0.0",
+      "dependent_models": ["job_volume_prediction_v1.0.0", "branch_load_forecast_v1.0.0"],
+      "model_run_id": "RUN-BU-20260624-001",
+      "rule_description": "Bay utilization is computed as: (predicted_job_count × avg_dwell_time_hrs_by_bay_type) / (bay_count × operating_hours_per_day × days_in_period) × 100. No ML training. Cross-model inputs: job volume from Model 1, branch load from Model 3."
+    },
+
+    "summary": {
+      "total_bays": 68,
+      "bays_operational": 62,
+      "bays_under_maintenance": 4,
+      "bays_decommissioned": 2,
+      "avg_utilization_pct_30d": 78.4,
+      "avg_utilization_pct_60d": 76.2,
+      "avg_utilization_pct_90d": 74.8,
+      "near_capacity_bays_30d": 8,
+      "over_capacity_bays_30d": 2,
+      "peak_utilization_week": "2026-07-15",
+      "peak_utilization_pct": 94.2,
+      "bay_type_highest_utilization": "Hydraulic",
+      "bay_type_lowest_utilization": "PDI",
+      "branches_with_bay_overload": 2,
+      "overflow_risk_score_avg": 0.18,
+      "data_freshness": "2026-06-24T02:00:00",
+      "data_freshness_relative": "6h 45m ago"
+    },
+
+    "graph_data": {
+
+      "utilization_trend_by_bay_type": {
+        "General": [
+          { "period_date": "2026-06-24", "predicted_utilization_pct": 76.2, "p10": 66.5, "p90": 85.9, "near_capacity_flag": false },
+          { "period_date": "2026-07-01", "predicted_utilization_pct": 78.8, "p10": 68.9, "p90": 88.7, "near_capacity_flag": false },
+          { "period_date": "2026-07-08", "predicted_utilization_pct": 84.1, "p10": 73.6, "p90": 94.6, "near_capacity_flag": false },
+          { "period_date": "2026-07-15", "predicted_utilization_pct": 88.6, "p10": 77.5, "p90": 99.7, "near_capacity_flag": true },
+          { "period_date": "2026-07-22", "predicted_utilization_pct": 82.4, "p10": 72.1, "p90": 92.7, "near_capacity_flag": false }
+        ],
+        "Hydraulic": [
+          { "period_date": "2026-06-24", "predicted_utilization_pct": 88.4, "p10": 77.3, "p90": 99.5, "near_capacity_flag": true },
+          { "period_date": "2026-07-01", "predicted_utilization_pct": 91.6, "p10": 80.1, "p90": 100.0, "near_capacity_flag": true },
+          { "period_date": "2026-07-08", "predicted_utilization_pct": 96.2, "p10": 84.2, "p90": 100.0, "near_capacity_flag": true },
+          { "period_date": "2026-07-15", "predicted_utilization_pct": 98.4, "p10": 86.1, "p90": 100.0, "near_capacity_flag": true },
+          { "period_date": "2026-07-22", "predicted_utilization_pct": 94.1, "p10": 82.3, "p90": 100.0, "near_capacity_flag": true }
+        ],
+        "Overhaul": [
+          { "period_date": "2026-06-24", "predicted_utilization_pct": 82.4, "p10": 72.1, "p90": 92.7, "near_capacity_flag": false },
+          { "period_date": "2026-07-08", "predicted_utilization_pct": 88.2, "p10": 77.2, "p90": 99.2, "near_capacity_flag": true }
+        ],
+        "PDI": [
+          { "period_date": "2026-06-24", "predicted_utilization_pct": 58.4, "p10": 51.1, "p90": 65.7, "near_capacity_flag": false },
+          { "period_date": "2026-07-08", "predicted_utilization_pct": 62.1, "p10": 54.3, "p90": 69.9, "near_capacity_flag": false }
+        ],
+        "Express": [
+          { "period_date": "2026-06-24", "predicted_utilization_pct": 71.8, "p10": 62.8, "p90": 80.8, "near_capacity_flag": false },
+          { "period_date": "2026-07-08", "predicted_utilization_pct": 78.4, "p10": 68.6, "p90": 88.2, "near_capacity_flag": false }
+        ]
+      },
+
+      "bay_type_utilization_bar": [
+        { "label": "Hydraulic", "avg_utilization_30d": 92.8, "near_capacity_days": 22, "overflow_risk_score": 0.42, "bay_count": 12 },
+        { "label": "Overhaul", "avg_utilization_30d": 84.6, "near_capacity_days": 14, "overflow_risk_score": 0.28, "bay_count": 10 },
+        { "label": "General", "avg_utilization_30d": 80.4, "near_capacity_days": 8, "overflow_risk_score": 0.18, "bay_count": 28 },
+        { "label": "Express", "avg_utilization_30d": 74.6, "near_capacity_days": 4, "overflow_risk_score": 0.08, "bay_count": 8 },
+        { "label": "PDI", "avg_utilization_30d": 60.2, "near_capacity_days": 0, "overflow_risk_score": 0.02, "bay_count": 10 }
+      ],
+
+      "branch_bay_heatmap": [
+        { "branch_id": "BR-HYD-03", "branch_name": "Hyderabad", "bay_type": "Hydraulic", "avg_util_30d": 98.4, "intensity": "CRITICAL" },
+        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore", "bay_type": "Hydraulic", "avg_util_30d": 94.2, "intensity": "HIGH" },
+        { "branch_id": "BR-CHN-02", "branch_name": "Chennai", "bay_type": "Overhaul", "avg_util_30d": 91.6, "intensity": "HIGH" },
+        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore", "bay_type": "General", "avg_util_30d": 86.4, "intensity": "HIGH" },
+        { "branch_id": "BR-MUM-05", "branch_name": "Mumbai", "bay_type": "Hydraulic", "avg_util_30d": 82.4, "intensity": "MEDIUM" },
+        { "branch_id": "BR-DEL-04", "branch_name": "Delhi", "bay_type": "General", "avg_util_30d": 74.8, "intensity": "MEDIUM" },
+        { "branch_id": "BR-KOL-07", "branch_name": "Kolkata", "bay_type": "PDI", "avg_util_30d": 58.2, "intensity": "LOW" },
+        { "branch_id": "BR-JAI-12", "branch_name": "Jaipur", "bay_type": "Express", "avg_util_30d": 61.4, "intensity": "LOW" }
+      ],
+
+      "daily_schedule_load_bar": [
+        { "label": "Monday", "avg_scheduled_jobs": 28, "avg_utilization_pct": 84.2 },
+        { "label": "Tuesday", "avg_scheduled_jobs": 32, "avg_utilization_pct": 88.6 },
+        { "label": "Wednesday", "avg_scheduled_jobs": 34, "avg_utilization_pct": 91.2 },
+        { "label": "Thursday", "avg_scheduled_jobs": 30, "avg_utilization_pct": 82.4 },
+        { "label": "Friday", "avg_scheduled_jobs": 26, "avg_utilization_pct": 76.8 },
+        { "label": "Saturday", "avg_scheduled_jobs": 18, "avg_utilization_pct": 52.4 },
+        { "label": "Sunday", "avg_scheduled_jobs": 6, "avg_utilization_pct": 18.2 }
+      ]
+    },
+
+    "forecast_table": {
+      "CRITICAL": [
+        {
+          "prediction_id": "PRED-BU-20260624-HYD-HYD-001",
+          "branch_id": "BR-HYD-03",
+          "branch_name": "Hyderabad Branch",
+          "bay_id": "BAY-WS003-02",
+          "bay_type": "Hydraulic",
+          "period_date": "2026-07-15",
+          "forecast_horizon_days": 30,
+          "predicted_utilization_pct": 98.4,
+          "predicted_utilization_pct_p10": 86.1,
+          "predicted_utilization_pct_p90": 100.0,
+          "near_capacity_flag": true,
+          "overflow_risk_score": 0.44,
+          "overflow_risk_pct": "44%",
+          "jobs_scheduled": 18,
+          "avg_dwell_time_hrs": 14.2,
+          "bay_capacity_hrs_day": 16.0,
+          "available_technicians_workshop": 22,
+          "shift_coverage_pct": 0.86,
+          "bay_maintenance_flag": false,
+          "model_name": "bay_utilization_forecast",
+          "model_version": "v1.0.0",
+          "prediction_timestamp": "2026-06-24T02:45:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_schedule_maintenance": true,
+            "can_trigger_overflow_alert": true,
+            "can_export": true
+          }
+        }
+      ],
+      "HIGH": [
+        {
+          "prediction_id": "PRED-BU-20260624-BLR-HYD-001",
+          "branch_id": "BR-BLR-01",
+          "branch_name": "Bangalore Branch",
+          "bay_id": "BAY-WS001-03",
+          "bay_type": "Hydraulic",
+          "period_date": "2026-07-15",
+          "forecast_horizon_days": 30,
+          "predicted_utilization_pct": 94.2,
+          "predicted_utilization_pct_p10": 82.4,
+          "predicted_utilization_pct_p90": 100.0,
+          "near_capacity_flag": true,
+          "overflow_risk_score": 0.32,
+          "overflow_risk_pct": "32%",
+          "jobs_scheduled": 16,
+          "avg_dwell_time_hrs": 13.8,
+          "bay_capacity_hrs_day": 16.0,
+          "available_technicians_workshop": 38,
+          "shift_coverage_pct": 0.91,
+          "bay_maintenance_flag": false,
+          "model_name": "bay_utilization_forecast",
+          "model_version": "v1.0.0",
+          "prediction_timestamp": "2026-06-24T02:45:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_schedule_maintenance": true,
+            "can_trigger_overflow_alert": true,
+            "can_export": true
+          }
+        },
+        {
+          "prediction_id": "PRED-BU-20260624-CHN-OVH-001",
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai Branch",
+          "bay_id": "BAY-WS002-05",
+          "bay_type": "Overhaul",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_utilization_pct": 91.6,
+          "predicted_utilization_pct_p10": 80.1,
+          "predicted_utilization_pct_p90": 100.0,
+          "near_capacity_flag": true,
+          "overflow_risk_score": 0.28,
+          "overflow_risk_pct": "28%",
+          "jobs_scheduled": 12,
+          "avg_dwell_time_hrs": 28.6,
+          "bay_capacity_hrs_day": 16.0,
+          "available_technicians_workshop": 32,
+          "shift_coverage_pct": 0.88,
+          "bay_maintenance_flag": false,
+          "model_name": "bay_utilization_forecast",
+          "model_version": "v1.0.0",
+          "prediction_timestamp": "2026-06-24T02:45:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_schedule_maintenance": true,
+            "can_trigger_overflow_alert": true,
+            "can_export": true
+          }
+        }
+      ],
+      "MEDIUM": [
+        {
+          "prediction_id": "PRED-BU-20260624-DEL-GEN-001",
+          "branch_id": "BR-DEL-04",
+          "branch_name": "Delhi Branch",
+          "bay_id": "BAY-WS004-07",
+          "bay_type": "General",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_utilization_pct": 74.8,
+          "predicted_utilization_pct_p10": 65.4,
+          "predicted_utilization_pct_p90": 84.2,
+          "near_capacity_flag": false,
+          "overflow_risk_score": 0.12,
+          "overflow_risk_pct": "12%",
+          "jobs_scheduled": 22,
+          "avg_dwell_time_hrs": 6.4,
+          "bay_capacity_hrs_day": 16.0,
+          "available_technicians_workshop": 28,
+          "shift_coverage_pct": 0.94,
+          "bay_maintenance_flag": false,
+          "model_name": "bay_utilization_forecast",
+          "model_version": "v1.0.0",
+          "prediction_timestamp": "2026-06-24T02:45:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_schedule_maintenance": false,
+            "can_trigger_overflow_alert": false,
+            "can_export": true
+          }
+        },
+        {
+          "prediction_id": "PRED-BU-20260624-MUM-EXP-001",
+          "branch_id": "BR-MUM-05",
+          "branch_name": "Mumbai Branch",
+          "bay_id": "BAY-WS005-04",
+          "bay_type": "Express",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_utilization_pct": 71.6,
+          "predicted_utilization_pct_p10": 62.7,
+          "predicted_utilization_pct_p90": 80.5,
+          "near_capacity_flag": false,
+          "overflow_risk_score": 0.10,
+          "overflow_risk_pct": "10%",
+          "jobs_scheduled": 18,
+          "avg_dwell_time_hrs": 4.8,
+          "bay_capacity_hrs_day": 16.0,
+          "available_technicians_workshop": 26,
+          "shift_coverage_pct": 0.92,
+          "bay_maintenance_flag": false,
+          "model_name": "bay_utilization_forecast",
+          "model_version": "v1.0.0",
+          "prediction_timestamp": "2026-06-24T02:45:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_schedule_maintenance": false,
+            "can_trigger_overflow_alert": false,
+            "can_export": true
+          }
+        }
+      ],
+      "LOW": [
+        {
+          "prediction_id": "PRED-BU-20260624-KOL-PDI-001",
+          "branch_id": "BR-KOL-07",
+          "branch_name": "Kolkata Branch",
+          "bay_id": "BAY-WS006-01",
+          "bay_type": "PDI",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_utilization_pct": 58.2,
+          "predicted_utilization_pct_p10": 50.9,
+          "predicted_utilization_pct_p90": 65.5,
+          "near_capacity_flag": false,
+          "overflow_risk_score": 0.02,
+          "overflow_risk_pct": "2%",
+          "jobs_scheduled": 10,
+          "avg_dwell_time_hrs": 6.5,
+          "bay_capacity_hrs_day": 16.0,
+          "available_technicians_workshop": 24,
+          "shift_coverage_pct": 0.96,
+          "bay_maintenance_flag": false,
+          "model_name": "bay_utilization_forecast",
+          "model_version": "v1.0.0",
+          "prediction_timestamp": "2026-06-24T02:45:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_schedule_maintenance": false,
+            "can_trigger_overflow_alert": false,
+            "can_export": true
+          }
+        },
+        {
+          "prediction_id": "PRED-BU-20260624-JAI-PDI-001",
+          "branch_id": "BR-JAI-12",
+          "branch_name": "Jaipur Branch",
+          "bay_id": "BAY-WS008-02",
+          "bay_type": "PDI",
+          "period_date": "2026-07-08",
+          "forecast_horizon_days": 30,
+          "predicted_utilization_pct": 54.6,
+          "predicted_utilization_pct_p10": 47.7,
+          "predicted_utilization_pct_p90": 61.5,
+          "near_capacity_flag": false,
+          "overflow_risk_score": 0.02,
+          "overflow_risk_pct": "2%",
+          "jobs_scheduled": 8,
+          "avg_dwell_time_hrs": 6.5,
+          "bay_capacity_hrs_day": 16.0,
+          "available_technicians_workshop": 20,
+          "shift_coverage_pct": 0.97,
+          "bay_maintenance_flag": false,
+          "model_name": "bay_utilization_forecast",
+          "model_version": "v1.0.0",
+          "prediction_timestamp": "2026-06-24T02:45:00",
+          "prediction_timestamp_relative": "6h ago",
+          "actions": {
+            "can_view_detail": true,
+            "can_schedule_maintenance": false,
+            "can_trigger_overflow_alert": false,
+            "can_export": true
+          }
+        }
+      ]
+    },
+
+    "bay_maintenance_schedule": [
+      {
+        "bay_id": "BAY-WS005-04",
+        "branch_id": "BR-MUM-05",
+        "bay_name": "Bay 4 – General B",
+        "bay_type": "General",
+        "status": "Under Maintenance",
+        "last_maintenance_dt": "2024-03-28",
+        "scheduled_return_dt": "2026-06-28",
+        "impact_on_utilization": "Remaining bays at +8% utilization while this bay is down"
+      }
+    ],
+
+    "filter_definitions": {
+      "branch_options": [
+        { "value": "ALL", "label": "All Branches" },
+        { "value": "BR-BLR-01", "label": "Bangalore Branch" },
+        { "value": "BR-CHN-02", "label": "Chennai Branch" },
+        { "value": "BR-HYD-03", "label": "Hyderabad Branch" }
+      ],
+      "bay_type_options": [
+        { "value": "ALL", "label": "All Bay Types" },
+        { "value": "General", "label": "General" },
+        { "value": "Hydraulic", "label": "Hydraulic" },
+        { "value": "PDI", "label": "PDI" },
+        { "value": "Overhaul", "label": "Overhaul" },
+        { "value": "Express", "label": "Express" }
+      ],
+      "utilization_status_options": [
+        { "value": "ALL", "label": "All" },
+        { "value": "CRITICAL", "label": "Over-Capacity (>95%)" },
+        { "value": "HIGH", "label": "Near-Capacity (90–95%)" },
+        { "value": "MEDIUM", "label": "Active (70–90%)" },
+        { "value": "LOW", "label": "Underutilized (<70%)" }
+      ],
+      "horizon_options": [
+        { "value": 30, "label": "30 Days" },
+        { "value": 60, "label": "60 Days" },
+        { "value": 90, "label": "90 Days" }
+      ]
+    },
+
+    "applied_filters": {
+      "branch_id": "ALL",
+      "bay_type": "ALL",
+      "utilization_status": "ALL",
+      "forecast_horizon_days": 30,
+      "date_range": "next_30_days"
+    },
+
+    "pagination": {
+      "total": 62,
+      "page": 1,
+      "page_size": 20,
+      "total_pages": 4,
+      "has_next": true,
+      "has_prev": false
+    }
+  }
+}

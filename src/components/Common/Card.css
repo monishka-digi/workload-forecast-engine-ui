@@ -1,17 +1,14 @@
 .dashboardCard {
   background: #171c24;
-  border: 1px solid #2a3140;
-  border-radius: 10px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
+  border: 1px solid #2d3647;
+  border-radius: 14px;
+  padding: 22px;
   transition: 0.25s;
 }
 
 .dashboardCard:hover {
-  border-color: #3c4557;
+  border-color: #475066;
 }
-
 .cardTop {
   display: flex;
   justify-content: space-between;
@@ -20,15 +17,13 @@
 }
 
 .cardTop h3 {
-  font-size: 17px;
-
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .cardTop span {
-  font-size: 12px;
-
-  color: #8b93a3;
+  color: #7f8ca8;
+  font-size: 13px;
 }
 
 .cardContent {

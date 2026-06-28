@@ -5,7 +5,7 @@ const menu = [
   { name: "Job Volume", path: "/job-volume", enabled: true },
   { name: "Component Demand", path: "/component-demand", enabled: true },
   { name: "Branch Load", path: "/branch-load", enabled: true },
-  { name: "Bay Utilization", enabled: false },
+  { name: "Bay Utilization", path: "/bay-utilization", enabled: true },
   { name: "Technician Demand", enabled: false },
 ];
 

@@ -1,0 +1,94 @@
+.bayTableCard {
+  margin-top: 24px;
+  background: #171c24;
+  border: 1px solid #2c3445;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.bayTableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.bayTableHeader h3 {
+  color: white;
+  font-size: 20px;
+  margin: 0;
+}
+
+.bayTableHeader span {
+  color: #8895aa;
+  font-size: 13px;
+}
+
+.bayTableWrapper {
+  overflow-x: auto;
+}
+
+.bayTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bayTable th {
+  color: #7d8aa4;
+  text-align: left;
+  padding: 16px;
+  font-size: 13px;
+  border-bottom: 1px solid #2b3342;
+}
+
+.bayTable td {
+  padding: 18px 16px;
+  color: white;
+  border-bottom: 1px solid #222936;
+  font-size: 14px;
+}
+
+.bayStatus {
+  padding: 6px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bayStatus.normal {
+  background: #153e33;
+  color: #34d399;
+}
+
+.bayStatus.critical {
+  background: #472222;
+  color: #ef4444;
+}
+
+.outlineBtn {
+  border: 1px solid #34d399;
+  background: none;
+  color: #34d399;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.ghostBtn {
+  border: 1px solid #3b4557;
+  background: none;
+  color: #c9d2df;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.outlineBtn:hover {
+  background: #34d399;
+  color: #111;
+}
+
+.ghostBtn:hover {
+  background: #2a3242;
+}
