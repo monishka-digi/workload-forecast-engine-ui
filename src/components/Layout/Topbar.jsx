@@ -1,12 +1,36 @@
+import { useLocation } from "react-router-dom";
 import "./topbar.css";
 
 export default function Topbar() {
+  const { pathname } = useLocation();
+
+  const pages = {
+    "/job-volume": {
+      title: "Job Volume Prediction",
+      subtitle: "All branches · South & West region workshops",
+    },
+    "/component-demand": {
+      title: "Component Category Demand",
+      subtitle:
+        "Parts consumption forecast driven by job-volume model",
+    },
+    "/branch-load": {
+      title: "Branch-wise Load Forecast",
+      subtitle: "Workload as % of rated branch capacity",
+    },
+  };
+
+  const page = pages[pathname] || {
+    title: "Forecast Dashboard",
+    subtitle: "",
+  };
+
   return (
     <div className="topbar">
       <div>
-        <h2>Job Volume Prediction</h2>
+        <h2>{page.title}</h2>
 
-        <p>All branches · South & West region workshops</p>
+        <p>{page.subtitle}</p>
       </div>
 
       <div className="right">
