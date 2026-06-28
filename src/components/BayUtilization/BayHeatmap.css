@@ -1,0 +1,83 @@
+.heatmapCard {
+  background: #171c24;
+  border: 1px solid #2d3647;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.heatmapHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.heatmapHeader h3 {
+  color: white;
+  margin: 0;
+  font-size: 20px;
+}
+
+.heatmapHeader span {
+  color: #8793a8;
+  font-size: 13px;
+}
+
+.heatmapGrid {
+  display: grid;
+  grid-template-columns: 140px repeat(5, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
+.heatHead {
+  color: #8d97aa;
+  font-size: 13px;
+  font-weight: 600;
+  padding-bottom: 10px;
+}
+
+.center {
+  text-align: center;
+}
+
+.branchName {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.heatCell {
+  height: 42px;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.low{
+    background:#34d399;
+}
+
+.medium{
+    background:#facc15;
+    color:#111;
+}
+
+.high{
+    background:#fb923c;
+}
+
+.critical{
+    background:#ef4444;
+}
+
+.empty {
+  background: #232b39;
+  color: #6f7d94;
+}

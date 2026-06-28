@@ -1,0 +1,87 @@
+.bayCard {
+  background: #171c24;
+  border: 1px solid #2d3647;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.bayCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.bayCardHeader h3 {
+  color: #fff;
+  font-size: 20px;
+  margin: 0;
+}
+
+.bayCardHeader span {
+  color: #7e8ba4;
+  font-size: 13px;
+}
+
+.bayCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bayRow {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.bayInfo h4 {
+  margin: 0;
+  color: white;
+  font-size: 15px;
+}
+
+.bayInfo p {
+  margin-top: 6px;
+  color: #7e8ba4;
+  font-size: 12px;
+}
+
+.bayProgressContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.bayProgressTrack {
+  flex: 1;
+  height: 14px;
+  background: #293142;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.bayProgressFill {
+  height: 100%;
+  border-radius: 30px;
+}
+
+.bayProgressFill.normal {
+  background: linear-gradient(90deg, #3dd8b2, #6cf0c2);
+}
+
+.bayProgressFill.warning {
+  background: linear-gradient(90deg, #ffd54d, #ffb300);
+}
+
+.bayProgressFill.critical {
+  background: linear-gradient(90deg, #ff8b5c, #ef4444);
+}
+
+.bayPercent {
+  width: 55px;
+  color: white;
+  text-align: right;
+  font-weight: 600;
+}
