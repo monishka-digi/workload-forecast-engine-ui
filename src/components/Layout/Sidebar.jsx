@@ -6,7 +6,7 @@ const menu = [
   { name: "Component Demand", path: "/component-demand", enabled: true },
   { name: "Branch Load", path: "/branch-load", enabled: true },
   { name: "Bay Utilization", path: "/bay-utilization", enabled: true },
-  { name: "Technician Demand", enabled: false },
+  { name: "Technician Demand", path: "/technician-demand", enabled: true },
 ];
 
 export default function Sidebar() {

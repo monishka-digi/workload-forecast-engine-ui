@@ -26,7 +26,7 @@ export default function ComponentDemandTable({
           <tbody>
             {rows.map((row) => (
               <tr key={row.id}>
-                <td>{row.category}</td>
+                <td>{row.component_category}</td>
 
                 <td>{row.branchId}</td>
 
