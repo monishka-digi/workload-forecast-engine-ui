@@ -1,5 +1,6 @@
 export const mapComponentDemandData = (response) => {
   if (!response) return null;
+  
 
   const {
     metadata,
@@ -11,6 +12,7 @@ export const mapComponentDemandData = (response) => {
     filter_definitions,
   } = response;
 
+  
   const kpis = [
     {
       title: "Categories Forecasted",
@@ -80,22 +82,52 @@ export const mapComponentDemandData = (response) => {
   const categoryBar = graph_data?.category_demand_bar_30d || [];
 
   const categoryDemand = {
-  labels: categoryBar.map(item => item.label),
+    labels: categoryBar.map((item) => item.label),
 
-  datasets: [
-    {
-      data: categoryBar.map(item => item.value),
-    },
-  ],
-};
+    datasets: [
+      {
+        data: categoryBar.map((item) => item.value),
+      },
+    ],
+  };
 
-  const heatmap = (graph_data?.branch_category_heatmap || []).map((item) => ({
-    branch: item.branch_name,
-    category: item.category,
-    demand: item.predicted_qty_30d,
-    utilization: item.stock_utilization_pct,
-    risk: (item.stockout_risk || "").toLowerCase(),
-  }));
+  const heatmap = graph_data?.branch_category_heatmap || [];
+
+  const branches = [...new Set(heatmap.map((item) => item.branch_name))];
+  const categories = [...new Set(heatmap.map((item) => item.category))];
+
+  const colors = [
+    "#37d8c3",
+    "#f5b400",
+    "#ff7b72",
+    "#7c5cff",
+    "#00c2ff",
+    "#8bc34a",
+    "#ff9800",
+    "#9c27b0",
+  ];
+
+  const branchCategoryMix = {
+    labels: branches,
+
+    datasets: categories.map((category, index) => ({
+      label: category,
+
+      data: branches.map((branch) => {
+        const row = heatmap.find(
+          (x) => x.branch_name === branch && x.category === category,
+        );
+
+        return row ? row.predicted_qty_30d : 0;
+      }),
+
+      backgroundColor: colors[index % colors.length],
+
+      borderRadius: 4,
+
+      borderSkipped: false,
+    })),
+  };
 
   const accuracyData = graph_data?.forecast_vs_actual_by_category || [];
 
@@ -131,21 +163,21 @@ export const mapComponentDemandData = (response) => {
   const predictionTable = tableRows.map((row) => ({
     id: row.prediction_id,
 
-    category: row.category,
+    componentCategory: row.component_category,
 
-    branch: row.branch_name,
+    branchName: row.branch_name,
 
-    branchId: row.branch_id,
+    stockOutRisk: row.stockout_risk_pct,
 
     predictedQty: row.predicted_qty,
 
-    drivingJobVolume: row.driving_job_volume,
+    avgUnitCost: row.avg_unit_cost,
 
-    usageRate: row.usage_rate_per_job,
-
-    method: row.forecast_method,
+    actions: row.actions,
   }));
 
+
+  console.log(graph_data.branch_category_heatmap);
   return {
     metadata,
 
@@ -160,7 +192,7 @@ export const mapComponentDemandData = (response) => {
     charts: {
       trend: trendChart,
       categoryDemand,
-      heatmap,
+      branchCategoryMix,
       accuracy: accuracyChart,
     },
 

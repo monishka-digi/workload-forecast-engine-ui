@@ -25,7 +25,9 @@ export default function ComponentDemand() {
       error={error}
       kpis={kpiSection}
       topLeft={<CategoryDemandChart data={dashboard.charts.categoryDemand} />}
-      topRight={<BranchCategoryMixChart data={dashboard.charts.heatmap} />}
+      // topRight={
+      //   <BranchCategoryMixChart data={dashboard.charts.branchCategoryMix} />
+      // }
       table={<ComponentDemandTable rows={dashboard.table.rows} />}
     />
   );
