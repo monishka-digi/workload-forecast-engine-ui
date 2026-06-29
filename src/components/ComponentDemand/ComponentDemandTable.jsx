@@ -1,55 +1,60 @@
 import Card from "../Common/Card";
 import MethodBadge from "./MethodBadge";
 
-export default function ComponentDemandTable({
-  rows = [],
-}) {
+import "./ComponentDemandTable.css";
+
+export default function ComponentDemandTable({ rows = [] }) {
   return (
-    <Card
-      title="Category Detail"
-      tag="primary_table grouped by component_category"
-      height="auto"
-    >
-      <div className="tableWrapper">
-        <table className="predictionTable">
+    <div className="componentTableCard">
+      <div className="componentTableHeader">
+        <h3>Category Detail</h3>
+      </div>
+
+      <div className="componentTableWrapper">
+        <table className="componentTable">
           <thead>
             <tr>
-              <th>Category</th>
-              <th>Branch</th>
-              <th>Driving Job Vol.</th>
-              <th>Usage Rate / Job</th>
-              <th>Pred. Qty (P50)</th>
-              <th>Method</th>
+              <th>Component Category</th>
+              <th>Branch Name</th>
+              <th>Stock Out Risk</th>
+              <th>Predicted Qty</th>
+              <th>Avg Unit Cost</th>
             </tr>
           </thead>
 
           <tbody>
             {rows.map((row) => (
               <tr key={row.id}>
-                <td>{row.component_category}</td>
+                <td>{row.componentCategory}</td>
 
-                <td>{row.branchId}</td>
+                <td>{row.branchName}</td>
 
                 <td>
-                  {row.drivingJobVolume?.toLocaleString()}
+                  <span
+                    className={`riskBadge ${
+                      parseInt(row.stockOutRisk) >= 50
+                        ? "high"
+                        : parseInt(row.stockOutRisk) >= 25
+                        ? "medium"
+                        : "low"
+                    }`}
+                  >
+                    {row.stockOutRisk}
+                  </span>
                 </td>
 
-                <td>{row.usageRate}</td>
-
                 <td>
-                  {row.predictedQty?.toLocaleString()}
+                  {Number(row.predictedQty).toLocaleString()}
                 </td>
 
                 <td>
-                  <MethodBadge
-                    method={row.method}
-                  />
+                  ₹ {Number(row.avgUnitCost).toLocaleString("en-IN")}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-    </Card>
+    </div>
   );
 }
