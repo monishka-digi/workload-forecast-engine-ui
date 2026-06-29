@@ -53,3 +53,10 @@
 .alert {
   border: 1px solid #ef5a5a55;
 }
+
+.kpiSection {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
