@@ -60,21 +60,21 @@
   font-weight: 600;
 }
 
-.low{
-    background:#34d399;
+.low {
+  background: #34d399;
 }
 
-.medium{
-    background:#facc15;
-    color:#111;
+.medium {
+  background: #facc15;
+  color: #111;
 }
 
-.high{
-    background:#fb923c;
+.high {
+  background: #fb923c;
 }
 
-.critical{
-    background:#ef4444;
+.critical {
+  background: #ef4444;
 }
 
 .empty {

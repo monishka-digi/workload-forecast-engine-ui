@@ -21,6 +21,10 @@ export default function Topbar() {
       title: "Bay Utilization Forecast",
       subtitle: "Bay occupancy by branch and bay type",
     },
+    "/technician-demand": {
+      title: "Technician Demand Forecast",
+      subtitle: "Required headcount & skill-mix per branch",
+    },
   };
 
   const page = pages[pathname] || {

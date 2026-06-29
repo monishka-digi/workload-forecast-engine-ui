@@ -6,6 +6,7 @@ import JobVolume from "./pages/JobVolume";
 import ComponentDemand from "./pages/ComponentDemand";
 import BranchLoad from "./pages/BranchLoad";
 import BayUtilization from "./pages/BayUtilization";
+import TechnicianDemand from "./pages/TechnicianDemand";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/component-demand" element={<ComponentDemand />} />
         <Route path="/branch-load" element={<BranchLoad />} />
         <Route path="/bay-utilization" element={<BayUtilization />} />
+        <Route path="/technician-demand" element={<TechnicianDemand />} />
       </Route>
     </Routes>
   );

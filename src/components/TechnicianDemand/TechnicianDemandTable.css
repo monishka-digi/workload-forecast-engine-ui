@@ -1,0 +1,126 @@
+.techTableCard {
+  background: #181d26;
+  border: 1px solid #2b3445;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-top: 20px;
+}
+
+.techTableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.techTableHeader h3 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.techTableHeader span {
+  color: #6f7d9d;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.techTableWrapper {
+  overflow-x: auto;
+}
+
+.techTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.techTable thead tr {
+  border-bottom: 1px solid #2b3445;
+}
+
+.techTable th {
+  text-align: left;
+  padding: 14px 12px;
+  color: #6f7d9d;
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.techTable td {
+  padding: 16px 12px;
+  color: #ffffff;
+  border-bottom: 1px solid #242c3a;
+  font-size: 15px;
+}
+
+.techTable tbody tr:hover {
+  background: #202734;
+}
+
+.techTable td:first-child {
+  font-weight: 600;
+}
+
+.shortfallBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.shortfallBadge.high {
+  background: #6b4d00;
+  color: #ffc83d;
+}
+
+.shortfallBadge.medium {
+  background: #5b3b00;
+  color: #f5b400;
+}
+
+.shortfallBadge.low {
+  background: #0b5c4b;
+  color: #37d8c3;
+}
+
+.approveBtn {
+  background: transparent;
+  border: 1px solid #2cc6a3;
+  color: #2cc6a3;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin-right: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.approveBtn:hover {
+  background: #2cc6a315;
+}
+
+.editBtn {
+  background: transparent;
+  border: 1px solid #394253;
+  color: #8792a8;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.editBtn:hover {
+  background: #39425330;
+}
+
+.approveBtn:disabled,
+.editBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
