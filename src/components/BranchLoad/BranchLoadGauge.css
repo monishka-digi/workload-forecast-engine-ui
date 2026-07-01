@@ -1,15 +1,15 @@
-.branchGaugeCard{
+.branchGaugeCard {
     background: var(--card-bg);
-    border:1px solid #2c3342;
-    border-radius:12px;
-    padding:20px 22px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
 }
-
 .branchGaugeHeader{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:22px;
 }
 
 .branchGaugeHeader h3{

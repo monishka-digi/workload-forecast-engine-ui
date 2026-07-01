@@ -5,6 +5,7 @@
   padding: 22px;
   transition: 0.25s;
   color: var(--text);
+  margin-bottom: 10px;
 }
 
 .dashboardCard:hover {

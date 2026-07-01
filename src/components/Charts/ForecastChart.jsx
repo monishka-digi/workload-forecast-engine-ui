@@ -33,6 +33,7 @@ export default function ForecastChart({ data }) {
         border: "1px solid var(--border)",
         borderRadius: 12,
         padding: 20,
+        marginBottom: "10px"
       }}
     >
       <Line

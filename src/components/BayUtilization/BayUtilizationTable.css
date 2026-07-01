@@ -56,13 +56,13 @@
 }
 
 .bayStatus.normal {
-  background: #153e33;
-  color: #34d399;
+  background: var(--status-normal-bg);
+  color: var(--status-normal-text);
 }
 
 .bayStatus.critical {
-  background: #472222;
-  color: #ef4444;
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
 }
 
 .outlineBtn {

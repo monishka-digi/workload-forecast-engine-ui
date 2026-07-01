@@ -74,18 +74,18 @@
 }
 
 .shortfallBadge.high {
-  background: #6b4d00;
-  color: #ffc83d;
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
 }
 
 .shortfallBadge.medium {
-  background: #5b3b00;
-  color: #f5b400;
+  background: var(--status-medium-bg);
+  color: var(--status-medium-text);
 }
 
 .shortfallBadge.low {
-  background: #0b5c4b;
-  color: #37d8c3;
+  background: var(--status-normal-bg);
+  color: var(--status-normal-text);
 }
 
 .approveBtn {

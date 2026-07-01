@@ -17,7 +17,7 @@ export default function BayUtilizationTable({ rows = [] }) {
               <th>BAY TYPE</th>
               <th>PERIOD</th>
               <th>UTILIZATION</th>
-              <th>P10-P90</th>
+              <th>DAY 10 - DAY90</th>
               <th>JOBS</th>
               <th>OVERFLOW</th>
               <th>STATUS</th>
