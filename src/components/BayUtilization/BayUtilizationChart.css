@@ -1,8 +1,10 @@
 .bayCard {
   background: var(--card-bg);
-  border: 1px solid #2d3647;
+  border: 1px solid var(--border);
   border-radius: 12px;
+  box-shadow: var(--shadow);
   padding: 20px;
+  margin-bottom: 20px
 }
 
 .bayCardHeader {

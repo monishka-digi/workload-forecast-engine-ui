@@ -1,3 +1,12 @@
+.componentTableCard {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 10px
+}
+
 .riskBadge {
   display: inline-flex;
   align-items: center;
