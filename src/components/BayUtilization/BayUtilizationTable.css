@@ -1,6 +1,6 @@
 .bayTableCard {
   margin-top: 24px;
-  background: #171c24;
+  background: var(--card-bg);
   border: 1px solid #2c3445;
   border-radius: 12px;
   padding: 20px;
@@ -14,7 +14,7 @@
 }
 
 .bayTableHeader h3 {
-  color: white;
+  color: var(--chart-label);
   font-size: 20px;
   margin: 0;
 }
@@ -43,7 +43,7 @@
 
 .bayTable td {
   padding: 18px 16px;
-  color: white;
+  color: var(--chart-label);
   border-bottom: 1px solid #222936;
   font-size: 14px;
 }

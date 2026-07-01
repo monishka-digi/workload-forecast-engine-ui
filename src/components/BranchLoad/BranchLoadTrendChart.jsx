@@ -9,6 +9,8 @@ import {
 } from "chart.js";
 
 import { Line } from "react-chartjs-2";
+import { useTheme } from "../../context/ThemeContext";
+import { getChartColors } from "../../config/chartOptions";
 import "./BranchLoadTrendChart.css";
 
 ChartJS.register(
@@ -21,6 +23,9 @@ ChartJS.register(
 );
 
 export default function BranchLoadTrendChart({ chart }) {
+  const { theme } = useTheme();
+  const colors = getChartColors(theme);
+
   return (
     <div className="branchTrendCard">
       <div className="branchTrendHeader">
@@ -42,9 +47,16 @@ export default function BranchLoadTrendChart({ chart }) {
                 align: "end",
 
                 labels: {
-                  color: "#d9dce5",
+                  color: colors.text,
                   boxWidth: 14,
                 },
+              },
+              tooltip: {
+                backgroundColor: colors.tooltipBg,
+                borderColor: colors.tooltipBorder,
+                borderWidth: 1,
+                titleColor: colors.tooltipText,
+                bodyColor: colors.tooltipText,
               },
             },
 
@@ -56,22 +68,22 @@ export default function BranchLoadTrendChart({ chart }) {
             scales: {
               x: {
                 ticks: {
-                  color: "#7b879d",
+                  color: colors.muted,
                 },
 
                 grid: {
-                  color: "#222b39",
+                  color: colors.grid,
                 },
               },
 
               y: {
                 ticks: {
-                  color: "#7b879d",
+                  color: colors.muted,
                   callback: (v) => `${v}%`,
                 },
 
                 grid: {
-                  color: "#222b39",
+                  color: colors.grid,
                 },
 
                 min: 0,

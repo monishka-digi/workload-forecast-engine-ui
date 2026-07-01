@@ -10,13 +10,16 @@ import {
 } from "chart.js";
 
 import Card from "../Common/Card";
+import { useTheme } from "../../context/ThemeContext";
+import { getChartColors } from "../../config/chartOptions";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export default function BranchCategoryMixChart({ data }) {
+  const { theme } = useTheme();
+  const colors = getChartColors(theme);
+  
   if (!data) return null;
-
-  console.log(data);
 
   const options = {
     responsive: true,
@@ -28,7 +31,7 @@ export default function BranchCategoryMixChart({ data }) {
         position: "bottom",
 
         labels: {
-          color: "#b8c1d1",
+          color: colors.text,
 
           boxWidth: 14,
 
@@ -40,6 +43,11 @@ export default function BranchCategoryMixChart({ data }) {
         mode: "index",
 
         intersect: false,
+        backgroundColor: colors.tooltipBg,
+        borderColor: colors.tooltipBorder,
+        borderWidth: 1,
+        titleColor: colors.tooltipText,
+        bodyColor: colors.tooltipText,
       },
     },
 
@@ -54,7 +62,7 @@ export default function BranchCategoryMixChart({ data }) {
         stacked: true,
 
         ticks: {
-          color: "#a8b2c7",
+          color: colors.muted,
         },
 
         grid: {
@@ -66,11 +74,11 @@ export default function BranchCategoryMixChart({ data }) {
         stacked: true,
 
         ticks: {
-          color: "#a8b2c7",
+          color: colors.muted,
         },
 
         grid: {
-          color: "#2b3445",
+          color: colors.grid,
         },
       },
     },

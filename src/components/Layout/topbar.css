@@ -1,67 +1,82 @@
-.topbar{
+.topbar {
+  height: 85px;
 
-height:85px;
+  display: flex;
 
-display:flex;
+  justify-content: space-between;
 
-justify-content:space-between;
+  align-items: center;
 
-align-items:center;
+  padding: 18px 25px;
 
-padding:0 25px;
-
-border-bottom:1px solid var(--line);
-
+  border-bottom: 1px solid var(--border);
+  background: var(--topbar-bg);
 }
 
-.topbar h2{
-
-font-size:32px;
-
+.topbar h2 {
+  font-size: 25px;
+  color: var(--text);
 }
 
-.topbar p{
+.topbar p {
+  color: var(--text-secondary);
 
-color:var(--textDim);
-
-margin-top:5px;
-
+  margin-top: 5px;
 }
 
-.right{
+.right {
+  display: flex;
 
-display:flex;
+  gap: 15px;
 
-gap:15px;
-
-align-items:center;
-
+  align-items: center;
 }
 
-select{
+select {
+  background: var(--panel);
 
-background:var(--panel);
+  border: 1px solid var(--border);
 
-border:1px solid var(--line);
+  color: var(--text);
 
-color:white;
+  padding: 10px 14px;
 
-padding:10px 14px;
-
-border-radius:8px;
-
+  border-radius: 8px;
+  outline: none;
 }
 
-.live{
+select option {
+  background: var(--card-bg);
+  color: var(--text);
+}
 
-padding:10px 16px;
+.live {
+  padding: 10px 16px;
 
-background:#12372a;
+  background: var(--primary-light);
 
-color:#2be38c;
+  color: var(--primary);
 
-border-radius:8px;
+  border-radius: 8px;
 
-border:1px solid #1d5f4f;
+  border: 1px solid var(--primary-border);
+  font-weight: 600;
+}
 
+.right button {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.right button:hover {
+  background: var(--card-hover);
 }

@@ -1,11 +1,11 @@
 .kpiCard {
-  background: #171c24;
+  background: var(--card-bg);
 
   padding: 18px;
 
   border-radius: 10px;
 
-  border: 1px solid #2a3140;
+  border: 1px solid var(--border);
 
   display: flex;
 
@@ -17,13 +17,13 @@
 }
 
 .kpiCard:hover {
-  border-color: #f5b400;
+  border-color: var(--primary);
 }
 
 .kpiTitle {
   font-size: 12px;
 
-  color: #8b93a3;
+  color: var(--text-secondary);
 
   text-transform: uppercase;
 
@@ -31,11 +31,11 @@
 }
 
 .kpiValue {
-  font-size: 32px;
+  font-size: 25px;
 
   font-weight: 700;
 
-  color: white;
+  color: var(--text);
 }
 
 .kpiSub {
@@ -43,15 +43,15 @@
 }
 
 .positive {
-  color: #34d6b8;
+  color: var(--success);
 }
 
 .negative {
-  color: #ef5a5a;
+  color: var(--danger);
 }
 
 .alert {
-  border: 1px solid #ef5a5a55;
+  border: 1px solid var(--danger-border);
 }
 
 .kpiSection {

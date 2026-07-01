@@ -1,25 +1,25 @@
-.riskBadge{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-width:70px;
-    height:28px;
-    border-radius:16px;
-    font-size:13px;
-    font-weight:600;
+.riskBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+  height: 28px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
-.riskBadge.high{
-    background:#4b1f26;
-    color:#ff6b6b;
+.riskBadge.high {
+  background: var(--danger-light);
+  color: var(--danger);
 }
 
-.riskBadge.medium{
-    background:#5b4700;
-    color:#ffc83d;
+.riskBadge.medium {
+  background: var(--warning-light);
+  color: var(--warning);
 }
 
-.riskBadge.low{
-    background:#0c5647;
-    color:#37d8c3;
+.riskBadge.low {
+  background: var(--success-light);
+  color: var(--success);
 }

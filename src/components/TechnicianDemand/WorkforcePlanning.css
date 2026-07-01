@@ -58,7 +58,7 @@
 */
 
 .planningCard{
-    background:#181d26;
+    background: var(--card-bg);
     border:1px solid #2b3445;
     border-radius:12px;
     padding:18px 20px;
@@ -73,7 +73,7 @@
 }
 
 .planningHeader h3{
-    color:#fff;
+    color: var(--chart-label);
     font-size:20px;
     font-weight:600;
 }
@@ -99,7 +99,7 @@
 }
 
 .planningItem h4{
-    color:#f5b400;
+    color:var(--primary);
     font-size:13px;
     text-transform:uppercase;
     letter-spacing:0.8px;

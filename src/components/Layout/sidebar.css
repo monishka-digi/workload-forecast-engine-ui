@@ -1,9 +1,9 @@
 .sidebar {
   width: 260px;
 
-  background: var(--sidebar);
+  background: var(--sidebar-bg);
 
-  border-right: 1px solid var(--line);
+  border-right: 1px solid var(--border);
 
   display: flex;
 
@@ -19,7 +19,7 @@
 
   align-items: center;
 
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
 }
 
 .logo {
@@ -27,9 +27,9 @@
 
   height: 38px;
 
-  background: var(--yellow);
+  background: var(--primary);
 
-  color: #111;
+  color: #fff;
 
   font-weight: bold;
 
@@ -43,13 +43,14 @@
 }
 
 .brand h3 {
-  font-size: 20px;
+  font-size: 18px;
+  color: var(--text);
 }
 
 .brand p {
   font-size: 12px;
 
-  color: var(--textDim);
+  color: var(--text-secondary);
 }
 
 .heading {
@@ -59,7 +60,7 @@
 
   letter-spacing: 2px;
 
-  color: var(--textLight);
+  color: var(--text-light);
 }
 
 .menuItem {
@@ -71,7 +72,7 @@
 
   padding: 15px 20px;
 
-  color: var(--textDim);
+  color: var(--text-secondary);
 
   cursor: pointer;
 
@@ -81,15 +82,15 @@
 }
 
 .menuItem:hover {
-  background: #171c24;
+  background: var(--card-hover);
 }
 
 .menuItem.active {
-  background: #171c24;
+  background: var(--card-hover);
 
-  color: white;
+  color: var(--text);
 
-  border-left: 3px solid var(--yellow);
+  border-left: 3px solid var(--primary);
 }
 
 .dot {
@@ -97,13 +98,13 @@
 
   height: 7px;
 
-  background: gray;
+  background: var(--text-light);
 
   border-radius: 50%;
 }
 
 .active .dot {
-  background: var(--yellow);
+  background: var(--primary);
 }
 
 .footer {
@@ -113,9 +114,9 @@
 
   font-size: 12px;
 
-  color: var(--textLight);
+  color: var(--text-light);
 
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
 }
 
 .menuItem.disabled {

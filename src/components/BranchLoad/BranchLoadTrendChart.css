@@ -1,5 +1,5 @@
 .branchTrendCard{
-    background:#171c24;
+     background: var(--card-bg);
     border:1px solid #2b3446;
     border-radius:14px;
     padding:20px;
@@ -14,7 +14,7 @@
 }
 
 .branchTrendHeader h3{
-    color:white;
+    color: var(--text);
     font-size:22px;
     font-weight:700;
 }

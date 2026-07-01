@@ -1,5 +1,5 @@
 .bayCard {
-  background: #171c24;
+  background: var(--card-bg);
   border: 1px solid #2d3647;
   border-radius: 12px;
   padding: 20px;
@@ -13,7 +13,7 @@
 }
 
 .bayCardHeader h3 {
-  color: #fff;
+  color: var(--text);
   font-size: 20px;
   margin: 0;
 }
@@ -38,7 +38,7 @@
 
 .bayInfo h4 {
   margin: 0;
-  color: white;
+  color: var(--chart-label);
   font-size: 15px;
 }
 
@@ -57,7 +57,7 @@
 .bayProgressTrack {
   flex: 1;
   height: 14px;
-  background: #293142;
+  background: var(--divider);
   border-radius: 30px;
   overflow: hidden;
 }
@@ -81,7 +81,7 @@
 
 .bayPercent {
   width: 55px;
-  color: white;
+  color: var(--chart-label);
   text-align: right;
   font-weight: 600;
 }

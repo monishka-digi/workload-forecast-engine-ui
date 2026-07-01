@@ -9,6 +9,8 @@ import {
 } from "chart.js";
 
 import { Line } from "react-chartjs-2";
+import { getCommonOptions } from "../../config/chartOptions";
+import { useTheme } from "../../context/ThemeContext";
 
 ChartJS.register(
   CategoryScale,
@@ -20,23 +22,22 @@ ChartJS.register(
 );
 
 export default function ForecastChart({ data }) {
+  const { theme } = useTheme();
   if (!data) return null;
 
   return (
     <div
       style={{
         height: 350,
-        background: "#171c24",
+        background: "var(--card-bg)",
+        border: "1px solid var(--border)",
         borderRadius: 12,
         padding: 20,
       }}
     >
       <Line
         data={data}
-        options={{
-          responsive: true,
-          maintainAspectRatio: false,
-        }}
+        options={getCommonOptions(theme)}
       />
     </div>
   );

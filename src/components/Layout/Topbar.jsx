@@ -1,8 +1,10 @@
 import { useLocation } from "react-router-dom";
 import "./topbar.css";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Topbar() {
   const { pathname } = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   const pages = {
     "/job-volume": {
@@ -50,6 +52,7 @@ export default function Topbar() {
         </select>
 
         <div className="live">● Live</div>
+        <button onClick={toggleTheme}>{theme === "dark" ? "☀️" : "🌙"}</button>
       </div>
     </div>
   );

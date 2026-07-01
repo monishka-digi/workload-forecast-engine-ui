@@ -57,7 +57,7 @@
 }
 
 .heatmapRow span {
-  color: white;
+  color: var(--chart-label);
 
   font-size: 14px;
 }
