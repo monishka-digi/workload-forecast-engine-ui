@@ -27,32 +27,37 @@ export default function MachineMixChart({ data }) {
         <div
           style={{
             position: "absolute",
-            left: "50%",
             top: "50%",
-            transform: "translate(-50%,-55%)",
-            textAlign: "center",
+            left: "50%",
+            transform: "translate(-190%, -50%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
             pointerEvents: "none",
           }}
         >
           <h2
             style={{
               margin: 0,
+              lineHeight: 1,
               color: "var(--text)",
               fontSize: 30,
+              fontWeight: 700,
             }}
           >
             {data.total}
           </h2>
 
-          <p
+          <span
             style={{
-              margin: 0,
+              marginTop: 6,
               color: "var(--text-secondary)",
-              fontSize: 13,
+              fontSize: 14,
             }}
           >
             Jobs
-          </p>
+          </span>
         </div>
       </div>
     </Card>

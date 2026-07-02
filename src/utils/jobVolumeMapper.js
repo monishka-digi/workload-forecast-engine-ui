@@ -161,24 +161,26 @@ export const mapJobVolumeData = (response) => {
   /* -------------------------------------------------------------------------- */
 
   const machineMix = {
-    total: machineTotal,
+  total: machineTotal,
 
-    labels: machine.map((item) => item.label),
+  labels: machine.map((item) => item.label),
 
-    datasets: [
-      {
-        data: machine.map((item) => item.value),
+  datasets: [
+    {
+      data: machine.map((item) => item.value),
 
-        backgroundColor: machineColors,
+      backgroundColor: machineColors,
 
-        borderColor: "var(--card-bg)",
+      borderColor: "#ffffff",      // or "#1d232c" for dark
+      borderWidth: 1,
 
-        borderWidth: 2,
+      spacing: 2,
+      hoverOffset: 6,
 
-        hoverOffset: 10,
-      },
-    ],
-  };
+      radius: "80%",
+    },
+  ],
+};
     /* -------------------------------------------------------------------------- */
   /*                              BRANCH CHART                                  */
   /* -------------------------------------------------------------------------- */

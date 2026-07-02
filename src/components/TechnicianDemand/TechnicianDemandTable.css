@@ -51,7 +51,7 @@
 .techTable td {
   padding: 16px 12px;
   color: var(--text);
-  border-bottom: 1px solid #242c3a;
+  border-bottom: 1px solid var(--border);
   font-size: 15px;
 }
 

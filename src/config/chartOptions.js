@@ -73,23 +73,29 @@ export const getCommonOptions = (theme) => {
 
 export const getDoughnutOptions = (theme) => {
   const colors = getChartColors(theme);
+
   return {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: "72%",
+
+    cutout: "55%",
+
     plugins: {
       legend: {
-        position: "bottom",
+        position: "right",
+
         labels: {
           color: colors.text,
-          usePointStyle: true,
-          pointStyle: "circle",
+          usePointStyle: false,
+          boxWidth: 18,
+          boxHeight: 18,
           padding: 16,
           font: {
-            size: 12,
+            size: 13,
           },
         },
       },
+
       tooltip: {
         backgroundColor: colors.tooltipBg,
         borderColor: colors.tooltipBorder,

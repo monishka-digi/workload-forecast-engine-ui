@@ -13,138 +13,327 @@
       "confidence_level": "80%",
       "forecast_horizons": [30, 60, 90],
       "input_dataset_ref": "gold_technician_demand_v20260624",
-      "dependent_models": ["job_volume_prediction_v1.0.0", "branch_load_forecast_v1.0.0"],
+      "dependent_models": [
+        "job_volume_prediction_v1.0.0",
+        "branch_load_forecast_v1.0.0"
+      ],
       "model_run_id": "RUN-TD-20260624-001"
     },
 
+    "forecast_reasoning": {
+      "scope_note": "Workforce demand is now forecast for two branches: Nagpur (BR-NAG-01, West) and Chennai (BR-CHN-02, South). Nagpur was added to this cycle; all headcount, skill-mix and gap figures cover just these two branches.",
+      "horizon_note": "Required headcount is projected weekly across the full 90-day window and tracks job volume: it peaks in the week of 2026-07-15 (monsoon breakdown surge) then stays elevated as accumulated backlog clears.",
+      "branch_level": {
+        "BR-NAG-01": "Nagpur drives the shortfall. 24 technicians against a 34-head requirement (29% gap), worst in Specialist and L3 skills needed for breakdown/overhaul work. High overtime (34%) and attrition risk make hiring, not just redeployment, essential.",
+        "BR-CHN-02": "Chennai is close to balanced (41 vs 44 required, 7% gap). It has an L1 surplus but is itself short on Specialists, so it can lend general technicians to Nagpur but not scarce skills."
+      },
+      "methodology": "Required headcount = predicted labour hours (from job volume) / effective productive hours per technician, split by skill via job-type mix. Gaps net off leave, training and contractor pool. Specialist forecasts carry the widest error (MAPE 11.8%)."
+    },
+
     "summary": {
-      "total_technicians_current": 386,
-      "total_technicians_required_30d": 428,
-      "total_technicians_required_60d": 441,
-      "total_technicians_required_90d": 448,
-      "total_headcount_gap_30d": 42,
-      "total_headcount_gap_60d": 55,
-      "total_headcount_gap_90d": 62,
-      "branches_with_shortfall": 5,
-      "branches_with_surplus": 3,
-      "critical_skill_shortfall_category": "L3",
-      "l1_required_30d": 142,
-      "l2_required_30d": 138,
-      "l3_required_30d": 104,
-      "specialist_required_30d": 44,
-      "l1_available": 148,
-      "l2_available": 122,
-      "l3_available": 90,
-      "specialist_available": 26,
-      "overtime_utilization_pct_avg": 18.4,
+      "total_technicians_current": 65,
+      "total_technicians_required_30d": 78,
+      "total_technicians_required_60d": 84,
+      "total_technicians_required_90d": 88,
+      "total_headcount_gap_30d": 13,
+      "total_headcount_gap_60d": 19,
+      "total_headcount_gap_90d": 23,
+      "branches_with_shortfall": 2,
+      "branches_with_surplus": 0,
+      "critical_skill_shortfall_category": "Specialist",
+      "l1_required_30d": 24,
+      "l2_required_30d": 22,
+      "l3_required_30d": 20,
+      "specialist_required_30d": 12,
+      "l1_available": 26,
+      "l2_available": 20,
+      "l3_available": 14,
+      "specialist_available": 5,
+      "overtime_utilization_pct_avg": 22.4,
       "attrition_risk_flag": true,
-      "sla_breach_rate_30d": 0.092,
-      "sla_breach_rate_30d_pct": "9.2%",
+      "sla_breach_rate_30d": 0.11,
+      "sla_breach_rate_30d_pct": "11.0%",
       "mape_last_30d": 7.8,
       "forecast_accuracy_pct": 92.2,
       "model_confidence_avg": 0.86,
       "model_confidence_avg_pct": "86%",
       "data_freshness": "2026-06-24T01:55:00",
-      "data_freshness_relative": "6h 5m ago"
+      "data_freshness_relative": "6h 5m ago",
+      "summary_reasoning": "Across both branches, 65 technicians must cover a 78-head requirement — a 13-head gap concentrated in Specialist (7) and L3 (6) skills at Nagpur. L1 is in slight surplus, so the fix is targeted skilled hiring plus overtime relief, not headcount across the board."
     },
 
     "graph_data": {
-
       "headcount_requirement_trend": [
-        { "period_date": "2026-06-24", "required": 396, "available": 386, "gap": 10, "is_forecast": false },
-        { "period_date": "2026-07-01", "required": 408, "available": 386, "gap": 22, "is_forecast": true },
-        { "period_date": "2026-07-08", "required": 428, "available": 388, "gap": 40, "is_forecast": true },
-        { "period_date": "2026-07-15", "required": 441, "available": 389, "gap": 52, "is_forecast": true },
-        { "period_date": "2026-07-22", "required": 435, "available": 390, "gap": 45, "is_forecast": true },
-        { "period_date": "2026-07-29", "required": 422, "available": 391, "gap": 31, "is_forecast": true },
-        { "period_date": "2026-08-05", "required": 418, "available": 393, "gap": 25, "is_forecast": true },
-        { "period_date": "2026-08-12", "required": 425, "available": 394, "gap": 31, "is_forecast": true },
-        { "period_date": "2026-08-19", "required": 431, "available": 396, "gap": 35, "is_forecast": true },
-        { "period_date": "2026-08-26", "required": 437, "available": 397, "gap": 40, "is_forecast": true },
-        { "period_date": "2026-09-02", "required": 444, "available": 398, "gap": 46, "is_forecast": true },
-        { "period_date": "2026-09-09", "required": 446, "available": 399, "gap": 47, "is_forecast": true },
-        { "period_date": "2026-09-16", "required": 448, "available": 400, "gap": 48, "is_forecast": true }
+        {
+          "period_date": "2026-06-24",
+          "required": 68,
+          "available": 65,
+          "gap": 3,
+          "is_forecast": false
+        },
+        {
+          "period_date": "2026-07-01",
+          "required": 72,
+          "available": 65,
+          "gap": 7,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-07-08",
+          "required": 78,
+          "available": 66,
+          "gap": 12,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-07-15",
+          "required": 86,
+          "available": 67,
+          "gap": 19,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-07-22",
+          "required": 84,
+          "available": 68,
+          "gap": 16,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-07-29",
+          "required": 79,
+          "available": 68,
+          "gap": 11,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-08-05",
+          "required": 75,
+          "available": 69,
+          "gap": 6,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-08-12",
+          "required": 77,
+          "available": 69,
+          "gap": 8,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-08-19",
+          "required": 80,
+          "available": 70,
+          "gap": 10,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-08-26",
+          "required": 82,
+          "available": 70,
+          "gap": 12,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-09-02",
+          "required": 85,
+          "available": 71,
+          "gap": 14,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-09-09",
+          "required": 87,
+          "available": 71,
+          "gap": 16,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-09-16",
+          "required": 88,
+          "available": 72,
+          "gap": 16,
+          "is_forecast": true
+        }
       ],
 
       "skill_mix_required_vs_available_bar": [
-        { "skill_level": "L1", "required_30d": 142, "available": 148, "gap": -6, "gap_type": "SURPLUS" },
-        { "skill_level": "L2", "required_30d": 138, "available": 122, "gap": 16, "gap_type": "SHORTFALL" },
-        { "skill_level": "L3", "required_30d": 104, "available": 90, "gap": 14, "gap_type": "SHORTFALL" },
-        { "skill_level": "Specialist", "required_30d": 44, "available": 26, "gap": 18, "gap_type": "SHORTFALL" }
+        {
+          "skill_level": "L1",
+          "required_30d": 24,
+          "available": 26,
+          "gap": -2,
+          "gap_type": "SURPLUS"
+        },
+        {
+          "skill_level": "L2",
+          "required_30d": 22,
+          "available": 20,
+          "gap": 2,
+          "gap_type": "SHORTFALL"
+        },
+        {
+          "skill_level": "L3",
+          "required_30d": 20,
+          "available": 14,
+          "gap": 6,
+          "gap_type": "SHORTFALL"
+        },
+        {
+          "skill_level": "Specialist",
+          "required_30d": 12,
+          "available": 5,
+          "gap": 7,
+          "gap_type": "SHORTFALL"
+        }
       ],
 
       "branch_headcount_gap_bar": [
-        { "branch_id": "BR-HYD-03", "branch_name": "Hyderabad", "required_30d": 68, "available": 54, "gap": 14, "gap_pct": 20.6 },
-        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore", "required_30d": 88, "available": 76, "gap": 12, "gap_pct": 13.6 },
-        { "branch_id": "BR-CHN-02", "branch_name": "Chennai", "required_30d": 74, "available": 64, "gap": 10, "gap_pct": 13.5 },
-        { "branch_id": "BR-DEL-04", "branch_name": "Delhi", "required_30d": 58, "available": 53, "gap": 5, "gap_pct": 8.6 },
-        { "branch_id": "BR-PUN-06", "branch_name": "Pune", "required_30d": 46, "available": 43, "gap": 3, "gap_pct": 6.5 },
-        { "branch_id": "BR-MUM-05", "branch_name": "Mumbai", "required_30d": 52, "available": 50, "gap": 2, "gap_pct": 3.8 },
-        { "branch_id": "BR-KOL-07", "branch_name": "Kolkata", "required_30d": 42, "available": 46, "gap": -4, "gap_pct": -9.5 },
-        { "branch_id": "BR-JAI-12", "branch_name": "Jaipur", "required_30d": 36, "available": 40, "gap": -4, "gap_pct": -11.1 }
+        {
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur",
+          "required_30d": 34,
+          "available": 24,
+          "gap": 10,
+          "gap_pct": 29.4
+        },
+        {
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai",
+          "required_30d": 44,
+          "available": 41,
+          "gap": 3,
+          "gap_pct": 6.8
+        }
       ],
 
       "skill_demand_by_job_type_stacked": [
-        { "job_type": "Breakdown", "L1": 12, "L2": 28, "L3": 42, "Specialist": 18 },
-        { "job_type": "Overhaul", "L1": 8, "L2": 22, "L3": 36, "Specialist": 14 },
-        { "job_type": "PM", "L1": 48, "L2": 32, "L3": 10, "Specialist": 4 },
-        { "job_type": "AMC", "L1": 42, "L2": 28, "L3": 8, "Specialist": 2 },
-        { "job_type": "PDI", "L1": 62, "L2": 18, "L3": 4, "Specialist": 0 },
-        { "job_type": "Warranty", "L1": 16, "L2": 24, "L3": 18, "Specialist": 8 }
+        {
+          "job_type": "Breakdown",
+          "L1": 8,
+          "L2": 16,
+          "L3": 22,
+          "Specialist": 10
+        },
+        {
+          "job_type": "Overhaul",
+          "L1": 5,
+          "L2": 12,
+          "L3": 18,
+          "Specialist": 7
+        },
+        { "job_type": "PM", "L1": 24, "L2": 16, "L3": 6, "Specialist": 2 },
+        { "job_type": "AMC", "L1": 20, "L2": 14, "L3": 4, "Specialist": 1 },
+        { "job_type": "PDI", "L1": 30, "L2": 9, "L3": 2, "Specialist": 0 },
+        { "job_type": "Warranty", "L1": 8, "L2": 12, "L3": 9, "Specialist": 4 }
       ],
 
       "overtime_risk_line": [
-        { "period_date": "2026-06-24", "overtime_utilization_pct": 16.2, "threshold": 25.0 },
-        { "period_date": "2026-07-01", "overtime_utilization_pct": 18.8, "threshold": 25.0 },
-        { "period_date": "2026-07-08", "overtime_utilization_pct": 24.1, "threshold": 25.0 },
-        { "period_date": "2026-07-15", "overtime_utilization_pct": 28.6, "threshold": 25.0 },
-        { "period_date": "2026-07-22", "overtime_utilization_pct": 26.4, "threshold": 25.0 },
-        { "period_date": "2026-07-29", "overtime_utilization_pct": 21.8, "threshold": 25.0 },
-        { "period_date": "2026-08-05", "overtime_utilization_pct": 19.4, "threshold": 25.0 }
+        {
+          "period_date": "2026-06-24",
+          "overtime_utilization_pct": 18.2,
+          "threshold": 25.0
+        },
+        {
+          "period_date": "2026-07-01",
+          "overtime_utilization_pct": 21.4,
+          "threshold": 25.0
+        },
+        {
+          "period_date": "2026-07-08",
+          "overtime_utilization_pct": 26.8,
+          "threshold": 25.0
+        },
+        {
+          "period_date": "2026-07-15",
+          "overtime_utilization_pct": 31.2,
+          "threshold": 25.0
+        },
+        {
+          "period_date": "2026-07-22",
+          "overtime_utilization_pct": 28.4,
+          "threshold": 25.0
+        },
+        {
+          "period_date": "2026-07-29",
+          "overtime_utilization_pct": 23.6,
+          "threshold": 25.0
+        },
+        {
+          "period_date": "2026-08-05",
+          "overtime_utilization_pct": 20.8,
+          "threshold": 25.0
+        }
       ],
 
       "attrition_risk_donut": [
-        { "label": "Low Risk (<10%)", "value": 248, "pct": 64.2 },
-        { "label": "Medium Risk (10–25%)", "value": 94, "pct": 24.4 },
-        { "label": "High Risk (>25%)", "value": 44, "pct": 11.4 }
+        { "label": "Low Risk (<10%)", "value": 42, "pct": 64.6 },
+        { "label": "Medium Risk (10–25%)", "value": 16, "pct": 24.6 },
+        { "label": "High Risk (>25%)", "value": 7, "pct": 10.8 }
       ],
 
       "geography_workforce_heatmap": [
-        { "region": "South", "total_required_30d": 230, "total_available": 194, "gap": 36, "gap_severity": "CRITICAL" },
-        { "region": "North", "total_required_30d": 94, "total_available": 93, "gap": 1, "gap_severity": "LOW" },
-        { "region": "West", "total_required_30d": 98, "total_available": 93, "gap": 5, "gap_severity": "MEDIUM" },
-        { "region": "East", "total_required_30d": 42, "total_available": 46, "gap": -4, "gap_severity": "SURPLUS" }
+        {
+          "region": "West",
+          "total_required_30d": 34,
+          "total_available": 24,
+          "gap": 10,
+          "gap_severity": "CRITICAL"
+        },
+        {
+          "region": "South",
+          "total_required_30d": 44,
+          "total_available": 41,
+          "gap": 3,
+          "gap_severity": "MEDIUM"
+        }
       ],
 
       "certification_pipeline_bar": [
-        { "skill_level": "L1", "cert_pipeline_30d": 8, "label": "L1 Certifications Due in 30d" },
-        { "skill_level": "L2", "cert_pipeline_30d": 12, "label": "L2 Certifications Due in 30d" },
-        { "skill_level": "L3", "cert_pipeline_30d": 6, "label": "L3 Certifications Due in 30d" },
-        { "skill_level": "Specialist", "cert_pipeline_30d": 2, "label": "Specialist Certs Due in 30d" }
+        {
+          "skill_level": "L1",
+          "cert_pipeline_30d": 4,
+          "label": "L1 Certifications Due in 30d"
+        },
+        {
+          "skill_level": "L2",
+          "cert_pipeline_30d": 5,
+          "label": "L2 Certifications Due in 30d"
+        },
+        {
+          "skill_level": "L3",
+          "cert_pipeline_30d": 3,
+          "label": "L3 Certifications Due in 30d"
+        },
+        {
+          "skill_level": "Specialist",
+          "cert_pipeline_30d": 1,
+          "label": "Specialist Certs Due in 30d"
+        }
       ]
     },
 
     "forecast_table": {
       "CRITICAL": [
         {
-          "prediction_id": "PRED-TD-20260624-HYD-SPL-001",
-          "branch_id": "BR-HYD-03",
-          "branch_name": "Hyderabad Branch",
-          "geography_zone": "South",
+          "prediction_id": "PRED-TD-20260624-NAG-SPL-001",
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur Branch",
+          "geography_zone": "West",
           "skill_category": "Specialist",
           "period_date": "2026-07-08",
           "forecast_horizon_days": 30,
-          "predicted_headcount_required": 12.0,
-          "predicted_headcount_p10": 10.0,
-          "predicted_headcount_p90": 14.0,
-          "prediction_confidence": 0.80,
+          "predicted_headcount_required": 6.0,
+          "predicted_headcount_p10": 5.0,
+          "predicted_headcount_p90": 8.0,
+          "prediction_confidence": 0.8,
           "prediction_confidence_pct": "80%",
-          "current_headcount_skill": 6,
+          "current_headcount_skill": 3,
           "headcount_on_leave_skill": 1,
           "headcount_in_training_skill": 0,
-          "effective_available_headcount": 5.0,
-          "contractor_pool_available": 2,
-          "predicted_skill_shortfall": 7.0,
+          "effective_available_headcount": 2.0,
+          "contractor_pool_available": 1,
+          "predicted_skill_shortfall": 4.0,
           "overtime_utilization_pct_4wk": 34.2,
           "attrition_risk_score": 0.28,
           "attrition_risk_pct": "28%",
@@ -152,6 +341,7 @@
           "sla_breach_rate_30d": 0.18,
           "sla_breach_rate_30d_pct": "18%",
           "gap_status": "CRITICAL",
+          "reasoning": "Nagpur needs 6 specialists but only 2 are effectively available (3 on strength, 1 on leave). Shortfall of 4 on a branch already near capacity forces 34% overtime and 18% SLA breach. No cert pipeline means this can only be fixed by hiring or contracting.",
           "model_name": "technician_demand_forecast",
           "model_version": "v1.0.0",
           "input_dataset_ref": "gold_technician_demand_v20260624",
@@ -168,31 +358,32 @@
       ],
       "HIGH": [
         {
-          "prediction_id": "PRED-TD-20260624-BLR-L3-001",
-          "branch_id": "BR-BLR-01",
-          "branch_name": "Bangalore Branch",
-          "geography_zone": "South",
+          "prediction_id": "PRED-TD-20260624-NAG-L3-001",
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur Branch",
+          "geography_zone": "West",
           "skill_category": "L3",
           "period_date": "2026-07-08",
           "forecast_horizon_days": 30,
-          "predicted_headcount_required": 28.0,
-          "predicted_headcount_p10": 24.0,
-          "predicted_headcount_p90": 32.0,
+          "predicted_headcount_required": 10.0,
+          "predicted_headcount_p10": 8.0,
+          "predicted_headcount_p90": 12.0,
           "prediction_confidence": 0.85,
           "prediction_confidence_pct": "85%",
-          "current_headcount_skill": 22,
-          "headcount_on_leave_skill": 2,
-          "headcount_in_training_skill": 1,
-          "effective_available_headcount": 19.0,
-          "contractor_pool_available": 4,
-          "predicted_skill_shortfall": 9.0,
-          "overtime_utilization_pct_4wk": 26.8,
-          "attrition_risk_score": 0.22,
-          "attrition_risk_pct": "22%",
-          "cert_pipeline_count_30d": 2,
-          "sla_breach_rate_30d": 0.12,
-          "sla_breach_rate_30d_pct": "12%",
+          "current_headcount_skill": 6,
+          "headcount_on_leave_skill": 1,
+          "headcount_in_training_skill": 0,
+          "effective_available_headcount": 5.0,
+          "contractor_pool_available": 2,
+          "predicted_skill_shortfall": 5.0,
+          "overtime_utilization_pct_4wk": 30.6,
+          "attrition_risk_score": 0.24,
+          "attrition_risk_pct": "24%",
+          "cert_pipeline_count_30d": 1,
+          "sla_breach_rate_30d": 0.14,
+          "sla_breach_rate_30d_pct": "14%",
           "gap_status": "HIGH",
+          "reasoning": "L3 skilled technicians handle the breakdown/overhaul work that spikes in monsoon. Nagpur is 5 short (5 effective vs 10 required); one L3 certification lands within 30 days, so hiring 3–4 plus contractors closes it.",
           "model_name": "technician_demand_forecast",
           "model_version": "v1.0.0",
           "input_dataset_ref": "gold_technician_demand_v20260624",
@@ -214,24 +405,25 @@
           "skill_category": "Specialist",
           "period_date": "2026-07-08",
           "forecast_horizon_days": 30,
-          "predicted_headcount_required": 10.0,
-          "predicted_headcount_p10": 8.0,
-          "predicted_headcount_p90": 12.0,
+          "predicted_headcount_required": 6.0,
+          "predicted_headcount_p10": 5.0,
+          "predicted_headcount_p90": 7.0,
           "prediction_confidence": 0.82,
           "prediction_confidence_pct": "82%",
-          "current_headcount_skill": 7,
+          "current_headcount_skill": 5,
           "headcount_on_leave_skill": 0,
           "headcount_in_training_skill": 1,
-          "effective_available_headcount": 6.0,
+          "effective_available_headcount": 4.0,
           "contractor_pool_available": 1,
-          "predicted_skill_shortfall": 4.0,
+          "predicted_skill_shortfall": 2.0,
           "overtime_utilization_pct_4wk": 22.4,
-          "attrition_risk_score": 0.18,
-          "attrition_risk_pct": "18%",
+          "attrition_risk_score": 0.16,
+          "attrition_risk_pct": "16%",
           "cert_pipeline_count_30d": 1,
-          "sla_breach_rate_30d": 0.10,
-          "sla_breach_rate_30d_pct": "10%",
+          "sla_breach_rate_30d": 0.09,
+          "sla_breach_rate_30d_pct": "9%",
           "gap_status": "HIGH",
+          "reasoning": "Chennai is only 2 specialists short and has one in training, so it manages with contractors and modest overtime (22%). It cannot spare specialists for Nagpur — both branches must hire this skill.",
           "model_name": "technician_demand_forecast",
           "model_version": "v1.0.0",
           "input_dataset_ref": "gold_technician_demand_v20260624",
@@ -248,70 +440,32 @@
       ],
       "MEDIUM": [
         {
-          "prediction_id": "PRED-TD-20260624-DEL-L2-001",
-          "branch_id": "BR-DEL-04",
-          "branch_name": "Delhi Branch",
-          "geography_zone": "North",
+          "prediction_id": "PRED-TD-20260624-CHN-L2-001",
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai Branch",
+          "geography_zone": "South",
           "skill_category": "L2",
           "period_date": "2026-07-08",
           "forecast_horizon_days": 30,
-          "predicted_headcount_required": 18.0,
-          "predicted_headcount_p10": 15.0,
-          "predicted_headcount_p90": 21.0,
+          "predicted_headcount_required": 12.0,
+          "predicted_headcount_p10": 10.0,
+          "predicted_headcount_p90": 14.0,
           "prediction_confidence": 0.89,
           "prediction_confidence_pct": "89%",
-          "current_headcount_skill": 15,
+          "current_headcount_skill": 11,
           "headcount_on_leave_skill": 1,
           "headcount_in_training_skill": 0,
-          "effective_available_headcount": 14.0,
+          "effective_available_headcount": 10.0,
           "contractor_pool_available": 2,
-          "predicted_skill_shortfall": 4.0,
-          "overtime_utilization_pct_4wk": 14.6,
-          "attrition_risk_score": 0.10,
+          "predicted_skill_shortfall": 2.0,
+          "overtime_utilization_pct_4wk": 15.8,
+          "attrition_risk_score": 0.1,
           "attrition_risk_pct": "10%",
           "cert_pipeline_count_30d": 3,
           "sla_breach_rate_30d": 0.07,
           "sla_breach_rate_30d_pct": "7%",
           "gap_status": "MEDIUM",
-          "model_name": "technician_demand_forecast",
-          "model_version": "v1.0.0",
-          "input_dataset_ref": "gold_technician_demand_v20260624",
-          "prediction_timestamp": "2026-06-24T02:30:00",
-          "prediction_timestamp_relative": "6h ago",
-          "actions": {
-            "can_view_detail": true,
-            "can_override": true,
-            "can_raise_hiring_request": false,
-            "can_trigger_redeployment": true,
-            "can_export": true
-          }
-        },
-        {
-          "prediction_id": "PRED-TD-20260624-MUM-L3-001",
-          "branch_id": "BR-MUM-05",
-          "branch_name": "Mumbai Branch",
-          "geography_zone": "West",
-          "skill_category": "L3",
-          "period_date": "2026-07-08",
-          "forecast_horizon_days": 30,
-          "predicted_headcount_required": 14.0,
-          "predicted_headcount_p10": 12.0,
-          "predicted_headcount_p90": 16.0,
-          "prediction_confidence": 0.88,
-          "prediction_confidence_pct": "88%",
-          "current_headcount_skill": 12,
-          "headcount_on_leave_skill": 0,
-          "headcount_in_training_skill": 1,
-          "effective_available_headcount": 11.0,
-          "contractor_pool_available": 2,
-          "predicted_skill_shortfall": 3.0,
-          "overtime_utilization_pct_4wk": 16.2,
-          "attrition_risk_score": 0.12,
-          "attrition_risk_pct": "12%",
-          "cert_pipeline_count_30d": 2,
-          "sla_breach_rate_30d": 0.08,
-          "sla_breach_rate_30d_pct": "8%",
-          "gap_status": "MEDIUM",
+          "reasoning": "Chennai's L2 gap is small (2) and three L2 certifications complete within 30 days, so the pipeline closes it without new hires — low overtime (16%) confirms it is manageable.",
           "model_name": "technician_demand_forecast",
           "model_version": "v1.0.0",
           "input_dataset_ref": "gold_technician_demand_v20260624",
@@ -328,31 +482,32 @@
       ],
       "LOW": [
         {
-          "prediction_id": "PRED-TD-20260624-KOL-L1-001",
-          "branch_id": "BR-KOL-07",
-          "branch_name": "Kolkata Branch",
-          "geography_zone": "East",
+          "prediction_id": "PRED-TD-20260624-CHN-L1-001",
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai Branch",
+          "geography_zone": "South",
           "skill_category": "L1",
           "period_date": "2026-07-08",
           "forecast_horizon_days": 30,
-          "predicted_headcount_required": 16.0,
-          "predicted_headcount_p10": 14.0,
-          "predicted_headcount_p90": 18.0,
+          "predicted_headcount_required": 14.0,
+          "predicted_headcount_p10": 12.0,
+          "predicted_headcount_p90": 16.0,
           "prediction_confidence": 0.93,
           "prediction_confidence_pct": "93%",
-          "current_headcount_skill": 20,
+          "current_headcount_skill": 16,
           "headcount_on_leave_skill": 1,
           "headcount_in_training_skill": 1,
-          "effective_available_headcount": 18.0,
+          "effective_available_headcount": 14.0,
           "contractor_pool_available": 0,
           "predicted_skill_shortfall": -2.0,
           "overtime_utilization_pct_4wk": 8.4,
           "attrition_risk_score": 0.06,
           "attrition_risk_pct": "6%",
-          "cert_pipeline_count_30d": 4,
+          "cert_pipeline_count_30d": 2,
           "sla_breach_rate_30d": 0.04,
           "sla_breach_rate_30d_pct": "4%",
           "gap_status": "LOW",
+          "reasoning": "Chennai holds a 2-head L1 surplus with low overtime (8%). This surplus is the network's only lending capacity — 2 L1s can redeploy to Nagpur to free its skilled staff for breakdown work.",
           "model_name": "technician_demand_forecast",
           "model_version": "v1.0.0",
           "input_dataset_ref": "gold_technician_demand_v20260624",
@@ -362,46 +517,7 @@
             "can_view_detail": true,
             "can_override": true,
             "can_raise_hiring_request": false,
-            "can_trigger_redeployment": false,
-            "can_export": true
-          }
-        },
-        {
-          "prediction_id": "PRED-TD-20260624-JAI-L1-001",
-          "branch_id": "BR-JAI-12",
-          "branch_name": "Jaipur Branch",
-          "geography_zone": "North",
-          "skill_category": "L1",
-          "period_date": "2026-07-08",
-          "forecast_horizon_days": 30,
-          "predicted_headcount_required": 12.0,
-          "predicted_headcount_p10": 10.0,
-          "predicted_headcount_p90": 14.0,
-          "prediction_confidence": 0.91,
-          "prediction_confidence_pct": "91%",
-          "current_headcount_skill": 16,
-          "headcount_on_leave_skill": 0,
-          "headcount_in_training_skill": 2,
-          "effective_available_headcount": 14.0,
-          "contractor_pool_available": 0,
-          "predicted_skill_shortfall": -2.0,
-          "overtime_utilization_pct_4wk": 6.2,
-          "attrition_risk_score": 0.05,
-          "attrition_risk_pct": "5%",
-          "cert_pipeline_count_30d": 5,
-          "sla_breach_rate_30d": 0.03,
-          "sla_breach_rate_30d_pct": "3%",
-          "gap_status": "LOW",
-          "model_name": "technician_demand_forecast",
-          "model_version": "v1.0.0",
-          "input_dataset_ref": "gold_technician_demand_v20260624",
-          "prediction_timestamp": "2026-06-24T02:30:00",
-          "prediction_timestamp_relative": "6h ago",
-          "actions": {
-            "can_view_detail": true,
-            "can_override": true,
-            "can_raise_hiring_request": false,
-            "can_trigger_redeployment": false,
+            "can_trigger_redeployment": true,
             "can_export": true
           }
         }
@@ -411,55 +527,44 @@
     "redeployment_recommendations": [
       {
         "recommendation_id": "REDP-001",
-        "from_branch_id": "BR-KOL-07",
-        "from_branch_name": "Kolkata Branch",
-        "to_branch_id": "BR-HYD-03",
-        "to_branch_name": "Hyderabad Branch",
-        "skill_category": "L3",
-        "recommended_headcount": 4,
-        "rationale": "Kolkata has L3 surplus of 4; Hyderabad L3 shortfall of 6. Distance feasible for short-term deployment.",
-        "distance_km": 1410,
-        "feasibility": "FEASIBLE"
-      },
-      {
-        "recommendation_id": "REDP-002",
-        "from_branch_id": "BR-JAI-12",
-        "from_branch_name": "Jaipur Branch",
-        "to_branch_id": "BR-BLR-01",
-        "to_branch_name": "Bangalore Branch",
+        "from_branch_id": "BR-CHN-02",
+        "from_branch_name": "Chennai Branch",
+        "to_branch_id": "BR-NAG-01",
+        "to_branch_name": "Nagpur Branch",
         "skill_category": "L1",
-        "recommended_headcount": 4,
-        "rationale": "Jaipur L1 surplus; Bangalore L1 shortfall in monsoon surge period.",
-        "distance_km": 1620,
-        "feasibility": "CONSIDER"
+        "recommended_headcount": 2,
+        "rationale": "Chennai has a 2-head L1 surplus; moving them to Nagpur covers general/PM work so Nagpur's scarce L3/Specialist staff focus on monsoon breakdowns.",
+        "reasoning": "Only feasible transfer in a two-branch network — Chennai cannot spare L3 or Specialists (it is short on both). L1 redeployment buys time until skilled hires onboard.",
+        "distance_km": 1092,
+        "feasibility": "FEASIBLE"
       }
     ],
 
     "hiring_pipeline": [
       {
         "skill_level": "Specialist",
-        "shortfall_30d": 18,
-        "shortfall_60d": 22,
-        "shortfall_90d": 26,
-        "recommended_hires": 20,
+        "shortfall_30d": 7,
+        "shortfall_60d": 9,
+        "shortfall_90d": 11,
+        "recommended_hires": 9,
         "avg_onboarding_weeks": 8,
         "urgency": "IMMEDIATE"
       },
       {
         "skill_level": "L3",
-        "shortfall_30d": 14,
-        "shortfall_60d": 18,
-        "shortfall_90d": 22,
-        "recommended_hires": 16,
+        "shortfall_30d": 6,
+        "shortfall_60d": 8,
+        "shortfall_90d": 10,
+        "recommended_hires": 8,
         "avg_onboarding_weeks": 6,
         "urgency": "HIGH"
       },
       {
         "skill_level": "L2",
-        "shortfall_30d": 10,
-        "shortfall_60d": 13,
-        "shortfall_90d": 16,
-        "recommended_hires": 12,
+        "shortfall_30d": 2,
+        "shortfall_60d": 3,
+        "shortfall_90d": 4,
+        "recommended_hires": 3,
         "avg_onboarding_weeks": 4,
         "urgency": "MEDIUM"
       },
@@ -499,9 +604,8 @@
     "filter_definitions": {
       "branch_options": [
         { "value": "ALL", "label": "All Branches" },
-        { "value": "BR-BLR-01", "label": "Bangalore Branch" },
-        { "value": "BR-CHN-02", "label": "Chennai Branch" },
-        { "value": "BR-HYD-03", "label": "Hyderabad Branch" }
+        { "value": "BR-NAG-01", "label": "Nagpur Branch" },
+        { "value": "BR-CHN-02", "label": "Chennai Branch" }
       ],
       "skill_level_options": [
         { "value": "ALL", "label": "All Skill Levels" },
@@ -525,9 +629,7 @@
       "geography_zone_options": [
         { "value": "ALL", "label": "All Regions" },
         { "value": "South", "label": "South" },
-        { "value": "North", "label": "North" },
-        { "value": "West", "label": "West" },
-        { "value": "East", "label": "East" }
+        { "value": "West", "label": "West" }
       ]
     },
 
@@ -541,11 +643,11 @@
     },
 
     "pagination": {
-      "total": 96,
+      "total": 5,
       "page": 1,
       "page_size": 20,
-      "total_pages": 5,
-      "has_next": true,
+      "total_pages": 1,
+      "has_next": false,
       "has_prev": false
     }
   }
