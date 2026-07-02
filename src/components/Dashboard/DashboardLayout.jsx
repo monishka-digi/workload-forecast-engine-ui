@@ -1,12 +1,20 @@
 import "./DashboardLayout.css";
+
 export default function DashboardLayout({
   loading,
   error,
+
   kpis,
+
   topLeft,
   topRight,
+
+  middleLeft,
+  middleRight,
+
   bottomLeft,
   bottomRight,
+
   table,
 }) {
   if (loading) return <div>Loading...</div>;
@@ -17,15 +25,29 @@ export default function DashboardLayout({
     <>
       {kpis}
 
-      <div className="dashboardGrid">
-        <div>{topLeft}</div>
-        <div>{topRight}</div>
-      </div>
+      {/* First Row */}
+      {(topLeft || topRight) && (
+        <div className="dashboardGrid">
+          <div>{topLeft}</div>
+          <div>{topRight}</div>
+        </div>
+      )}
 
-      <div className="dashboardGrid">
-        <div>{bottomLeft}</div>
-        <div>{bottomRight}</div>
-      </div>
+      {/* Second Row */}
+      {(middleLeft || middleRight) && (
+        <div className="dashboardGrid">
+          <div>{middleLeft}</div>
+          <div>{middleRight}</div>
+        </div>
+      )}
+
+      {/* Third Row */}
+      {(bottomLeft || bottomRight) && (
+        <div className="dashboardGrid">
+          <div>{bottomLeft}</div>
+          <div>{bottomRight}</div>
+        </div>
+      )}
 
       {table}
     </>

@@ -54,14 +54,96 @@ export const mapTechnicianDemandData = (response) => {
 
   // ---------------- Skill Chart ----------------
 
-  const skillChart = (
-    graph_data?.skill_mix_required_vs_available_bar || []
-  ).map((item) => ({
-    skill: item.skill_level,
-    required: item.required_30d,
-    available: item.available_30d,
-    shortfall: item.shortfall_30d,
-    utilization: item.utilization_pct,
+  const skillChart = {
+    labels: ["L1", "L2", "L3", "Specialist"],
+
+    datasets: [
+      {
+        label: "Required (30D)",
+        data: [24, 22, 20, 12],
+        backgroundColor: "#2A78D6",
+        borderRadius: 6,
+        barThickness: 18,
+      },
+      {
+        label: "Available",
+        data: [26, 20, 14, 5],
+        backgroundColor: "#12BE83",
+        borderRadius: 6,
+        barThickness: 18,
+      },
+    ],
+  };
+
+  // ---------------- Headcount Trend ----------------
+
+  const trend = graph_data?.headcount_requirement_trend || [];
+
+  const headcountTrend = {
+    labels: trend.map((item) =>
+      new Date(item.period_date).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+      }),
+    ),
+
+    datasets: [
+      {
+        label: "Required",
+        data: trend.map((item) => item.required),
+        borderColor: "#2A78D6",
+        backgroundColor: "rgba(42,120,214,0.08)",
+        fill: true,
+        tension: 0.3,
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: "#2A78D6",
+      },
+
+      {
+        label: "Available",
+        data: trend.map((item) => item.available),
+        borderColor: "#12BE83",
+        backgroundColor: "transparent",
+        fill: false,
+        tension: 0.3,
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: "#12BE83",
+      },
+    ],
+  };
+
+  // ---------------- Branch Headcount Gap ----------------
+
+  const gapData = graph_data?.branch_headcount_gap_bar || [];
+
+  const branchGap = {
+    labels: gapData.map((item) => item.branch_name),
+
+    datasets: [
+      {
+        label: "Required (30D)",
+        data: gapData.map((item) => item.required_30d),
+        backgroundColor: "#2A78D6",
+        borderRadius: 6,
+        barThickness: 18,
+      },
+
+      {
+        label: "Available",
+        data: gapData.map((item) => item.available),
+        backgroundColor: "#12BE83",
+        borderRadius: 6,
+        barThickness: 18,
+      },
+    ],
+  };
+
+  const branchGapSummary = gapData.map((item) => ({
+    branch: item.branch_name,
+    gap: item.gap,
+    gapPct: item.gap_pct,
   }));
 
   // ---------------- Workforce Planning ----------------
@@ -174,9 +256,14 @@ export const mapTechnicianDemandData = (response) => {
     kpis,
 
     planning,
+    branchGapSummary,
 
     charts: {
       skill: skillChart,
+
+      headcountTrend,
+
+      branchGap,
     },
 
     table: {

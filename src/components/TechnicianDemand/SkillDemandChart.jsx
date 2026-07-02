@@ -1,46 +1,47 @@
-import "./SkillDemandChart.css";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-export default function SkillDemandChart({ data = [] }) {
-  const maxValue = Math.max(
-    ...data.map((item) => item.required),
-    1
-  );
+import { Bar } from "react-chartjs-2";
+
+import Card from "../Common/Card";
+import { useTheme } from "../../context/ThemeContext";
+import { getGroupedHorizontalBarOptions } from "../../config/chartOptions";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+  Legend
+);
+
+export default function SkillDemandChart({ data }) {
+  const { theme } = useTheme();
+
+  if (!data) return null;
 
   return (
-    <div className="skillChartCard">
-      <div className="skillChartHeader">
-        <h3>Required vs shortfall by skill</h3>
-
-        <span>technicians_required</span>
+    <Card
+      title="Required vs Available by Skill"
+      tag="technicians_required"
+      height="420px"
+    >
+      <div
+        style={{
+          height: 320,
+        }}
+      >
+        <Bar
+          data={data}
+          options={getGroupedHorizontalBarOptions(theme)}
+        />
       </div>
-
-      <div className="skillChartBody">
-        {data.map((item) => (
-          <div
-            key={item.skill}
-            className="skillRow"
-          >
-            <div className="skillLabel">
-              {item.skill}
-            </div>
-
-            <div className="skillBarWrapper">
-              <div className="skillTrack">
-                <div
-                  className="skillFill"
-                  style={{
-                    width: `${(item.required / maxValue) * 100}%`,
-                  }}
-                />
-              </div>
-
-              <span className="skillValue">
-                {item.required}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    </Card>
   );
 }
