@@ -86,11 +86,13 @@
 }
 
 .menuItem.active {
-  background: var(--card-hover);
+ background:#E8FFF6;
 
-  color: var(--text);
+color:#12BE83;
 
-  border-left: 3px solid var(--primary);
+border-radius:12px;
+
+font-weight:600;
 }
 
 .dot {
