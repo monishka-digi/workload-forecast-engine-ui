@@ -27,9 +27,9 @@
 .loadValue {
   font-size: 14px;
 
-  font-weight: 700;
+  font-weight: 500;
 
-  color: #fff;
+  color: var(--chart-label);
 }
 
 .progressTrack {
@@ -37,7 +37,7 @@
 
   height: 8px;
 
-  background: #2a3140;
+  background: var(--divider);
 
   border-radius: 999px;
 

@@ -1,8 +1,10 @@
 import { useLocation } from "react-router-dom";
 import "./topbar.css";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Topbar() {
   const { pathname } = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   const pages = {
     "/job-volume": {
@@ -41,15 +43,20 @@ export default function Topbar() {
       </div>
 
       <div className="right">
-        <select>
-          <option>Next 60 Days</option>
+        <select defaultValue="60">
+          <option value="30">Next 30 Days</option>
+          <option value="60">Next 60 Days</option>
+          <option value="90">Next 90 Days</option>
         </select>
 
-        <select>
-          <option>All Branches</option>
+        <select defaultValue="all">
+          <option value="all">All Branches</option>
+          <option value="chennai">Chennai</option>
+          <option value="nagpur">Nagpur</option>
         </select>
 
         <div className="live">● Live</div>
+        <button onClick={toggleTheme}>{theme === "dark" ? "☀️" : "🌙"}</button>
       </div>
     </div>
   );

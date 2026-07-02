@@ -14,13 +14,13 @@ gap:16px;
 
 .categoryName{
 font-size:17px;
-color:#ffffff;
+color: var(--chart-label);
 font-weight:500;
 }
 
 .categoryProgress{
 height:10px;
-background:#232938;
+background: var(--divider);
 border-radius:20px;
 overflow:hidden;
 position:relative;
@@ -44,5 +44,5 @@ transition:width .5s ease;
 text-align:right;
 font-size:16px;
 font-weight:600;
-color:white;
+color: var(--chart-label);
 }

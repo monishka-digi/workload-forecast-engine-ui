@@ -1,9 +1,11 @@
 .skillChartCard {
-  background: #181d26;
-  border: 1px solid #2b3445;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
   border-radius: 12px;
+  box-shadow: var(--shadow);
   padding: 20px;
   height: 100%;
+  margin-bottom: 20px
 }
 
 .skillChartHeader {
@@ -14,7 +16,7 @@
 }
 
 .skillChartHeader h3 {
-  color: #fff;
+  color: var(--text);
   font-size: 20px;
   font-weight: 600;
 }
@@ -39,7 +41,7 @@
 }
 
 .skillLabel {
-  color: white;
+  color: var(--chart-label);
   font-size: 16px;
   font-weight: 500;
 }
@@ -53,7 +55,7 @@
 .skillTrack {
   flex: 1;
   height: 10px;
-  background: #252d3d;
+  background: var(--divider);
   border-radius: 999px;
   overflow: hidden;
   position: relative;
@@ -66,7 +68,7 @@
 }
 
 .skillValue {
-  color: white;
+  color: var(--chart-label);
   font-size: 15px;
   font-weight: 600;
   width: 42px;

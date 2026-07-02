@@ -12,7 +12,7 @@ export default function PredictionTable({ rows = [], type = "jobVolume" }) {
             <th>Description</th>
             <th>Period</th>
             <th>Forecast Qty</th>
-            <th>P10-P90</th>
+            <th>DAY 10 - DAY 90</th>
             <th>Confidence</th>
             <th>Current Stock</th>
             <th>Supplier</th>

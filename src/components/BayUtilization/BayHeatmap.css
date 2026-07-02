@@ -1,8 +1,10 @@
 .heatmapCard {
-  background: #171c24;
-  border: 1px solid #2d3647;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
   border-radius: 12px;
+  box-shadow: var(--shadow);
   padding: 20px;
+  margin-bottom: 10px
 }
 
 .heatmapHeader {
@@ -13,7 +15,7 @@
 }
 
 .heatmapHeader h3 {
-  color: white;
+  color: var(--chart-label);
   margin: 0;
   font-size: 20px;
 }
@@ -42,7 +44,7 @@
 }
 
 .branchName {
-  color: white;
+  color: var(--chart-label);
   font-size: 14px;
   font-weight: 500;
 }
@@ -55,7 +57,7 @@
   align-items: center;
   justify-content: center;
 
-  color: white;
+  color: var(--chart-label);
   font-size: 12px;
   font-weight: 600;
 }
@@ -78,6 +80,6 @@
 }
 
 .empty {
-  background: #232b39;
-  color: #6f7d94;
+  background: var(--divider);
+  color: var(--chart-label);
 }

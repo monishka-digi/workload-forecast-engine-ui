@@ -3,11 +3,13 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
 import Card from "../Common/Card";
-import { doughnutOptions } from "../../config/chartOptions";
+import { getDoughnutOptions } from "../../config/chartOptions";
+import { useTheme } from "../../context/ThemeContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function MachineMixChart({ data }) {
+  const { theme } = useTheme();
   if (!data) return null;
 
   return (
@@ -17,10 +19,10 @@ export default function MachineMixChart({ data }) {
           height: 320,
           width: "100%",
           position: "relative",
-          background: "#222",
+          background: "var(--card-bg)",
         }}
       >
-        <Doughnut data={data} options={doughnutOptions} />
+        <Doughnut data={data} options={getDoughnutOptions(theme)} />
 
         <div
           style={{
@@ -35,7 +37,7 @@ export default function MachineMixChart({ data }) {
           <h2
             style={{
               margin: 0,
-              color: "#fff",
+              color: "var(--text)",
               fontSize: 30,
             }}
           >
@@ -45,7 +47,7 @@ export default function MachineMixChart({ data }) {
           <p
             style={{
               margin: 0,
-              color: "#8b93a3",
+              color: "var(--text-secondary)",
               fontSize: 13,
             }}
           >

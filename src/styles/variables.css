@@ -1,27 +1,81 @@
 :root {
 
-    --bg:#11151b;
+  /* ===============================
+     Brand
+  =============================== */
 
-    --sidebar:#0d1117;
+  --primary: #12BE83;
+  --primary-dark: #0F9E6D;
+  --primary-light: #D9F7EC;
 
-    --panel:#171c24;
+  --secondary: #757A7C;
 
-    --panel2:#1d232c;
+  /* ===============================
+     Background
+  =============================== */
 
-    --line:#2a3140;
+  --bg: #F5F8F7;
 
-    --text:#e7eaef;
+  --sidebar-bg: #FFFFFF;
 
-    --textDim:#8b93a3;
+  --topbar-bg: #FFFFFF;
 
-    --textLight:#5b6373;
+  --card-bg: #FFFFFF;
 
-    --yellow:#f5b400;
+  --card-hover: #F8FAFA;
 
-    --green:#34d6b8;
+  /* ===============================
+     Text
+  =============================== */
 
-    --danger:#ef5a5a;
+  --text: #1D2428;
 
-    --radius:10px;
+  --text-secondary: #757A7C;
 
+  --text-light: #A0A8AC;
+
+  /* ===============================
+     Borders
+  =============================== */
+
+  --border: #E3E8E9;
+
+  --divider: #EDF2F2;
+
+  /* ===============================
+     Status
+  =============================== */
+
+  --success: #12BE83;
+
+  --warning: #F5B400;
+
+  --danger: #EF5A5A;
+
+  --info: #3BA3F5;
+
+  /* ===============================
+     Charts
+  =============================== */
+
+  --chart-green: #12BE83;
+
+  --chart-yellow: #F5B400;
+
+  --chart-red: #EF5A5A;
+
+  --chart-blue: #46A6FF;
+
+  /* ===============================
+     Shadows
+  =============================== */
+
+  --shadow:
+      0 8px 24px rgba(0,0,0,.06);
+
+  /* ===============================
+     Radius
+  =============================== */
+
+  --radius: 12px;
 }

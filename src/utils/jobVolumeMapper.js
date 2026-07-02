@@ -171,7 +171,7 @@ export const mapJobVolumeData = (response) => {
 
         backgroundColor: machineColors,
 
-        borderColor: "#171c24",
+        borderColor: "var(--card-bg)",
 
         borderWidth: 2,
 
@@ -223,10 +223,10 @@ export const mapJobVolumeData = (response) => {
 
     color:
       branch.load_pct >= 100
-        ? "#ef4444"
+        ? "var(--danger)"
         : branch.load_pct >= 90
-        ? "#f59e0b"
-        : "#34d399",
+        ? "var(--warning)"
+        : "var(--primary)",
 
   }));
 

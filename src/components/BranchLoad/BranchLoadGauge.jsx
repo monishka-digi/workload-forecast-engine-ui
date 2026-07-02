@@ -1,57 +1,63 @@
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+
+import { Doughnut } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 import "./BranchLoadGauge.css";
 
-export default function BranchLoadGauge({ data = [] }) {
+export default function BranchLoadGauge({ data }) {
+  const chartData = {
+    labels: data.map((x) => x.branch),
+
+    datasets: [
+      {
+        data: data.map((x) => x.load),
+
+        backgroundColor: [
+          "#12BE83",
+          "#1CC88A",
+          "#36D399",
+          "#7BDCB5",
+          "#FFD54F",
+          "#FFB300",
+          "#FF8A65",
+          "#EF5350",
+          "#AB47BC",
+        ],
+
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <div className="branchGaugeCard">
       <div className="branchGaugeHeader">
-        <h3>Branch load gauge</h3>
-
-        <span>predicted_load_pct vs 100% rated capacity</span>
+        <h3>Branch Load Gauge</h3>
       </div>
 
-      <div className="branchGaugeBody">
-        {data.map((branch) => {
-          const width = Math.min(branch.load, 110);
+      <div
+        style={{
+          width: "450px",
+          height: "450px",
+          margin: "0 auto",
+        }}
+      >
+        <Doughnut
+          data={chartData}
+          options={{
+            responsive: true,
 
-          return (
-            <div
-              key={branch.id}
-              className="gaugeRow"
-            >
-              <div className="gaugeInfo">
-                <h4>{branch.branch}</h4>
+            maintainAspectRatio: false,
 
-                <p>{branch.geography}</p>
-              </div>
-
-              <div className="gaugeBarContainer">
-                <div className="gaugeTrack">
-                  <div
-                    className={`gaugeFill ${
-                      branch.load > 100 ? "danger" : "normal"
-                    }`}
-                    style={{
-                      width: `${width}%`,
-                    }}
-                  />
-
-                  {/* 100% marker */}
-                  <div className="capacityMarker" />
-                </div>
-
-                <span
-                  className={
-                    branch.load > 100
-                      ? "dangerText"
-                      : "normalText"
-                  }
-                >
-                  {branch.load}%
-                </span>
-              </div>
-            </div>
-          );
-        })}
+            plugins: {
+              legend: {
+                position: "right",
+              },
+            },
+          }}
+        />
       </div>
     </div>
   );

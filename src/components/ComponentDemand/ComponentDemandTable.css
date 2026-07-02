@@ -1,25 +1,34 @@
-.riskBadge{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-width:70px;
-    height:28px;
-    border-radius:16px;
-    font-size:13px;
-    font-weight:600;
+.componentTableCard {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 10px
 }
 
-.riskBadge.high{
-    background:#4b1f26;
-    color:#ff6b6b;
+.riskBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+  height: 28px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
-.riskBadge.medium{
-    background:#5b4700;
-    color:#ffc83d;
+.riskBadge.high {
+  background: var(--danger-light);
+  color: var(--danger);
 }
 
-.riskBadge.low{
-    background:#0c5647;
-    color:#37d8c3;
+.riskBadge.medium {
+  background: var(--warning-light);
+  color: var(--warning);
+}
+
+.riskBadge.low {
+  background: var(--success-light);
+  color: var(--success);
 }

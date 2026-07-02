@@ -1,7 +1,8 @@
 .techTableCard {
-  background: #181d26;
-  border: 1px solid #2b3445;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
   border-radius: 12px;
+  box-shadow: var(--shadow);
   padding: 18px 20px;
   margin-top: 20px;
 }
@@ -14,7 +15,7 @@
 }
 
 .techTableHeader h3 {
-  color: #fff;
+  color: var(--text);
   font-size: 20px;
   font-weight: 600;
 }
@@ -49,14 +50,14 @@
 
 .techTable td {
   padding: 16px 12px;
-  color: #ffffff;
+  color: var(--text);
   border-bottom: 1px solid #242c3a;
   font-size: 15px;
 }
 
-.techTable tbody tr:hover {
+/* .techTable tbody tr:hover {
   background: #202734;
-}
+} */
 
 .techTable td:first-child {
   font-weight: 600;
@@ -74,18 +75,18 @@
 }
 
 .shortfallBadge.high {
-  background: #6b4d00;
-  color: #ffc83d;
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
 }
 
 .shortfallBadge.medium {
-  background: #5b3b00;
-  color: #f5b400;
+  background: var(--status-medium-bg);
+  color: var(--status-medium-text);
 }
 
 .shortfallBadge.low {
-  background: #0b5c4b;
-  color: #37d8c3;
+  background: var(--status-normal-bg);
+  color: var(--status-normal-text);
 }
 
 .approveBtn {

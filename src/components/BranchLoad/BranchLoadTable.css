@@ -1,8 +1,9 @@
 .branchTableCard {
-  background: #171c24;
-  border: 1px solid #2a3243;
-  border-radius: 14px;
-  padding: 22px;
+   background: var(--card-bg);
+   border: 1px solid var(--border);
+    border-radius: 14px;
+   padding: 18px 18px 22px;
+    box-shadow: var(--shadow);
 }
 
 .branchTableHeader {
@@ -13,7 +14,7 @@
 }
 
 .branchTableHeader h3 {
-  color: white;
+  color: var(--chart-label);
   font-size: 22px;
   font-weight: 700;
 }
@@ -45,7 +46,7 @@
 
 .branchTable td {
   padding: 20px 14px;
-  color: white;
+  color: var(--chart-label);
   border-bottom: 1px solid #222b39;
   font-size: 15px;
 }
@@ -60,7 +61,7 @@
 }
 
 .negativeGap {
-  color: white;
+  color: var(--chart-label);
 }
 
 .statusBadge {
