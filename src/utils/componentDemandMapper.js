@@ -17,28 +17,28 @@ export const mapComponentDemandData = (response) => {
     {
       title: "Categories Forecasted",
       value: summary.total_categories_forecasted,
-      subText: `${summary.total_branches_forecasted} Branches`,
+      // subText: `${summary.total_branches_forecasted} Branches`,
       positive: true,
       alert: false,
     },
     {
       title: "Forecast Units (30D)",
       value: summary.total_units_forecast_30d.toLocaleString(),
-      subText: `${summary.yoy_demand_growth_pct}% YoY`,
+      // subText: `${summary.yoy_demand_growth_pct}% YoY`,
       positive: true,
       alert: false,
     },
     {
       title: "Forecast Cost",
       value: `₹ ${(summary.total_cost_forecast_30d_inr / 10000000).toFixed(2)} Cr`,
-      subText: "30 Days",
+      // subText: "30 Days",
       positive: true,
       alert: false,
     },
     {
-      title: "Forecast Accuracy",
-      value: `${summary.forecast_accuracy_pct}%`,
-      subText: `MAPE ${summary.mape_last_30d}%`,
+      title: "Highest Demand Category",
+      value: `${summary.highest_demand_category}`,
+      // subText: `MAPE ${summary.mape_last_30d}%`,
       positive: true,
       alert: false,
     },
@@ -91,7 +91,7 @@ export const mapComponentDemandData = (response) => {
     ],
   };
 
-  const heatmap = graph_data?.branch_category_heatmap || [];
+  const heatmap = graph_data?.branch_x_category_heatmap || [];
 
   const branches = [...new Set(heatmap.map((item) => item.branch_name))];
   const categories = [...new Set(heatmap.map((item) => item.category))];
@@ -106,6 +106,7 @@ export const mapComponentDemandData = (response) => {
     "#ff9800",
     "#9c27b0",
   ];
+
 
   const branchCategoryMix = {
     labels: branches,

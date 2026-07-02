@@ -20,10 +20,16 @@ export default function BranchChart({ data }) {
   if (!data) return null;
 
   return (
-    <Card title="Branch Wise Workload Forecast" tag="Predicted Jobs" height="auto">
+    <Card
+      title="Branch Wise Workload Forecast"
+      tag="Predicted Jobs"
+      height="auto"
+    >
       <div
         style={{
-          height: 320,
+          flex: 1,
+          position: "relative",
+          minHeight: 0,
           width: "100%",
           position: "relative",
           background: "var(--card-bg)",

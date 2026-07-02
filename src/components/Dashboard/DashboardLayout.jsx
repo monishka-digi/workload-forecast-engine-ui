@@ -1,3 +1,4 @@
+import "./DashboardLayout.css";
 export default function DashboardLayout({
   loading,
   error,

@@ -78,7 +78,8 @@ export const getDoughnutOptions = (theme) => {
     responsive: true,
     maintainAspectRatio: false,
 
-    cutout: "55%",
+    cutout: "70%",
+     radius: "82%", 
 
     plugins: {
       legend: {

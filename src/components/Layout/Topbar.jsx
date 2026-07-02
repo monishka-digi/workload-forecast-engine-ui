@@ -43,7 +43,7 @@ export default function Topbar() {
       </div>
 
       <div className="right">
-        <select defaultValue="60">
+        <select defaultValue="30">
           <option value="30">Next 30 Days</option>
           <option value="60">Next 60 Days</option>
           <option value="90">Next 90 Days</option>

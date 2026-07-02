@@ -22,7 +22,7 @@ export default function BayHeatmap({ data = [] }) {
   };
 
   return (
-    <div className="heatmapCard">
+    <div className="heatmapCard" style={{ height: '381px' }}>
       <div className="heatmapHeader">
         <h3>Branch × Bay Type</h3>
 

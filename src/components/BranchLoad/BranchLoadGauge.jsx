@@ -16,14 +16,16 @@ export default function BranchLoadGauge({ data }) {
 
         backgroundColor: [
           "#12BE83",
-          "#1CC88A",
-          "#36D399",
-          "#7BDCB5",
-          "#FFD54F",
-          "#FFB300",
-          "#FF8A65",
-          "#EF5350",
-          "#AB47BC",
+          "#D8DEE9",
+          // "#12BE83",
+          // "#1CC88A",
+          // "#36D399",
+          // "#7BDCB5",
+          // "#FFD54F",
+          // "#FFB300",
+          // "#FF8A65",
+          // "#EF5350",
+          // "#AB47BC",
         ],
 
         borderWidth: 1,
@@ -39,25 +41,42 @@ export default function BranchLoadGauge({ data }) {
 
       <div
         style={{
-          width: "450px",
-          height: "450px",
-          margin: "0 auto",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "320px",
         }}
       >
-        <Doughnut
-          data={chartData}
-          options={{
-            responsive: true,
-
-            maintainAspectRatio: false,
-
-            plugins: {
-              legend: {
-                position: "right",
-              },
-            },
+        <div
+          style={{
+            width: 290,
+            height: 290,
           }}
-        />
+        >
+          <Doughnut
+            data={chartData}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: "58%",
+
+              plugins: {
+                legend: {
+                  position: "right",
+                  align: "center",
+
+                  labels: {
+                    boxWidth: 16,
+                    boxHeight: 16,
+                    padding: 14,
+                    usePointStyle: false,
+                    color: "var(--text)",
+                  },
+                },
+              },
+            }}
+          />
+        </div>
       </div>
     </div>
   );

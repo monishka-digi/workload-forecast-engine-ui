@@ -26,8 +26,8 @@ export default function JobVolume() {
   } = useJobVolume();
 
   console.log("Dashboard:", dashboard);
-console.log("Loading:", loading);
-console.log("Error:", error);
+  console.log("Loading:", loading);
+  console.log("Error:", error);
 
   if (!dashboard) {
     return null;

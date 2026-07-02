@@ -17,31 +17,31 @@ export const mapBranchLoadData = (response) => {
     {
       title: "Average Predicted Load",
       value: summary.avg_load_display,
-      subText: `${summary.active_branches} Active Branches`,
+      // subText: `${summary.active_branches} Active Branches`,
       positive: true,
       alert: false,
     },
 
     {
-      title: "Branches Over Capacity",
-      value: summary.branches_over_capacity,
+      title: "Capacity Breach Alerts",
+      value: summary.capacity_breach_alerts,
       subText: "Capacity Breach",
       positive: false,
       alert: true,
     },
 
     {
-      title: "Branches Covered",
+      title: "Total Branches",
       value: summary.total_branches,
-      subText: "Forecast Generated",
+      // subText: "Forecast Generated",
       positive: true,
       alert: false,
     },
 
     {
-      title: "Capacity Gap",
-      value: summary.total_predicted_capacity_gap_jobs,
-      subText: "Jobs",
+      title: "High Load Alerts",
+      value: summary.high_load_alerts,
+      // subText: "Jobs",
       positive: false,
       alert: false,
     },

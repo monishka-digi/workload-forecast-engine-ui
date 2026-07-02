@@ -17,7 +17,7 @@ export default function BayUtilizationTable({ rows = [] }) {
               <th>BAY TYPE</th>
               <th>PERIOD</th>
               <th>UTILIZATION</th>
-              <th>DAY 10 - DAY 90</th>
+              {/* <th>DAY 10 - DAY 90</th> */}
               <th>JOBS</th>
               <th>OVERFLOW</th>
               <th>STATUS</th>
@@ -36,13 +36,13 @@ export default function BayUtilizationTable({ rows = [] }) {
 
                 <td>{Number(row.utilization).toFixed(1)}%</td>
 
-                <td>
+                {/* <td>
                   {row.lower}% - {row.upper}%
-                </td>
+                </td> */}
 
                 <td>{row.jobs}</td>
 
-                <td>{row.overflowRisk}%</td>
+                <td>{row.overflowRisk}</td>
 
                 <td>
                   <span

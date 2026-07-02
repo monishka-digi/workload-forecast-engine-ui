@@ -18,7 +18,7 @@ export const mapTechnicianDemandData = (response) => {
     {
       title: "Total Required Headcount",
       value: summary.total_technicians_required_30d,
-      subText: `${summary.total_headcount_gap_30d} Gap`,
+      // subText: `${summary.total_headcount_gap_30d} Gap`,
       positive: true,
       alert: false,
     },
@@ -32,7 +32,7 @@ export const mapTechnicianDemandData = (response) => {
     {
       title: "Branches With Shortfall",
       value: summary.branches_with_shortfall,
-      subText: `${summary.branches_with_surplus} Surplus`,
+      // subText: `${summary.branches_with_surplus} Surplus`,
       positive: true,
       alert: false,
     },
@@ -43,13 +43,13 @@ export const mapTechnicianDemandData = (response) => {
       positive: true,
       alert: false,
     },
-    {
-      title: "Avg MAE",
-      value: model_performance.mae_headcount,
-      subText: `${model_performance.accuracy_pct}% Accuracy`,
-      positive: true,
-      alert: false,
-    },
+    // {
+    //   title: "Avg MAE",
+    //   value: model_performance.mae_headcount,
+    //   subText: `${model_performance.accuracy_pct}% Accuracy`,
+    //   positive: true,
+    //   alert: false,
+    // },
   ];
 
   // ---------------- Skill Chart ----------------

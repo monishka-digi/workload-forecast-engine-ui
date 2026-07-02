@@ -16,10 +16,11 @@ export default function MachineMixChart({ data }) {
     <Card title="Machine Type Mix" tag="Predicted Jobs" height="420px">
       <div
         style={{
-          height: 320,
-          width: "100%",
           position: "relative",
-          background: "var(--card-bg)",
+          width: "100%",
+          maxWidth: "380px", 
+          height: "280px", 
+          margin: "20px auto", 
         }}
       >
         <Doughnut data={data} options={getDoughnutOptions(theme)} />

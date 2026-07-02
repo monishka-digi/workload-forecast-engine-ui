@@ -10,7 +10,7 @@ export const mapBayUtilizationData = (response) => {
     {
       title: "Avg Predicted Util.",
       value: `${summary.avg_utilization_pct_30d}%`,
-      subText: `${summary.avg_utilization_pct_60d}% (60 Days)`,
+      // subText: `${summary.avg_utilization_pct_60d}% (60 Days)`,
       positive: true,
       alert: false,
     },
@@ -45,7 +45,7 @@ export const mapBayUtilizationData = (response) => {
     {
       title: "Most Loaded Type",
       value: summary.bay_type_highest_utilization,
-      subText: `${summary.peak_utilization_pct}%`,
+      // subText: `${summary.peak_utilization_pct}%`,
       positive: true,
       alert: false,
     },
