@@ -14,6 +14,7 @@ import { Line } from "react-chartjs-2";
 import Card from "../Common/Card";
 import { useTheme } from "../../context/ThemeContext";
 import { getCommonOptions } from "../../config/chartOptions";
+import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
 ChartJS.register(
   CategoryScale,
@@ -28,14 +29,35 @@ ChartJS.register(
 export default function HeadcountTrendChart({ data }) {
   const { theme } = useTheme();
 
+  const chartTitleStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontSize: "20px",
+    fontWeight: 700,
+    color: "var(--text)",
+    lineHeight: 1.2,
+  };
+  
   if (!data) return null;
 
   return (
     <Card
-      title="Headcount Requirement Trend"
-      tag="Required vs Available"
-      height="320px"
-    >
+          title={
+            <div style={chartTitleStyle}>
+              <span style={chartTitleStyle}>Headcount Requirement Trend</span>
+    
+              <InfoTooltip
+                position="bottom"
+                content="Weekly required vs available technicians over the 90-day forecast — the gap widens during the mid-July monsoon surge and stays elevated."
+              >
+                <span className="infoIcon">i</span>
+              </InfoTooltip>
+            </div>
+          }
+          tag="Technician Demand"
+          height="320px"
+        >
       <div className="trendChartWrapper">
         <Line
           data={data}

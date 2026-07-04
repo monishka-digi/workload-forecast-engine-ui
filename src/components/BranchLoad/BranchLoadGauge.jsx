@@ -1,6 +1,7 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 import { Doughnut } from "react-chartjs-2";
+import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -36,7 +37,22 @@ export default function BranchLoadGauge({ data }) {
   return (
     <div className="branchGaugeCard">
       <div className="branchGaugeHeader">
-        <h3>Branch Load Gauge</h3>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <h3>Branch Load Gauge</h3>
+
+          <InfoTooltip
+            position="bottom"
+            content="Shows relative share of overall workload/demand split between Nagpur and Chennai branches, giving a quick at-a-glance view of which branch is carrying more of the total load."
+          >
+            <span className="infoIcon">i</span>
+          </InfoTooltip>
+        </div>
       </div>
 
       <div

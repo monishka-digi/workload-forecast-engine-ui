@@ -5,6 +5,7 @@ import { Doughnut } from "react-chartjs-2";
 import Card from "../Common/Card";
 import { getDoughnutOptions } from "../../config/chartOptions";
 import { useTheme } from "../../context/ThemeContext";
+import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -12,15 +13,40 @@ export default function MachineMixChart({ data }) {
   const { theme } = useTheme();
   if (!data) return null;
 
+  const chartTitleStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  fontSize: "20px",
+  fontWeight: 700,
+  color: "var(--text)",
+  lineHeight: 1.2,
+};
+
   return (
-    <Card title="Machine Type Mix" tag="Predicted Jobs" height="420px">
+    <Card
+          title={
+            <div style={chartTitleStyle}>
+              <span style={chartTitleStyle}>Machine Type Mix</span>
+    
+              <InfoTooltip
+                position="bottom"
+                content="Breakdown of predicted job volume by machine type, showing which equipment categories will drive the most service demand."
+              >
+                <span className="infoIcon">i</span>
+              </InfoTooltip>
+            </div>
+          }
+          tag="Technician Demand"
+          height="350px"
+        >
       <div
         style={{
           position: "relative",
           width: "100%",
-          maxWidth: "380px", 
-          height: "280px", 
-          margin: "20px auto", 
+          maxWidth: "380px",
+          height: "280px",
+          margin: "20px auto",
         }}
       >
         <Doughnut data={data} options={getDoughnutOptions(theme)} />

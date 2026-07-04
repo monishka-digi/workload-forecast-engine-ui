@@ -1,10 +1,26 @@
 import "./BayUtilizationTable.css";
+import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
 export default function BayUtilizationTable({ rows = [] }) {
   return (
     <div className="bayTableCard">
       <div className="bayTableHeader">
-        <h3>Near Capacity Watchlist</h3>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <h3>Near Capacity Watchlist</h3>
+
+          <InfoTooltip
+            position="bottom"
+            content="It's tracking bay-level workshop capacity across branches, bay types, and time periods, flagging which ones are running hot."
+          >
+            <span className="infoIcon">i</span>
+          </InfoTooltip>
+        </div>
 
         <span>{rows.length} Records</span>
       </div>
@@ -13,6 +29,7 @@ export default function BayUtilizationTable({ rows = [] }) {
         <table className="bayTable">
           <thead>
             <tr>
+              
               <th>BRANCH</th>
               <th>BAY TYPE</th>
               <th>PERIOD</th>

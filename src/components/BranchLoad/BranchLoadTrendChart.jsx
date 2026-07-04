@@ -12,6 +12,7 @@ import { Line } from "react-chartjs-2";
 import { useTheme } from "../../context/ThemeContext";
 import { getChartColors } from "../../config/chartOptions";
 import "./BranchLoadTrendChart.css";
+import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
 ChartJS.register(
   CategoryScale,
@@ -19,7 +20,7 @@ ChartJS.register(
   PointElement,
   LineElement,
   Tooltip,
-  Legend
+  Legend,
 );
 
 export default function BranchLoadTrendChart({ chart }) {
@@ -29,7 +30,22 @@ export default function BranchLoadTrendChart({ chart }) {
   return (
     <div className="branchTrendCard">
       <div className="branchTrendHeader">
-        <h3>Load trend — breach branches</h3>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <h3>Load trend — breach branches</h3>
+
+          <InfoTooltip
+            position="bottom"
+            content="Tracks forecasted vs. actual utilization % (Y-axis) over time specifically for branches that are flagged as breaching capacity thresholds. This shows forecasts accuracy for the branches most at risk of capacity breach"
+          >
+            <span className="infoIcon">i</span>
+          </InfoTooltip>
+        </div>
 
         <span>forecast vs actual</span>
       </div>

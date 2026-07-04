@@ -1,12 +1,7 @@
 import "./BayHeatmap.css";
+import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
-const bayTypes = [
-  "General",
-  "Hydraulic",
-  "Overhaul",
-  "Express",
-  "PDI",
-];
+const bayTypes = ["General", "Hydraulic", "Overhaul", "Express", "PDI"];
 
 export default function BayHeatmap({ data = [] }) {
   const getClass = (value) => {
@@ -22,9 +17,24 @@ export default function BayHeatmap({ data = [] }) {
   };
 
   return (
-    <div className="heatmapCard" style={{ height: '381px' }}>
+    <div className="heatmapCard" style={{ height: "381px" }}>
       <div className="heatmapHeader">
-        <h3>Branch × Bay Type</h3>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <h3>Branch × Bay Type</h3>
+
+          <InfoTooltip
+            position="bottom"
+            content="Cross-tab of average utilization % for each bay type across branches; dashes indicate no bays of that type at that branch."
+          >
+            <span className="infoIcon">i</span>
+          </InfoTooltip>
+        </div>
 
         <span>Average Utilization</span>
       </div>
@@ -33,20 +43,14 @@ export default function BayHeatmap({ data = [] }) {
         <div className="heatHead">Branch</div>
 
         {bayTypes.map((type) => (
-          <div
-            key={type}
-            className="heatHead center"
-          >
+          <div key={type} className="heatHead center">
             {type}
           </div>
         ))}
 
         {data.map((row) => (
           <>
-            <div
-              key={row.branch}
-              className="branchName"
-            >
+            <div key={row.branch} className="branchName">
               {row.branch}
             </div>
 

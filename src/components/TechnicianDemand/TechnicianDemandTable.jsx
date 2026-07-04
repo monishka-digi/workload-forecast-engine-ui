@@ -1,4 +1,5 @@
 import "./TechnicianDemandTable.css";
+import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
 export default function TechnicianDemandTable({ rows = [] }) {
   return (
@@ -16,9 +17,44 @@ export default function TechnicianDemandTable({ rows = [] }) {
               <th>BRANCH</th>
               <th>SKILL</th>
               <th>PERIOD</th>
-              <th>REQUIRED (P50)</th>
-              <th>ROSTERED</th>
-              <th>SHORTFALL</th>
+              {/* <th>REQUIRED (P50)</th> */}
+              {/* <th>ROSTERED</th> */}
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  <span>ROSTERED</span>
+
+                  <InfoTooltip
+                    position="bottom"
+                    content="The number of staff at that skill level who are actually scheduled/assigned to work at that branch for the given period (2026-07-08)."
+                  >
+                    <span className="infoIcon">i</span>
+                  </InfoTooltip>
+                </div>
+              </th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  <span>SHORTFALL</span>
+
+                  <InfoTooltip
+                    position="bottom"
+                    content="The gap between what's required and what's rostered (Required - Rostered). It tells you how understaffed that skill level is."
+                  >
+                    <span className="infoIcon">i</span>
+                  </InfoTooltip>
+                </div>
+              </th>
               <th>ACTIONS</th>
             </tr>
           </thead>
@@ -32,7 +68,7 @@ export default function TechnicianDemandTable({ rows = [] }) {
 
                 <td>{row.period}</td>
 
-                <td>{row.required}</td>
+                {/* <td>{row.required}</td> */}
 
                 <td>{row.rostered}</td>
 
@@ -42,8 +78,8 @@ export default function TechnicianDemandTable({ rows = [] }) {
                       row.shortfall > 4
                         ? "high"
                         : row.shortfall > 0
-                        ? "medium"
-                        : "low"
+                          ? "medium"
+                          : "low"
                     }`}
                   >
                     {row.shortfall}
@@ -58,10 +94,7 @@ export default function TechnicianDemandTable({ rows = [] }) {
                     Approve
                   </button>
 
-                  <button
-                    className="editBtn"
-                    disabled={!row.actions.canEdit}
-                  >
+                  <button className="editBtn" disabled={!row.actions.canEdit}>
                     Edit
                   </button>
                 </td>
