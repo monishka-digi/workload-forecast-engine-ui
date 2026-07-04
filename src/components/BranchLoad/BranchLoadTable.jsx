@@ -1,4 +1,5 @@
 import "./BranchLoadTable.css";
+import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
 export default function BranchLoadTable({ rows = [] }) {
   return (
@@ -17,8 +18,42 @@ export default function BranchLoadTable({ rows = [] }) {
               <th>GEOGRAPHY</th>
               <th>PERIOD</th>
               <th>PRED. LOAD %</th>
-              <th>CAPACITY GAP</th>
-              <th>BREACH</th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  <span>CAPACITY GAP</span>
+
+                  <InfoTooltip
+                    position="bottom"
+                    content="The buffer (or deficit) of remaining capacity — how many jobs/units of work the branch can still absorb before hitting 100% capacity, at that predicted load %."
+                  >
+                    <span className="infoIcon">i</span>
+                  </InfoTooltip>
+                </div>
+              </th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  <span>BREACH</span>
+
+                  <InfoTooltip
+                    position="bottom"
+                    content="Branches whose load/utilization % is forecasted to exceed a defined threshold (likely 100% capacity, or possibly a lower SLA threshold like 90%) — i.e., branches at risk of, or actively exceeding, their safe operating capacity"
+                  >
+                    <span className="infoIcon">i</span>
+                  </InfoTooltip>
+                </div>
+              </th>
               <th>ACTIONS</th>
             </tr>
           </thead>

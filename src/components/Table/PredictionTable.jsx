@@ -12,7 +12,7 @@ export default function PredictionTable({ rows = [], type = "jobVolume" }) {
             <th>Description</th>
             <th>Period</th>
             <th>Forecast Qty</th>
-            <th>DAY 10 - DAY 90</th>
+            {/* <th>P10-P90</th> */}
             <th>Confidence</th>
             <th>Current Stock</th>
             <th>Supplier</th>
@@ -28,7 +28,7 @@ export default function PredictionTable({ rows = [], type = "jobVolume" }) {
             <th>Segment</th>
             <th>Period</th>
             <th>Forecast</th>
-            <th>P10-P90</th>
+            {/* <th>P10-P90</th> */}
             <th>Confidence</th>
             <th>Actions</th>
           </tr>
@@ -49,9 +49,9 @@ export default function PredictionTable({ rows = [], type = "jobVolume" }) {
 
             <td>{row.predictedQty}</td>
 
-            <td>
+            {/* <td>
               {row.lower} - {row.upper}
-            </td>
+            </td> */}
 
             <td>
               <div className="confidenceCell">
@@ -85,9 +85,9 @@ export default function PredictionTable({ rows = [], type = "jobVolume" }) {
 
             <td>{row.predictedJobs}</td>
 
-            <td>
+            {/* <td>
               {row.lower} - {row.upper}
-            </td>
+            </td> */}
 
             <td>
               <div className="confidenceCell">

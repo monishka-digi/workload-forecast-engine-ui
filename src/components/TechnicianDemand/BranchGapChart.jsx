@@ -16,9 +16,8 @@ import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-export default function SkillDemandChart({ data }) {
+export default function BranchGapChart({ data, summary = [] }) {
   const { theme } = useTheme();
-
   const chartTitleStyle = {
     display: "flex",
     alignItems: "center",
@@ -28,32 +27,39 @@ export default function SkillDemandChart({ data }) {
     color: "var(--text)",
     lineHeight: 1.2,
   };
-  
   if (!data) return null;
 
   return (
     <Card
       title={
         <div style={chartTitleStyle}>
-          <span style={chartTitleStyle}>Required vs Available by Skill</span>
+          <span style={chartTitleStyle}>Branch Headcount Gap</span>
 
           <InfoTooltip
             position="bottom"
-            content="Compares required technician headcount against currently available staff by skill level over the next 30 days. L1 has a small surplus, while L2, L3, and Specialist levels face growing shortfalls"
+            content="Required vs available technicians by branch — Nagpur carries the larger shortfall (29.4%) versus Chennai's near-balanced 6.8% gap"
           >
             <span className="infoIcon">i</span>
           </InfoTooltip>
         </div>
       }
       tag="Technician Demand"
-      height="420px"
+      height="320px"
     >
-      <div
-        style={{
-          height: 320,
-        }}
-      >
+      <div className="branchGapChartWrapper">
         <Bar data={data} options={getGroupedHorizontalBarOptions(theme)} />
+      </div>
+
+      <div className="branchGapSummary">
+        {summary.map((item) => (
+          <div key={item.branch} className="branchGapItem">
+            <p>{item.branch}</p>
+
+            <h3 className={item.gap > 5 ? "danger" : "warning"}>
+              -{item.gap} ({item.gapPct})
+            </h3>
+          </div>
+        ))}
       </div>
     </Card>
   );

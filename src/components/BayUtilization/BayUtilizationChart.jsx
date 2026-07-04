@@ -1,10 +1,26 @@
 import "./BayUtilizationChart.css";
+import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
 export default function BayUtilizationChart({ data = [] }) {
   return (
     <div className="bayCard">
       <div className="bayCardHeader">
-        <h3>Utilization by Bay Type</h3>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <h3>Utilization by Bay Type</h3>
+
+          <InfoTooltip
+            position="bottom"
+            content="This chart shows the average utilization rate over the periof for each bay type across your branches (aggregated, not branch-specific like the watchlist table). It's a quick visual health-check of which type of service bay is under the most strain system-wide"
+          >
+            <span className="infoIcon">i</span>
+          </InfoTooltip>
+        </div>
 
         <span>Average 30 Days</span>
       </div>

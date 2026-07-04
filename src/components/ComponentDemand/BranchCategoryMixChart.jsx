@@ -18,8 +18,10 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 export default function BranchCategoryMixChart({ data }) {
   const { theme } = useTheme();
   const colors = getChartColors(theme);
-  
+
   if (!data) return null;
+
+  console.log("Branch Category Mix:", data);
 
   const options = {
     responsive: true,
@@ -88,7 +90,9 @@ export default function BranchCategoryMixChart({ data }) {
     <Card title="Branch × Category Mix" tag="stacked">
       <div
         style={{
-          height: 320,
+          flex: 1,
+          position: "relative",
+          minHeight: 0,
         }}
       >
         <Bar data={data} options={options} />

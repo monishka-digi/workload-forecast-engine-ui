@@ -13,104 +13,736 @@
       "generated_timestamp_relative": "6h ago",
       "forecast_horizons": [30, 60, 90],
       "rule_engine_ref": "bay_utilization_rules_v1.0.0",
-      "dependent_models": ["job_volume_prediction_v1.0.0", "branch_load_forecast_v1.0.0"],
+      "dependent_models": [
+        "job_volume_prediction_v1.0.0",
+        "branch_load_forecast_v1.0.0"
+      ],
       "model_run_id": "RUN-BU-20260624-001",
       "rule_description": "Bay utilization is computed as: (predicted_job_count × avg_dwell_time_hrs_by_bay_type) / (bay_count × operating_hours_per_day × days_in_period) × 100. No ML training. Cross-model inputs: job volume from Model 1, branch load from Model 3."
     },
 
+    "forecast_reasoning": {
+      "scope_note": "Only two branches remain: Nagpur (BR-NAG-01, 8 bays) and Chennai (BR-CHN-02, 12 bays). All bay counts, buckets and pagination reflect these 20 bays.",
+      "horizon_note": "Utilization is projected weekly across the full 90-day window. Every bay type peaks in the week of 2026-07-15 (monsoon breakdown surge) then relaxes toward baseline by mid-September.",
+      "bay_type_level": {
+        "Hydraulic": "Highest utilization type. Monsoon breakdowns concentrate on hydraulic circuits; Nagpur's single hydraulic bay tips over capacity at the peak, driving the CRITICAL alert.",
+        "Overhaul": "Long dwell times (26–29 hrs) keep overhaul bays near capacity even at moderate job counts; Chennai carries most overhaul demand.",
+        "General": "Broadest, most elastic pool; absorbs overflow and stays in the active band.",
+        "Express": "Short dwell, quick turnover, comfortable headroom.",
+        "PDI": "Lowest and most stable — pre-delivery inspection volume is planned, not breakdown-driven."
+      },
+      "methodology": "predicted_utilization_pct = (jobs × dwell_hrs) / (bay_count × 16 hrs/day × days). Near-capacity flag trips at ≥90%. p10/p90 are ±11 pts, capped at 100%."
+    },
+
     "summary": {
-      "total_bays": 68,
-      "bays_operational": 62,
-      "bays_under_maintenance": 4,
-      "bays_decommissioned": 2,
-      "avg_utilization_pct_30d": 78.4,
-      "avg_utilization_pct_60d": 76.2,
-      "avg_utilization_pct_90d": 74.8,
-      "near_capacity_bays_30d": 8,
-      "over_capacity_bays_30d": 2,
+      "total_bays": 20,
+      "bays_operational": 18,
+      "bays_under_maintenance": 1,
+      "bays_decommissioned": 1,
+      "avg_utilization_pct_30d": 84.2,
+      "avg_utilization_pct_60d": 82.6,
+      "avg_utilization_pct_90d": 80.4,
+      "near_capacity_bays_30d": 5,
+      "over_capacity_bays_30d": 1,
       "peak_utilization_week": "2026-07-15",
-      "peak_utilization_pct": 94.2,
+      "peak_utilization_pct": 98.4,
       "bay_type_highest_utilization": "Hydraulic",
       "bay_type_lowest_utilization": "PDI",
-      "branches_with_bay_overload": 2,
-      "overflow_risk_score_avg": 0.18,
+      "branches_with_bay_overload": 1,
+      "overflow_risk_score_avg": 0.22,
       "data_freshness": "2026-06-24T02:00:00",
-      "data_freshness_relative": "6h 45m ago"
+      "data_freshness_relative": "6h 45m ago",
+      "summary_reasoning": "Across 18 operational bays, Nagpur's single hydraulic bay is the only over-capacity unit (98.4% at the 2026-07-15 peak). Chennai's larger, more balanced bay mix keeps its utilization in the active band, so bay overload is confined to one branch."
     },
 
     "graph_data": {
-
       "utilization_trend_by_bay_type": {
         "General": [
-          { "period_date": "2026-06-24", "predicted_utilization_pct": 76.2, "p10": 66.5, "p90": 85.9, "near_capacity_flag": false },
-          { "period_date": "2026-07-01", "predicted_utilization_pct": 78.8, "p10": 68.9, "p90": 88.7, "near_capacity_flag": false },
-          { "period_date": "2026-07-08", "predicted_utilization_pct": 84.1, "p10": 73.6, "p90": 94.6, "near_capacity_flag": false },
-          { "period_date": "2026-07-15", "predicted_utilization_pct": 88.6, "p10": 77.5, "p90": 99.7, "near_capacity_flag": true },
-          { "period_date": "2026-07-22", "predicted_utilization_pct": 82.4, "p10": 72.1, "p90": 92.7, "near_capacity_flag": false }
+          {
+            "period_date": "2026-06-24",
+            "predicted_utilization_pct": 76.2,
+            "p10": 65.2,
+            "p90": 87.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-01",
+            "predicted_utilization_pct": 78.8,
+            "p10": 67.8,
+            "p90": 89.8,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-08",
+            "predicted_utilization_pct": 84.1,
+            "p10": 73.1,
+            "p90": 95.1,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-15",
+            "predicted_utilization_pct": 88.6,
+            "p10": 77.6,
+            "p90": 99.6,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-22",
+            "predicted_utilization_pct": 82.4,
+            "p10": 71.4,
+            "p90": 93.4,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-29",
+            "predicted_utilization_pct": 80.1,
+            "p10": 69.1,
+            "p90": 91.1,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-05",
+            "predicted_utilization_pct": 78.4,
+            "p10": 67.4,
+            "p90": 89.4,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-12",
+            "predicted_utilization_pct": 79.6,
+            "p10": 68.6,
+            "p90": 90.6,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-19",
+            "predicted_utilization_pct": 81.2,
+            "p10": 70.2,
+            "p90": 92.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-26",
+            "predicted_utilization_pct": 79.8,
+            "p10": 68.8,
+            "p90": 90.8,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-02",
+            "predicted_utilization_pct": 78.0,
+            "p10": 67.0,
+            "p90": 89.0,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-09",
+            "predicted_utilization_pct": 77.1,
+            "p10": 66.1,
+            "p90": 88.1,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-16",
+            "predicted_utilization_pct": 76.4,
+            "p10": 65.4,
+            "p90": 87.4,
+            "near_capacity_flag": false
+          }
         ],
         "Hydraulic": [
-          { "period_date": "2026-06-24", "predicted_utilization_pct": 88.4, "p10": 77.3, "p90": 99.5, "near_capacity_flag": true },
-          { "period_date": "2026-07-01", "predicted_utilization_pct": 91.6, "p10": 80.1, "p90": 100.0, "near_capacity_flag": true },
-          { "period_date": "2026-07-08", "predicted_utilization_pct": 96.2, "p10": 84.2, "p90": 100.0, "near_capacity_flag": true },
-          { "period_date": "2026-07-15", "predicted_utilization_pct": 98.4, "p10": 86.1, "p90": 100.0, "near_capacity_flag": true },
-          { "period_date": "2026-07-22", "predicted_utilization_pct": 94.1, "p10": 82.3, "p90": 100.0, "near_capacity_flag": true }
+          {
+            "period_date": "2026-06-24",
+            "predicted_utilization_pct": 88.4,
+            "p10": 77.4,
+            "p90": 99.4,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-01",
+            "predicted_utilization_pct": 91.6,
+            "p10": 80.6,
+            "p90": 100.0,
+            "near_capacity_flag": true
+          },
+          {
+            "period_date": "2026-07-08",
+            "predicted_utilization_pct": 96.2,
+            "p10": 85.2,
+            "p90": 100.0,
+            "near_capacity_flag": true
+          },
+          {
+            "period_date": "2026-07-15",
+            "predicted_utilization_pct": 98.4,
+            "p10": 87.4,
+            "p90": 100.0,
+            "near_capacity_flag": true
+          },
+          {
+            "period_date": "2026-07-22",
+            "predicted_utilization_pct": 94.1,
+            "p10": 83.1,
+            "p90": 100.0,
+            "near_capacity_flag": true
+          },
+          {
+            "period_date": "2026-07-29",
+            "predicted_utilization_pct": 90.8,
+            "p10": 79.8,
+            "p90": 100.0,
+            "near_capacity_flag": true
+          },
+          {
+            "period_date": "2026-08-05",
+            "predicted_utilization_pct": 88.2,
+            "p10": 77.2,
+            "p90": 99.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-12",
+            "predicted_utilization_pct": 89.4,
+            "p10": 78.4,
+            "p90": 100.0,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-19",
+            "predicted_utilization_pct": 91.0,
+            "p10": 80.0,
+            "p90": 100.0,
+            "near_capacity_flag": true
+          },
+          {
+            "period_date": "2026-08-26",
+            "predicted_utilization_pct": 89.1,
+            "p10": 78.1,
+            "p90": 100.0,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-02",
+            "predicted_utilization_pct": 87.2,
+            "p10": 76.2,
+            "p90": 98.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-09",
+            "predicted_utilization_pct": 86.0,
+            "p10": 75.0,
+            "p90": 97.0,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-16",
+            "predicted_utilization_pct": 85.1,
+            "p10": 74.1,
+            "p90": 96.1,
+            "near_capacity_flag": false
+          }
         ],
         "Overhaul": [
-          { "period_date": "2026-06-24", "predicted_utilization_pct": 82.4, "p10": 72.1, "p90": 92.7, "near_capacity_flag": false },
-          { "period_date": "2026-07-08", "predicted_utilization_pct": 88.2, "p10": 77.2, "p90": 99.2, "near_capacity_flag": true }
+          {
+            "period_date": "2026-06-24",
+            "predicted_utilization_pct": 82.4,
+            "p10": 71.4,
+            "p90": 93.4,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-01",
+            "predicted_utilization_pct": 85.1,
+            "p10": 74.1,
+            "p90": 96.1,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-08",
+            "predicted_utilization_pct": 88.2,
+            "p10": 77.2,
+            "p90": 99.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-15",
+            "predicted_utilization_pct": 90.6,
+            "p10": 79.6,
+            "p90": 100.0,
+            "near_capacity_flag": true
+          },
+          {
+            "period_date": "2026-07-22",
+            "predicted_utilization_pct": 86.8,
+            "p10": 75.8,
+            "p90": 97.8,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-29",
+            "predicted_utilization_pct": 84.2,
+            "p10": 73.2,
+            "p90": 95.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-05",
+            "predicted_utilization_pct": 82.6,
+            "p10": 71.6,
+            "p90": 93.6,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-12",
+            "predicted_utilization_pct": 83.8,
+            "p10": 72.8,
+            "p90": 94.8,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-19",
+            "predicted_utilization_pct": 85.4,
+            "p10": 74.4,
+            "p90": 96.4,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-26",
+            "predicted_utilization_pct": 84.0,
+            "p10": 73.0,
+            "p90": 95.0,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-02",
+            "predicted_utilization_pct": 82.4,
+            "p10": 71.4,
+            "p90": 93.4,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-09",
+            "predicted_utilization_pct": 81.2,
+            "p10": 70.2,
+            "p90": 92.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-16",
+            "predicted_utilization_pct": 80.4,
+            "p10": 69.4,
+            "p90": 91.4,
+            "near_capacity_flag": false
+          }
         ],
         "PDI": [
-          { "period_date": "2026-06-24", "predicted_utilization_pct": 58.4, "p10": 51.1, "p90": 65.7, "near_capacity_flag": false },
-          { "period_date": "2026-07-08", "predicted_utilization_pct": 62.1, "p10": 54.3, "p90": 69.9, "near_capacity_flag": false }
+          {
+            "period_date": "2026-06-24",
+            "predicted_utilization_pct": 58.4,
+            "p10": 51.1,
+            "p90": 65.7,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-01",
+            "predicted_utilization_pct": 60.2,
+            "p10": 52.9,
+            "p90": 67.5,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-08",
+            "predicted_utilization_pct": 62.1,
+            "p10": 54.3,
+            "p90": 69.9,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-15",
+            "predicted_utilization_pct": 64.4,
+            "p10": 56.4,
+            "p90": 72.4,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-22",
+            "predicted_utilization_pct": 61.2,
+            "p10": 53.6,
+            "p90": 68.8,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-29",
+            "predicted_utilization_pct": 59.6,
+            "p10": 52.1,
+            "p90": 67.1,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-05",
+            "predicted_utilization_pct": 58.2,
+            "p10": 50.9,
+            "p90": 65.5,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-12",
+            "predicted_utilization_pct": 58.8,
+            "p10": 51.4,
+            "p90": 66.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-19",
+            "predicted_utilization_pct": 60.0,
+            "p10": 52.6,
+            "p90": 67.4,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-26",
+            "predicted_utilization_pct": 59.0,
+            "p10": 51.6,
+            "p90": 66.4,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-02",
+            "predicted_utilization_pct": 57.8,
+            "p10": 50.5,
+            "p90": 65.1,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-09",
+            "predicted_utilization_pct": 57.0,
+            "p10": 49.8,
+            "p90": 64.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-16",
+            "predicted_utilization_pct": 56.4,
+            "p10": 49.3,
+            "p90": 63.5,
+            "near_capacity_flag": false
+          }
         ],
         "Express": [
-          { "period_date": "2026-06-24", "predicted_utilization_pct": 71.8, "p10": 62.8, "p90": 80.8, "near_capacity_flag": false },
-          { "period_date": "2026-07-08", "predicted_utilization_pct": 78.4, "p10": 68.6, "p90": 88.2, "near_capacity_flag": false }
+          {
+            "period_date": "2026-06-24",
+            "predicted_utilization_pct": 71.8,
+            "p10": 62.8,
+            "p90": 80.8,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-01",
+            "predicted_utilization_pct": 74.2,
+            "p10": 65.2,
+            "p90": 83.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-08",
+            "predicted_utilization_pct": 78.4,
+            "p10": 68.6,
+            "p90": 88.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-15",
+            "predicted_utilization_pct": 81.6,
+            "p10": 71.6,
+            "p90": 91.6,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-22",
+            "predicted_utilization_pct": 77.2,
+            "p10": 67.6,
+            "p90": 86.8,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-07-29",
+            "predicted_utilization_pct": 75.0,
+            "p10": 65.6,
+            "p90": 84.4,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-05",
+            "predicted_utilization_pct": 73.4,
+            "p10": 64.2,
+            "p90": 82.6,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-12",
+            "predicted_utilization_pct": 74.2,
+            "p10": 65.0,
+            "p90": 83.4,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-19",
+            "predicted_utilization_pct": 75.8,
+            "p10": 66.4,
+            "p90": 85.2,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-08-26",
+            "predicted_utilization_pct": 74.4,
+            "p10": 65.2,
+            "p90": 83.6,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-02",
+            "predicted_utilization_pct": 72.8,
+            "p10": 63.8,
+            "p90": 81.8,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-09",
+            "predicted_utilization_pct": 71.6,
+            "p10": 62.6,
+            "p90": 80.6,
+            "near_capacity_flag": false
+          },
+          {
+            "period_date": "2026-09-16",
+            "predicted_utilization_pct": 70.8,
+            "p10": 61.8,
+            "p90": 79.8,
+            "near_capacity_flag": false
+          }
         ]
       },
 
       "bay_type_utilization_bar": [
-        { "label": "Hydraulic", "avg_utilization_30d": 92.8, "near_capacity_days": 22, "overflow_risk_score": 0.42, "bay_count": 12 },
-        { "label": "Overhaul", "avg_utilization_30d": 84.6, "near_capacity_days": 14, "overflow_risk_score": 0.28, "bay_count": 10 },
-        { "label": "General", "avg_utilization_30d": 80.4, "near_capacity_days": 8, "overflow_risk_score": 0.18, "bay_count": 28 },
-        { "label": "Express", "avg_utilization_30d": 74.6, "near_capacity_days": 4, "overflow_risk_score": 0.08, "bay_count": 8 },
-        { "label": "PDI", "avg_utilization_30d": 60.2, "near_capacity_days": 0, "overflow_risk_score": 0.02, "bay_count": 10 }
+        {
+          "label": "Hydraulic",
+          "avg_utilization_30d": 93.4,
+          "near_capacity_days": 24,
+          "overflow_risk_score": 0.44,
+          "bay_count": 3,
+          "reasoning": "Only 3 hydraulic bays (1 at Nagpur, 2 at Chennai) absorb the monsoon breakdown spike; Nagpur's single bay tips over capacity, so risk is highest."
+        },
+        {
+          "label": "Overhaul",
+          "avg_utilization_30d": 87.6,
+          "near_capacity_days": 15,
+          "overflow_risk_score": 0.3,
+          "bay_count": 3,
+          "reasoning": "Long 26–29 hr dwell times keep overhaul near capacity even at low job counts; concentrated at Chennai."
+        },
+        {
+          "label": "General",
+          "avg_utilization_30d": 82.4,
+          "near_capacity_days": 7,
+          "overflow_risk_score": 0.18,
+          "bay_count": 8,
+          "reasoning": "Largest pool (8 bays) gives elasticity; sits comfortably in the active band and absorbs overflow."
+        },
+        {
+          "label": "Express",
+          "avg_utilization_30d": 76.6,
+          "near_capacity_days": 2,
+          "overflow_risk_score": 0.08,
+          "bay_count": 3,
+          "reasoning": "Short dwell, fast turnover keeps utilization moderate with healthy headroom."
+        },
+        {
+          "label": "PDI",
+          "avg_utilization_30d": 60.6,
+          "near_capacity_days": 0,
+          "overflow_risk_score": 0.02,
+          "bay_count": 3,
+          "reasoning": "Planned pre-delivery volume, not breakdown-driven, so lowest and most stable."
+        }
       ],
 
       "branch_bay_heatmap": [
-        { "branch_id": "BR-HYD-03", "branch_name": "Hyderabad", "bay_type": "Hydraulic", "avg_util_30d": 98.4, "intensity": "CRITICAL" },
-        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore", "bay_type": "Hydraulic", "avg_util_30d": 94.2, "intensity": "HIGH" },
-        { "branch_id": "BR-CHN-02", "branch_name": "Chennai", "bay_type": "Overhaul", "avg_util_30d": 91.6, "intensity": "HIGH" },
-        { "branch_id": "BR-BLR-01", "branch_name": "Bangalore", "bay_type": "General", "avg_util_30d": 86.4, "intensity": "HIGH" },
-        { "branch_id": "BR-MUM-05", "branch_name": "Mumbai", "bay_type": "Hydraulic", "avg_util_30d": 82.4, "intensity": "MEDIUM" },
-        { "branch_id": "BR-DEL-04", "branch_name": "Delhi", "bay_type": "General", "avg_util_30d": 74.8, "intensity": "MEDIUM" },
-        { "branch_id": "BR-KOL-07", "branch_name": "Kolkata", "bay_type": "PDI", "avg_util_30d": 58.2, "intensity": "LOW" },
-        { "branch_id": "BR-JAI-12", "branch_name": "Jaipur", "bay_type": "Express", "avg_util_30d": 61.4, "intensity": "LOW" }
+        {
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur",
+          "bay_type": "Hydraulic",
+          "avg_util_30d": 98.4,
+          "intensity": "CRITICAL"
+        },
+        {
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai",
+          "bay_type": "Overhaul",
+          "avg_util_30d": 91.6,
+          "intensity": "HIGH"
+        },
+        {
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur",
+          "bay_type": "General",
+          "avg_util_30d": 86.2,
+          "intensity": "HIGH"
+        },
+        {
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai",
+          "bay_type": "Hydraulic",
+          "avg_util_30d": 85.6,
+          "intensity": "MEDIUM"
+        },
+        {
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai",
+          "bay_type": "General",
+          "avg_util_30d": 79.8,
+          "intensity": "MEDIUM"
+        },
+        {
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur",
+          "bay_type": "Express",
+          "avg_util_30d": 69.4,
+          "intensity": "LOW"
+        },
+        {
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai",
+          "bay_type": "PDI",
+          "avg_util_30d": 59.4,
+          "intensity": "LOW"
+        },
+        {
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur",
+          "bay_type": "PDI",
+          "avg_util_30d": 58.0,
+          "intensity": "LOW"
+        }
       ],
 
       "daily_schedule_load_bar": [
-        { "label": "Monday", "avg_scheduled_jobs": 28, "avg_utilization_pct": 84.2 },
-        { "label": "Tuesday", "avg_scheduled_jobs": 32, "avg_utilization_pct": 88.6 },
-        { "label": "Wednesday", "avg_scheduled_jobs": 34, "avg_utilization_pct": 91.2 },
-        { "label": "Thursday", "avg_scheduled_jobs": 30, "avg_utilization_pct": 82.4 },
-        { "label": "Friday", "avg_scheduled_jobs": 26, "avg_utilization_pct": 76.8 },
-        { "label": "Saturday", "avg_scheduled_jobs": 18, "avg_utilization_pct": 52.4 },
-        { "label": "Sunday", "avg_scheduled_jobs": 6, "avg_utilization_pct": 18.2 }
+        {
+          "label": "Monday",
+          "avg_scheduled_jobs": 28,
+          "avg_utilization_pct": 84.2
+        },
+        {
+          "label": "Tuesday",
+          "avg_scheduled_jobs": 32,
+          "avg_utilization_pct": 88.6
+        },
+        {
+          "label": "Wednesday",
+          "avg_scheduled_jobs": 34,
+          "avg_utilization_pct": 91.2
+        },
+        {
+          "label": "Thursday",
+          "avg_scheduled_jobs": 30,
+          "avg_utilization_pct": 82.4
+        },
+        {
+          "label": "Friday",
+          "avg_scheduled_jobs": 26,
+          "avg_utilization_pct": 76.8
+        },
+        {
+          "label": "Saturday",
+          "avg_scheduled_jobs": 18,
+          "avg_utilization_pct": 52.4
+        },
+        {
+          "label": "Sunday",
+          "avg_scheduled_jobs": 6,
+          "avg_utilization_pct": 18.2
+        }
+      ],
+      "branch_bay_type_mix_stacked": [
+        {
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur Branch",
+          "total_bays": 8,
+          "bay_type_mix": {
+            "General": {
+              "bay_count": 3,
+              "avg_utilization_pct": 86.2,
+              "pct_of_branch_bays": 37.5
+            },
+            "Hydraulic": {
+              "bay_count": 1,
+              "avg_utilization_pct": 98.4,
+              "pct_of_branch_bays": 12.5
+            },
+            "Overhaul": {
+              "bay_count": 1,
+              "avg_utilization_pct": 84.6,
+              "pct_of_branch_bays": 12.5
+            },
+            "Express": {
+              "bay_count": 2,
+              "avg_utilization_pct": 69.4,
+              "pct_of_branch_bays": 25.0
+            },
+            "PDI": {
+              "bay_count": 1,
+              "avg_utilization_pct": 58.0,
+              "pct_of_branch_bays": 12.5
+            }
+          }
+        },
+        {
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai Branch",
+          "total_bays": 12,
+          "bay_type_mix": {
+            "General": {
+              "bay_count": 5,
+              "avg_utilization_pct": 79.8,
+              "pct_of_branch_bays": 41.7
+            },
+            "Hydraulic": {
+              "bay_count": 2,
+              "avg_utilization_pct": 85.6,
+              "pct_of_branch_bays": 16.7
+            },
+            "Overhaul": {
+              "bay_count": 2,
+              "avg_utilization_pct": 91.6,
+              "pct_of_branch_bays": 16.7
+            },
+            "Express": {
+              "bay_count": 1,
+              "avg_utilization_pct": 70.2,
+              "pct_of_branch_bays": 8.3
+            },
+            "PDI": {
+              "bay_count": 2,
+              "avg_utilization_pct": 59.4,
+              "pct_of_branch_bays": 16.7
+            }
+          }
+        }
       ]
     },
 
     "forecast_table": {
       "CRITICAL": [
         {
-          "prediction_id": "PRED-BU-20260624-HYD-HYD-001",
-          "branch_id": "BR-HYD-03",
-          "branch_name": "Hyderabad Branch",
-          "bay_id": "BAY-WS003-02",
+          "prediction_id": "PRED-BU-20260624-NAG-HYD-001",
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur Branch",
+          "bay_id": "BAY-NAG01-02",
           "bay_type": "Hydraulic",
           "period_date": "2026-07-15",
           "forecast_horizon_days": 30,
           "predicted_utilization_pct": 98.4,
-          "predicted_utilization_pct_p10": 86.1,
+          "predicted_utilization_pct_p10": 87.4,
           "predicted_utilization_pct_p90": 100.0,
           "near_capacity_flag": true,
           "overflow_risk_score": 0.44,
@@ -118,9 +750,10 @@
           "jobs_scheduled": 18,
           "avg_dwell_time_hrs": 14.2,
           "bay_capacity_hrs_day": 16.0,
-          "available_technicians_workshop": 22,
-          "shift_coverage_pct": 0.86,
+          "available_technicians_workshop": 24,
+          "shift_coverage_pct": 0.84,
           "bay_maintenance_flag": false,
+          "reasoning": "Single hydraulic bay (18 jobs × 14.2 hr dwell) hits 98.4% at the monsoon peak. With no second hydraulic bay to share load, any slippage pushes it over 100% — overflow risk 44%. Add a shift or export hydraulic jobs to Chennai.",
           "model_name": "bay_utilization_forecast",
           "model_version": "v1.0.0",
           "prediction_timestamp": "2026-06-24T02:45:00",
@@ -135,25 +768,26 @@
       ],
       "HIGH": [
         {
-          "prediction_id": "PRED-BU-20260624-BLR-HYD-001",
-          "branch_id": "BR-BLR-01",
-          "branch_name": "Bangalore Branch",
-          "bay_id": "BAY-WS001-03",
-          "bay_type": "Hydraulic",
-          "period_date": "2026-07-15",
+          "prediction_id": "PRED-BU-20260624-CHN-OVH-001",
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai Branch",
+          "bay_id": "BAY-CHN02-05",
+          "bay_type": "Overhaul",
+          "period_date": "2026-07-08",
           "forecast_horizon_days": 30,
-          "predicted_utilization_pct": 94.2,
-          "predicted_utilization_pct_p10": 82.4,
+          "predicted_utilization_pct": 91.6,
+          "predicted_utilization_pct_p10": 80.1,
           "predicted_utilization_pct_p90": 100.0,
           "near_capacity_flag": true,
-          "overflow_risk_score": 0.32,
-          "overflow_risk_pct": "32%",
-          "jobs_scheduled": 16,
-          "avg_dwell_time_hrs": 13.8,
+          "overflow_risk_score": 0.3,
+          "overflow_risk_pct": "30%",
+          "jobs_scheduled": 12,
+          "avg_dwell_time_hrs": 28.6,
           "bay_capacity_hrs_day": 16.0,
-          "available_technicians_workshop": 38,
-          "shift_coverage_pct": 0.91,
+          "available_technicians_workshop": 41,
+          "shift_coverage_pct": 0.88,
           "bay_maintenance_flag": false,
+          "reasoning": "Overhaul dwell is very long (28.6 hr), so just 12 jobs across 2 bays reach 91.6%. Utilization is dwell-driven, not volume-driven — staggering job intake smooths the peak better than adding technicians.",
           "model_name": "bay_utilization_forecast",
           "model_version": "v1.0.0",
           "prediction_timestamp": "2026-06-24T02:45:00",
@@ -166,25 +800,26 @@
           }
         },
         {
-          "prediction_id": "PRED-BU-20260624-CHN-OVH-001",
-          "branch_id": "BR-CHN-02",
-          "branch_name": "Chennai Branch",
-          "bay_id": "BAY-WS002-05",
-          "bay_type": "Overhaul",
-          "period_date": "2026-07-08",
+          "prediction_id": "PRED-BU-20260624-NAG-GEN-001",
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur Branch",
+          "bay_id": "BAY-NAG01-04",
+          "bay_type": "General",
+          "period_date": "2026-07-15",
           "forecast_horizon_days": 30,
-          "predicted_utilization_pct": 91.6,
-          "predicted_utilization_pct_p10": 80.1,
-          "predicted_utilization_pct_p90": 100.0,
-          "near_capacity_flag": true,
-          "overflow_risk_score": 0.28,
-          "overflow_risk_pct": "28%",
-          "jobs_scheduled": 12,
-          "avg_dwell_time_hrs": 28.6,
+          "predicted_utilization_pct": 86.2,
+          "predicted_utilization_pct_p10": 75.2,
+          "predicted_utilization_pct_p90": 97.2,
+          "near_capacity_flag": false,
+          "overflow_risk_score": 0.2,
+          "overflow_risk_pct": "20%",
+          "jobs_scheduled": 26,
+          "avg_dwell_time_hrs": 6.6,
           "bay_capacity_hrs_day": 16.0,
-          "available_technicians_workshop": 32,
-          "shift_coverage_pct": 0.88,
+          "available_technicians_workshop": 24,
+          "shift_coverage_pct": 0.82,
           "bay_maintenance_flag": false,
+          "reasoning": "Nagpur's general bays run hot (86.2%) as they absorb overflow from the saturated hydraulic bay. Still sub-90, but the thin 3-bay pool leaves little cushion during the peak week.",
           "model_name": "bay_utilization_forecast",
           "model_version": "v1.0.0",
           "prediction_timestamp": "2026-06-24T02:45:00",
@@ -199,25 +834,26 @@
       ],
       "MEDIUM": [
         {
-          "prediction_id": "PRED-BU-20260624-DEL-GEN-001",
-          "branch_id": "BR-DEL-04",
-          "branch_name": "Delhi Branch",
-          "bay_id": "BAY-WS004-07",
+          "prediction_id": "PRED-BU-20260624-CHN-GEN-001",
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai Branch",
+          "bay_id": "BAY-CHN02-07",
           "bay_type": "General",
           "period_date": "2026-07-08",
           "forecast_horizon_days": 30,
-          "predicted_utilization_pct": 74.8,
-          "predicted_utilization_pct_p10": 65.4,
-          "predicted_utilization_pct_p90": 84.2,
+          "predicted_utilization_pct": 79.8,
+          "predicted_utilization_pct_p10": 70.0,
+          "predicted_utilization_pct_p90": 89.6,
           "near_capacity_flag": false,
           "overflow_risk_score": 0.12,
           "overflow_risk_pct": "12%",
-          "jobs_scheduled": 22,
+          "jobs_scheduled": 30,
           "avg_dwell_time_hrs": 6.4,
           "bay_capacity_hrs_day": 16.0,
-          "available_technicians_workshop": 28,
+          "available_technicians_workshop": 41,
           "shift_coverage_pct": 0.94,
           "bay_maintenance_flag": false,
+          "reasoning": "Chennai's 5 general bays share volume well, holding 79.8% in the active band. Healthy headroom means it can take redeployed general jobs from Nagpur.",
           "model_name": "bay_utilization_forecast",
           "model_version": "v1.0.0",
           "prediction_timestamp": "2026-06-24T02:45:00",
@@ -230,10 +866,10 @@
           }
         },
         {
-          "prediction_id": "PRED-BU-20260624-MUM-EXP-001",
-          "branch_id": "BR-MUM-05",
-          "branch_name": "Mumbai Branch",
-          "bay_id": "BAY-WS005-04",
+          "prediction_id": "PRED-BU-20260624-NAG-EXP-001",
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur Branch",
+          "bay_id": "BAY-NAG01-06",
           "bay_type": "Express",
           "period_date": "2026-07-08",
           "forecast_horizon_days": 30,
@@ -241,14 +877,15 @@
           "predicted_utilization_pct_p10": 62.7,
           "predicted_utilization_pct_p90": 80.5,
           "near_capacity_flag": false,
-          "overflow_risk_score": 0.10,
+          "overflow_risk_score": 0.1,
           "overflow_risk_pct": "10%",
           "jobs_scheduled": 18,
           "avg_dwell_time_hrs": 4.8,
           "bay_capacity_hrs_day": 16.0,
-          "available_technicians_workshop": 26,
+          "available_technicians_workshop": 24,
           "shift_coverage_pct": 0.92,
           "bay_maintenance_flag": false,
+          "reasoning": "Express bays turn jobs fast (4.8 hr dwell) so even 18 jobs stay at 71.6%. These bays are candidates to flex-cover minor general work when Nagpur peaks.",
           "model_name": "bay_utilization_forecast",
           "model_version": "v1.0.0",
           "prediction_timestamp": "2026-06-24T02:45:00",
@@ -263,25 +900,26 @@
       ],
       "LOW": [
         {
-          "prediction_id": "PRED-BU-20260624-KOL-PDI-001",
-          "branch_id": "BR-KOL-07",
-          "branch_name": "Kolkata Branch",
-          "bay_id": "BAY-WS006-01",
+          "prediction_id": "PRED-BU-20260624-CHN-PDI-001",
+          "branch_id": "BR-CHN-02",
+          "branch_name": "Chennai Branch",
+          "bay_id": "BAY-CHN02-01",
           "bay_type": "PDI",
           "period_date": "2026-07-08",
           "forecast_horizon_days": 30,
-          "predicted_utilization_pct": 58.2,
-          "predicted_utilization_pct_p10": 50.9,
-          "predicted_utilization_pct_p90": 65.5,
+          "predicted_utilization_pct": 59.4,
+          "predicted_utilization_pct_p10": 52.1,
+          "predicted_utilization_pct_p90": 66.7,
           "near_capacity_flag": false,
           "overflow_risk_score": 0.02,
           "overflow_risk_pct": "2%",
-          "jobs_scheduled": 10,
+          "jobs_scheduled": 11,
           "avg_dwell_time_hrs": 6.5,
           "bay_capacity_hrs_day": 16.0,
-          "available_technicians_workshop": 24,
+          "available_technicians_workshop": 41,
           "shift_coverage_pct": 0.96,
           "bay_maintenance_flag": false,
+          "reasoning": "PDI volume is planned pre-delivery inspection, unaffected by monsoon breakdowns, so it stays low (59.4%) and stable across the horizon.",
           "model_name": "bay_utilization_forecast",
           "model_version": "v1.0.0",
           "prediction_timestamp": "2026-06-24T02:45:00",
@@ -294,25 +932,26 @@
           }
         },
         {
-          "prediction_id": "PRED-BU-20260624-JAI-PDI-001",
-          "branch_id": "BR-JAI-12",
-          "branch_name": "Jaipur Branch",
-          "bay_id": "BAY-WS008-02",
+          "prediction_id": "PRED-BU-20260624-NAG-PDI-001",
+          "branch_id": "BR-NAG-01",
+          "branch_name": "Nagpur Branch",
+          "bay_id": "BAY-NAG01-08",
           "bay_type": "PDI",
           "period_date": "2026-07-08",
           "forecast_horizon_days": 30,
-          "predicted_utilization_pct": 54.6,
-          "predicted_utilization_pct_p10": 47.7,
-          "predicted_utilization_pct_p90": 61.5,
+          "predicted_utilization_pct": 58.0,
+          "predicted_utilization_pct_p10": 50.7,
+          "predicted_utilization_pct_p90": 65.3,
           "near_capacity_flag": false,
           "overflow_risk_score": 0.02,
           "overflow_risk_pct": "2%",
           "jobs_scheduled": 8,
           "avg_dwell_time_hrs": 6.5,
           "bay_capacity_hrs_day": 16.0,
-          "available_technicians_workshop": 20,
-          "shift_coverage_pct": 0.97,
+          "available_technicians_workshop": 24,
+          "shift_coverage_pct": 0.95,
           "bay_maintenance_flag": false,
+          "reasoning": "Nagpur PDI is the most under-used bay (58.0%). Its spare hours are the branch's only internal cushion — could be temporarily repurposed for light general jobs during the hydraulic peak.",
           "model_name": "bay_utilization_forecast",
           "model_version": "v1.0.0",
           "prediction_timestamp": "2026-06-24T02:45:00",
@@ -329,23 +968,22 @@
 
     "bay_maintenance_schedule": [
       {
-        "bay_id": "BAY-WS005-04",
-        "branch_id": "BR-MUM-05",
-        "bay_name": "Bay 4 – General B",
+        "bay_id": "BAY-NAG01-07",
+        "branch_id": "BR-NAG-01",
+        "bay_name": "Bay 7 – General C",
         "bay_type": "General",
         "status": "Under Maintenance",
         "last_maintenance_dt": "2024-03-28",
         "scheduled_return_dt": "2026-06-28",
-        "impact_on_utilization": "Remaining bays at +8% utilization while this bay is down"
+        "impact_on_utilization": "Remaining Nagpur bays at +9% utilization while this bay is down — worsens the hydraulic-peak crunch until 28-Jun."
       }
     ],
 
     "filter_definitions": {
       "branch_options": [
         { "value": "ALL", "label": "All Branches" },
-        { "value": "BR-BLR-01", "label": "Bangalore Branch" },
-        { "value": "BR-CHN-02", "label": "Chennai Branch" },
-        { "value": "BR-HYD-03", "label": "Hyderabad Branch" }
+        { "value": "BR-NAG-01", "label": "Nagpur Branch" },
+        { "value": "BR-CHN-02", "label": "Chennai Branch" }
       ],
       "bay_type_options": [
         { "value": "ALL", "label": "All Bay Types" },
@@ -378,11 +1016,11 @@
     },
 
     "pagination": {
-      "total": 62,
+      "total": 18,
       "page": 1,
       "page_size": 20,
-      "total_pages": 4,
-      "has_next": true,
+      "total_pages": 1,
+      "has_next": false,
       "has_prev": false
     }
   }
