@@ -12,12 +12,22 @@ import {
 import Card from "../Common/Card";
 import { useTheme } from "../../context/ThemeContext";
 import { getChartColors } from "../../config/chartOptions";
+import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export default function BranchCategoryMixChart({ data }) {
   const { theme } = useTheme();
   const colors = getChartColors(theme);
+  const chartTitleStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontSize: "20px",
+    fontWeight: 700,
+    color: "var(--text)",
+    lineHeight: 1.2,
+  };
 
   if (!data) return null;
 
@@ -87,7 +97,22 @@ export default function BranchCategoryMixChart({ data }) {
   };
 
   return (
-    <Card title="Branch × Category Mix" tag="stacked">
+    <Card
+              title={
+                <div style={chartTitleStyle}>
+                  <span style={chartTitleStyle}>Branch x Category Mix</span>
+        
+                  <InfoTooltip
+                    position="bottom"
+                    content="Shows predicted parts demand broken down by component category for each branch"
+                  >
+                    <span className="infoIcon">i</span>
+                  </InfoTooltip>
+                </div>
+              }
+              tag="Stacked Forecast"
+              height="350px"
+            >
       <div
         style={{
           flex: 1,
