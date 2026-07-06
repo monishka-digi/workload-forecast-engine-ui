@@ -1,13 +1,35 @@
 import Card from "../Common/Card";
 import GaugeRow from "./GaugeRow";
+import InfoTooltip from "../Common/Tooltip/InfoTooltip";
 
 export default function CapacityPressure({ data = [] }) {
+
+  const chartTitleStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontSize: "20px",
+    fontWeight: 700,
+    color: "var(--text)",
+    lineHeight: 1.2,
+  };
+  
   return (
     <Card
-      title="Capacity Pressure"
-      tag="Branch Utilization"
-      height="auto"
-    >
+          title={
+            <div style={chartTitleStyle}>
+              <span style={chartTitleStyle}>Capacity Pressure</span>
+    
+              <InfoTooltip
+                position="bottom"
+                content="Branch utilization as a share of total capacity — predicted job count against maximum capacity for each branch, shows each branch's predicted job volume as a % of its total capacity."
+              >
+                <span className="infoIcon">i</span>
+              </InfoTooltip>
+            </div>
+          }
+          height="350px"
+        >
       <div
         style={{
           display: "flex",

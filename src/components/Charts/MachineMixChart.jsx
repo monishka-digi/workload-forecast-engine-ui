@@ -37,7 +37,6 @@ export default function MachineMixChart({ data }) {
               </InfoTooltip>
             </div>
           }
-          tag="Technician Demand"
           height="350px"
         >
       <div
