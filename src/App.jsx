@@ -2,11 +2,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import Layout from "./components/Layout/Layout";
 
-import JobVolume from "./pages/JobVolume";
-import ComponentDemand from "./pages/ComponentDemand";
-import BranchLoad from "./pages/BranchLoad";
-import BayUtilization from "./pages/BayUtilization";
-import TechnicianDemand from "./pages/TechnicianDemand";
+import JobVolume from "./features/JobVolume/JobVolume";
+import ComponentDemand from "./features/ComponentDemand/ComponentDemand";
+import BranchLoad from "./features/BranchLoad/BranchLoad";
+import BayUtilization from "./features/BayUtilization/BayUtilization";
+import TechnicianDemand from "./features/TechnicianDemand/TechnicianDemand";
 
 export default function App() {
   return (
