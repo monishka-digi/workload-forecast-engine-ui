@@ -1,15 +1,15 @@
 import "./PredictionTable.css";
 
-/* ─── helpers ─────────────────────────────────────────────── */
-
 function LoadBadge({ status }) {
   const colorMap = {
     CRITICAL: { bg: "rgba(239,68,68,0.15)", text: "#ef4444" },
-    HIGH:     { bg: "rgba(245,158,11,0.15)", text: "#f59e0b" },
-    MEDIUM:   { bg: "rgba(59,130,246,0.15)", text: "#3b82f6" },
-    LOW:      { bg: "rgba(52,214,184,0.15)", text: "#34d6b8" },
+    HIGH: { bg: "rgba(245,158,11,0.15)", text: "#f59e0b" },
+    MEDIUM: { bg: "rgba(59,130,246,0.15)", text: "#3b82f6" },
+    LOW: { bg: "rgba(52,214,184,0.15)", text: "#34d6b8" },
   };
+
   const style = colorMap[status] || colorMap.LOW;
+
   return (
     <span
       style={{
@@ -41,27 +41,27 @@ function ConfidenceBar({ value }) {
 function ActionButtons({ actions }) {
   return (
     <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-      {actions?.can_view_detail && (
-        <button className="tableBtn">View</button>
-      )}
-      {actions?.can_override && (
-        <button className="tableBtn">Override</button>
-      )}
-      {actions?.can_trigger_alert && (
-        <button className="tableBtn">Alert</button>
-      )}
-      {actions?.can_export && (
-        <button className="tableBtn">Export</button>
-      )}
+      {actions?.can_view_detail && <button className="tableBtn">View</button>}
     </div>
   );
 }
 
-/* ─── main component ──────────────────────────────────────── */
+const getSelectedForecastKey = (forecastDays) => {
+  const horizon = Number(forecastDays) || 30;
 
-export default function PredictionTable({ rows = [], type = "jobVolume" }) {
+  if (horizon === 60) return "predictedJobs60d";
+  if (horizon === 90) return "predictedJobs90d";
+  return "predictedJobs";
+};
 
-  /* ── componentDemand table (unchanged) ── */
+export default function PredictionTable({
+  rows = [],
+  type = "jobVolume",
+  forecastDays = 30,
+}) {
+  const selectedForecastKey = getSelectedForecastKey(forecastDays);
+  const selectedForecastLabel = `Forecast (${Number(forecastDays) || 30}D)`;
+
   if (type === "componentDemand") {
     return (
       <div className="predictionCard">
@@ -93,7 +93,9 @@ export default function PredictionTable({ rows = [], type = "jobVolume" }) {
                   <td>{row.partDescription}</td>
                   <td>{row.period}</td>
                   <td>{row.predictedQty}</td>
-                  <td><ConfidenceBar value={row.confidence} /></td>
+                  <td>
+                    <ConfidenceBar value={row.confidence} />
+                  </td>
                   <td>{row.currentStock}</td>
                   <td>{row.supplier}</td>
                 </tr>
@@ -105,7 +107,6 @@ export default function PredictionTable({ rows = [], type = "jobVolume" }) {
     );
   }
 
-  /* ── jobVolume table (new structure) ── */
   return (
     <div className="predictionCard">
       <div className="tableHeader">
@@ -120,10 +121,8 @@ export default function PredictionTable({ rows = [], type = "jobVolume" }) {
               <th>Branch</th>
               <th>Geography</th>
               <th>Period</th>
-              <th>Forecast (30D)</th>
-              <th>Forecast (60D)</th>
-              <th>Forecast (90D)</th>
-              <th>P10 – P90</th>
+              <th>{selectedForecastLabel}</th>
+              <th>P10 - P90</th>
               <th>Load %</th>
               <th>Status</th>
               <th>Confidence</th>
@@ -134,47 +133,41 @@ export default function PredictionTable({ rows = [], type = "jobVolume" }) {
           <tbody>
             {rows.map((row) => (
               <tr key={row.id}>
-                {/* Branch */}
                 <td>
                   <div style={{ fontWeight: 600 }}>{row.branch}</div>
-                  <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 2 }}>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      color: "var(--text-secondary)",
+                      marginTop: 2,
+                    }}
+                  >
                     {row.branchId}
                   </div>
                 </td>
 
-                {/* Geography */}
                 <td>{row.geography}</td>
 
-                {/* Period */}
                 <td style={{ whiteSpace: "nowrap" }}>{row.period}</td>
 
-                {/* 30-Day forecast */}
                 <td style={{ fontWeight: 700, color: "var(--primary)" }}>
-                  {Number(row.predictedJobs ?? 0).toFixed(1)}
-                </td>
-
-                {/* 60-Day forecast */}
-                <td style={{ color: "var(--text-secondary)" }}>
-                  {row.predictedJobs60d != null
-                    ? Number(row.predictedJobs60d).toFixed(1)
+                  {row[selectedForecastKey] != null
+                    ? Number(row[selectedForecastKey]).toFixed(1)
                     : "—"}
                 </td>
 
-                {/* 90-Day forecast */}
-                <td style={{ color: "var(--text-secondary)" }}>
-                  {row.predictedJobs90d != null
-                    ? Number(row.predictedJobs90d).toFixed(1)
-                    : "—"}
-                </td>
-
-                {/* P10 – P90 range */}
-                <td style={{ fontSize: 12, color: "var(--text-secondary)", whiteSpace: "nowrap" }}>
+                <td
+                  style={{
+                    fontSize: 12,
+                    color: "var(--text-secondary)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
                   {row.lower != null && row.upper != null
-                    ? `${Number(row.lower).toFixed(1)} – ${Number(row.upper).toFixed(1)}`
+                    ? `${Number(row.lower).toFixed(1)} - ${Number(row.upper).toFixed(1)}`
                     : "—"}
                 </td>
 
-                {/* Load % */}
                 <td>
                   <span
                     style={{
@@ -183,8 +176,8 @@ export default function PredictionTable({ rows = [], type = "jobVolume" }) {
                         row.loadPercentage >= 100
                           ? "var(--danger)"
                           : row.loadPercentage >= 85
-                          ? "var(--warning)"
-                          : "var(--text)",
+                            ? "var(--warning)"
+                            : "var(--text)",
                     }}
                   >
                     {row.loadPercentage != null
@@ -193,17 +186,14 @@ export default function PredictionTable({ rows = [], type = "jobVolume" }) {
                   </span>
                 </td>
 
-                {/* Load status badge */}
                 <td>
                   <LoadBadge status={row.loadStatus} />
                 </td>
 
-                {/* Confidence bar */}
                 <td>
                   <ConfidenceBar value={row.confidence} />
                 </td>
 
-                {/* Action buttons */}
                 <td>
                   <ActionButtons actions={row.actions} />
                 </td>

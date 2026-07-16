@@ -1,48 +1,7 @@
-import { useMemo } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-import { Bar } from "react-chartjs-2";
-
 import Card from "../../../components/Common/Card";
-import { useTheme } from "../../../context/ThemeContext";
-import { getGroupedHorizontalBarOptions } from "../../../config/chartOptions";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
-
-const filterChartByBranch = (data, selectedBranch) => {
-  if (!data || selectedBranch === "ALL") return data;
-
-  const matchingIndices = (data.branchIds || [])
-    .map((branchId, index) => (branchId === selectedBranch ? index : -1))
-    .filter((index) => index >= 0);
-
-  if (!matchingIndices.length) return data;
-
-  return {
-    ...data,
-    labels: matchingIndices.map((index) => data.labels[index]),
-    branchIds: matchingIndices.map((index) => data.branchIds[index]),
-    datasets: data.datasets.map((dataset) => ({
-      ...dataset,
-      data: matchingIndices.map((index) => dataset.data[index]),
-    })),
-  };
-};
-
-export default function BranchGapChart({
-  data,
-  summary = [],
-  selectedBranch = "ALL",
-}) {
-  const { theme } = useTheme();
+export default function BranchGapChart({ data }) {
   const chartTitleStyle = {
     display: "flex",
     alignItems: "center",
@@ -55,66 +14,141 @@ export default function BranchGapChart({
 
   if (!data) return null;
 
-  const filteredData = useMemo(
-    () => {
-      const chart = filterChartByBranch(data, selectedBranch);
+  const rowLabels = data.rowLabels || [];
+  const columnLabels = data.columnLabels || [];
+  const maxValue = data.maxValue || 0;
 
-      if (!chart) {
-        return chart;
-      }
+  const getCellTone = (value) => {
+    if (value == null) return "empty";
+    if (!maxValue) return "low";
 
-      return {
-        ...chart,
-        datasets: chart.datasets.map((dataset) => ({
-          ...dataset,
-          barPercentage: 0.72,
-          categoryPercentage: 0.62,
-          maxBarThickness: 16,
-        })),
-      };
-    },
-    [data, selectedBranch],
-  );
+    const ratio = value / maxValue;
+    if (ratio >= 0.85) return "critical";
+    if (ratio >= 0.65) return "high";
+    if (ratio >= 0.35) return "medium";
+    return "low";
+  };
 
-  const filteredSummary = useMemo(() => {
-    if (selectedBranch === "ALL") return summary;
+  const getCellStyle = (value) => {
+    const tone = getCellTone(value);
 
-    const matchingSummary = summary.filter(
-      (item) => item.branchId === selectedBranch,
-    );
+    const palette = {
+      empty: { background: "var(--divider)", color: "var(--text-secondary)" },
+      low: {
+        background: "rgba(52, 211, 153, 0.18)",
+        color: "var(--text)",
+      },
+      medium: {
+        background: "rgba(250, 204, 21, 0.22)",
+        color: "var(--text)",
+      },
+      high: {
+        background: "rgba(245, 158, 11, 0.25)",
+        color: "var(--text)",
+      },
+      critical: {
+        background: "rgba(239, 68, 68, 0.22)",
+        color: "var(--text)",
+      },
+    };
 
-    return matchingSummary.length ? matchingSummary : summary;
-  }, [summary, selectedBranch]);
+    return palette[tone];
+  };
 
   return (
-   <Card
-    title={
+    <Card
+      title={
         <div style={chartTitleStyle}>
-            <span style={chartTitleStyle}>
-                Branch Headcount Gap
-            </span>
+          <span style={chartTitleStyle}>Branch Headcount Gap</span>
 
-            <InfoTooltip
-                position="bottom"
-                content="Compares required technician headcount against available technicians across branches over the next 30 days."
-            >
-                <span className="infoIcon">i</span>
-            </InfoTooltip>
+          <InfoTooltip
+            position="bottom"
+            content="Heatmap view of skill demand by job type across the forecast horizon."
+          >
+            <span className="infoIcon">i</span>
+          </InfoTooltip>
         </div>
-    }
-    tag="Technician Demand"
-    height="420px"
->
-    <div
-        style={{
-            height:320
-        }}
+      }
+      tag="Technician Demand"
+      height="420px"
     >
-        <Bar
-            data={filteredData}
-            options={getGroupedHorizontalBarOptions(theme)}
-        />
-    </div>
-</Card>
+      <div
+        style={{
+          height: 320,
+          overflow: "auto",
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `170px repeat(${columnLabels.length}, minmax(100px, 1fr))`,
+            gap: 10,
+            alignItems: "stretch",
+            minWidth: columnLabels.length
+              ? `${170 + columnLabels.length * 110}px`
+              : "100%",
+          }}
+        >
+          <div
+            style={{
+              color: "var(--text-secondary)",
+              fontSize: 12,
+              fontWeight: 700,
+            }}
+          >
+            Job Type
+          </div>
+
+          {columnLabels.map((label) => (
+            <div
+              key={label}
+              style={{
+                color: "var(--text-secondary)",
+                fontSize: 12,
+                fontWeight: 700,
+                textAlign: "center",
+              }}
+            >
+              {label}
+            </div>
+          ))}
+
+          {rowLabels.map((rowLabel, rowIndex) => (
+            <div key={rowLabel} style={{ display: "contents" }}>
+              <div
+                style={{
+                  color: "var(--text)",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  paddingRight: 10,
+                  alignSelf: "center",
+                }}
+              >
+                {rowLabel}
+              </div>
+
+              {(data.rows?.[rowIndex]?.values || []).map((value, columnIndex) => (
+                <div
+                  key={`${rowLabel}-${columnLabels[columnIndex]}`}
+                  title={`${rowLabel} • ${columnLabels[columnIndex]}: ${value}`}
+                  style={{
+                    minHeight: 44,
+                    borderRadius: 10,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 700,
+                    background: getCellStyle(value).background,
+                    color: getCellStyle(value).color,
+                  }}
+                >
+                  {value}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </Card>
   );
 }

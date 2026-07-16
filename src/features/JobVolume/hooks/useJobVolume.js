@@ -23,8 +23,7 @@ export default function useJobVolume(
         forecastDays
       );
 
-      const mapped = mapJobVolumeData(response, branchId);
-      console.log(mapped, 'mapped')
+      const mapped = mapJobVolumeData(response, forecastDays, branchId);
 
       setDashboard(mapped);
     } catch (err) {

@@ -1,4 +1,8 @@
-import { filterRowsByBranch, isAllBranches } from "../../../utils/branchFilters";
+import {
+  filterRowsByBranch,
+  formatBranchLabel,
+  isAllBranches,
+} from "../../../utils/branchFilters";
 
 const pick = (...values) =>
   values.find((value) => value !== undefined && value !== null);
@@ -68,7 +72,7 @@ const buildSkillChart = (rows = []) => ({
 });
 
 const buildBranchGapChart = (rows = []) => ({
-  labels: rows.map((item) => item.branch_name),
+  labels: rows.map((item) => formatBranchLabel(item.branch_name)),
   branchIds: rows.map((item) => item.branch_id),
   datasets: [
     {
@@ -87,6 +91,33 @@ const buildBranchGapChart = (rows = []) => ({
     },
   ],
 });
+
+const buildHeatmapMatrix = (rows = []) => {
+  const skillLevels = Array.from(
+    new Set(
+      rows.flatMap((row) =>
+        Object.keys(row).filter((key) => key !== "job_type"),
+      ),
+    ),
+  );
+
+  const heatmapRows = rows.map((row) => ({
+    jobType: row.job_type,
+    values: skillLevels.map((skillLevel) => toNumber(row[skillLevel])),
+  }));
+
+  const maxValue = Math.max(
+    0,
+    ...heatmapRows.flatMap((row) => row.values),
+  );
+
+  return {
+    rowLabels: heatmapRows.map((row) => row.jobType),
+    columnLabels: skillLevels,
+    rows: heatmapRows,
+    maxValue,
+  };
+};
 
 export const mapTechnicianDemandData = (
   response,
@@ -110,6 +141,7 @@ export const mapTechnicianDemandData = (
   const skillRows = graph_data.skill_mix_required_vs_available_bar || [];
   const trendRows = graph_data.headcount_requirement_trend || [];
   const gapRows = graph_data.branch_headcount_gap_bar || [];
+  const heatmapRows = graph_data.skill_demand_by_job_type_stacked || [];
   const overtimeRows = graph_data.overtime_risk_line || [];
   const tableRows = Object.values(forecast_table || {}).flat();
 
@@ -153,7 +185,7 @@ export const mapTechnicianDemandData = (
 
   const branchGapSummary = branchRows.map((item) => ({
     branchId: item.branch_id,
-    branch: item.branch_name,
+    branch: formatBranchLabel(item.branch_name),
     gap: toNumber(item.gap),
     gapPct: toNumber(item.gap_pct),
   }));
@@ -206,7 +238,7 @@ export const mapTechnicianDemandData = (
       description: topRedeployment
         ? topRedeployment.rationale ||
           topRedeployment.reasoning ||
-          `${topRedeployment.from_branch_name || topRedeployment.from_branch_id} -> ${topRedeployment.to_branch_name || topRedeployment.to_branch_id}`
+          `${formatBranchLabel(topRedeployment.from_branch_name || topRedeployment.from_branch_id)} -> ${formatBranchLabel(topRedeployment.to_branch_name || topRedeployment.to_branch_id)}`
         : summary.summary_reasoning || "No redeployment recommendation available",
     },
     {
@@ -231,7 +263,7 @@ export const mapTechnicianDemandData = (
 
   const rows = (scopedTableRows.length ? scopedTableRows : tableRows).map((row) => ({
     id: row.prediction_id,
-    branch: row.branch_name,
+    branch: formatBranchLabel(row.branch_name),
     branchId: row.branch_id,
     skill: row.skill_category,
     period: formatDate(row.period_date),
@@ -268,7 +300,8 @@ export const mapTechnicianDemandData = (
     charts: {
       skill: buildSkillChart(skillRows),
       headcountTrend: buildLineChart(trendRows),
-      branchGap: buildBranchGapChart(branchRows),
+      branchGap: buildHeatmapMatrix(heatmapRows),
+      branchGapSummary: buildBranchGapChart(branchRows),
       overtimeRisk: {
         labels: overtimeRows.map((item) =>
           new Date(item.period_date).toLocaleDateString("en-IN", {

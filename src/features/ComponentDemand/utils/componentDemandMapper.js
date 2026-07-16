@@ -1,6 +1,29 @@
-import { filterRowsByBranch, isAllBranches } from "../../../utils/branchFilters";
+import {
+  filterRowsByBranch,
+  formatBranchLabel,
+  isAllBranches,
+} from "../../../utils/branchFilters";
 
 const toNumber = (value) => Number(value ?? 0);
+
+const getHorizonSuffix = (forecastDays = 30) => `${Number(forecastDays) || 30}d`;
+
+const pickHorizonKey = (baseKey, horizonSuffix) => `${baseKey}_${horizonSuffix}`;
+
+const pickHorizonValue = (source = {}, baseKey, horizonSuffix, fallback = null) =>
+  source?.[pickHorizonKey(baseKey, horizonSuffix)] ??
+  source?.[baseKey] ??
+  source?.[`${baseKey}_30d`] ??
+  fallback;
+
+const pickForecastCost = (summary, horizonSuffix) =>
+  summary?.[`total_cost_forecast_${horizonSuffix}_inr`] ?? null;
+
+const pickHorizonArray = (source = {}, baseKey, horizonSuffix) =>
+  source?.[pickHorizonKey(baseKey, horizonSuffix)] ??
+  source?.[`${baseKey}_30d`] ??
+  source?.[baseKey] ??
+  [];
 
 const formatCurrency = (value) =>
   new Intl.NumberFormat("en-IN", {
@@ -11,7 +34,7 @@ const buildHeatmap = (rows = []) => {
   const grouped = {};
 
   rows.forEach((item) => {
-    const branchName = item.branch_name;
+    const branchName = formatBranchLabel(item.branch_name);
     const category = item.category;
     const value = toNumber(item.predicted_qty_30d);
 
@@ -29,7 +52,7 @@ const buildHeatmap = (rows = []) => {
 };
 
 const buildBranchCategoryMix = (rows = []) => {
-  const branches = [...new Set(rows.map((item) => item.branch_name))];
+  const branches = [...new Set(rows.map((item) => formatBranchLabel(item.branch_name)))];
   const categories = [...new Set(rows.map((item) => item.category))];
 
   const colors = [
@@ -49,7 +72,7 @@ const buildBranchCategoryMix = (rows = []) => {
       label: category,
       data: branches.map((branch) => {
         const row = rows.find(
-          (item) => item.branch_name === branch && item.category === category,
+          (item) => formatBranchLabel(item.branch_name) === branch && item.category === category,
         );
 
         return row ? toNumber(row.predicted_qty_30d) : 0;
@@ -146,14 +169,19 @@ export const mapComponentDemandData = (
     applied_filters = {},
   } = response;
 
-  const categoryBar = graph_data.category_demand_bar_30d || [];
-  const branchCategoryHeatmap = graph_data.branch_x_category_heatmap || [];
+  const currentHorizon = Number(forecastDays) || 30;
+  const horizonSuffix = getHorizonSuffix(currentHorizon);
+  const categoryBar = pickHorizonArray(graph_data, "category_demand_bar", horizonSuffix);
+  const branchCategoryHeatmap = pickHorizonArray(
+    graph_data,
+    "branch_x_category_heatmap",
+    horizonSuffix,
+  );
   const trendLines = graph_data.category_demand_trend_lines || {};
-  const forecastVsActual = graph_data.forecast_vs_actual_by_category || [];
-  const currentHorizon = Number(
-    applied_filters.forecast_horizon_days ??
-      metadata.forecast_horizons?.[0] ??
-      forecastDays,
+  const forecastVsActual = pickHorizonArray(
+    graph_data,
+    "forecast_vs_actual_by_category",
+    horizonSuffix,
   );
 
   const scopedBranchRows = isAllBranches(branchId)
@@ -161,6 +189,14 @@ export const mapComponentDemandData = (
     : filterRowsByBranch(branchCategoryHeatmap, branchId);
 
   const branchRows = scopedBranchRows.length ? scopedBranchRows : branchCategoryHeatmap;
+  const stockoutCategoryNames = Array.isArray(
+    summary.categories_with_stockout_risk_names,
+  )
+    ? summary.categories_with_stockout_risk_names
+    : String(summary.categories_with_stockout_risk_names || "")
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
 
   const kpis = [
     {
@@ -171,15 +207,20 @@ export const mapComponentDemandData = (
       alert: false,
     },
     {
-      title: "Forecast Units (30D)",
-      value: toNumber(summary.total_units_forecast_30d).toLocaleString("en-IN"),
+      title: `Forecast Units (${currentHorizon}D)`,
+      value: toNumber(
+        pickHorizonValue(summary, "total_units_forecast", horizonSuffix, 0),
+      ).toLocaleString("en-IN"),
       subText: `Model confidence ${summary.model_confidence_avg_pct || "n/a"}`,
       positive: true,
       alert: false,
     },
     {
-      title: "Forecast Cost",
-      value: `₹ ${formatCurrency(summary.total_cost_forecast_30d_inr)}`,
+      title: `Forecast Cost (${currentHorizon}D)`,
+      value:
+        pickForecastCost(summary, horizonSuffix) != null
+          ? `Rs. ${formatCurrency(pickForecastCost(summary, horizonSuffix))}`
+          : "N/A",
       subText: `${currentHorizon}-day horizon`,
       positive: true,
       alert: false,
@@ -187,13 +228,18 @@ export const mapComponentDemandData = (
     {
       title: "Highest Demand Category",
       value: summary.highest_demand_category || "N/A",
-      subText: `${toNumber(summary.highest_demand_category_units_30d).toLocaleString("en-IN")} units`,
+      subText: `${toNumber(
+        pickHorizonValue(summary, "highest_demand_category_units", horizonSuffix, 0),
+      ).toLocaleString("en-IN")} units`,
       positive: true,
       alert: false,
     },
     {
-      title: "Stockout Risk",
-      value: toNumber(summary.categories_with_stockout_risk),
+      title: "Categories Stockout Risk",
+      value:
+        stockoutCategoryNames.length > 0
+          ? stockoutCategoryNames.join(", ")
+          : toNumber(summary.categories_with_stockout_risk),
       subText: "High-risk categories",
       positive: false,
       alert: toNumber(summary.categories_with_stockout_risk) > 0,
@@ -222,7 +268,7 @@ export const mapComponentDemandData = (
 
   const alerts = filterRowsByBranch(stockout_risk_alerts, branchId).map((item) => ({
     id: item.alert_id,
-    branch: item.branch_name,
+    branch: formatBranchLabel(item.branch_name),
     category: item.component_category,
     severity: item.severity,
     risk: item.stockout_risk_pct,
@@ -240,7 +286,7 @@ export const mapComponentDemandData = (
   const predictionTable = (scopedTableRows.length ? scopedTableRows : tableRows).map((row) => ({
     id: row.prediction_id,
     componentCategory: row.component_category,
-    branchName: row.branch_name,
+    branchName: formatBranchLabel(row.branch_name),
     branchId: row.branch_id,
     machineType: row.machine_type,
     customerSegment: row.customer_segment,

@@ -7,6 +7,7 @@ import {
   Legend,
 } from "chart.js";
 
+import { useMemo } from "react";
 import { Bar } from "react-chartjs-2";
 
 import Card from "../../../components/Common/Card";
@@ -28,7 +29,27 @@ export default function SkillDemandChart({ data }) {
     color: "var(--text)",
     lineHeight: 1.2,
   };
-  
+
+  const options = useMemo(() => {
+    const baseOptions = getGroupedHorizontalBarOptions(theme);
+
+    return {
+      ...baseOptions,
+      interaction: {
+        mode: "nearest",
+        intersect: true,
+      },
+      plugins: {
+        ...baseOptions.plugins,
+        tooltip: {
+          ...baseOptions.plugins.tooltip,
+          mode: "nearest",
+          intersect: true,
+        },
+      },
+    };
+  }, [theme]);
+
   if (!data) return null;
 
   return (
@@ -53,7 +74,7 @@ export default function SkillDemandChart({ data }) {
           height: 320,
         }}
       >
-        <Bar data={data} options={getGroupedHorizontalBarOptions(theme)} />
+        <Bar data={data} options={options} />
       </div>
     </Card>
   );

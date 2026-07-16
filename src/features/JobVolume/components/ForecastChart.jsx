@@ -26,6 +26,11 @@ export default function ForecastChart({ data }) {
   const { theme } = useTheme();
 
   if (!data) return null;
+  const options = getCommonOptions(theme);
+  options.scales.y.title = {
+    display: true,
+    text: "Jobs",
+  };
 
   return (
     <div
@@ -82,10 +87,7 @@ export default function ForecastChart({ data }) {
       </div>
 
       <div style={{ height: "280px", minHeight: 0, minWidth: 0 }}>
-        <Line
-          data={data}
-          options={getCommonOptions(theme)}
-        />
+        <Line data={data} options={options} />
       </div>
     </div>
   );

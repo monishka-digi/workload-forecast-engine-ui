@@ -31,29 +31,20 @@ export default function BranchCategoryMixChart({ data }) {
 
   if (!data) return null;
 
-  console.log("Branch Category Mix:", data);
-
   const options = {
     responsive: true,
-
     maintainAspectRatio: false,
-
     plugins: {
       legend: {
         position: "bottom",
-
         labels: {
           color: colors.text,
-
           boxWidth: 14,
-
           padding: 18,
         },
       },
-
       tooltip: {
         mode: "index",
-
         intersect: false,
         backgroundColor: colors.tooltipBg,
         borderColor: colors.tooltipBorder,
@@ -62,37 +53,40 @@ export default function BranchCategoryMixChart({ data }) {
         bodyColor: colors.tooltipText,
       },
     },
-
     interaction: {
       mode: "index",
-
       intersect: false,
     },
-
     scales: {
       x: {
         stacked: true,
-
         ticks: {
           color: colors.muted,
-          autoSkip: true,
-          maxTicksLimit: 8,
-          maxRotation: 0,
-          minRotation: 0,
+          autoSkip: false,
+          maxRotation: 90,
+          minRotation: 90,
+          font: {
+            size: 11,
+          },
         },
-
         grid: {
           display: false,
         },
       },
-
       y: {
         stacked: true,
-
+        title: {
+          display: true,
+          text: "Branches",
+          color: colors.text,
+          font: {
+            size: 12,
+            weight: 600,
+          },
+        },
         ticks: {
           color: colors.muted,
         },
-
         grid: {
           color: colors.grid,
         },

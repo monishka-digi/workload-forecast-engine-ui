@@ -4,7 +4,46 @@
     border-radius: 12px;
     box-shadow: var(--shadow);
     padding: 20px;
-    margin-bottom: 10px
+    margin-bottom: 10px;
+}
+
+.componentTableWrapper {
+    overflow-x: auto;
+}
+
+.componentTable {
+    width: 100%;
+    min-width: 980px;
+    border-collapse: collapse;
+}
+
+.componentTable th,
+.componentTable td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+}
+
+.componentTable th {
+    color: var(--text-secondary);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.componentTable td {
+    color: var(--text);
+    font-size: 14px;
+}
+
+.reasoningCell {
+    min-width: 320px;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.45;
+    max-width: 520px;
 }
 
 .riskBadge {

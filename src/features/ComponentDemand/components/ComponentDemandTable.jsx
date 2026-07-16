@@ -15,7 +15,7 @@ export default function ComponentDemandTable({ rows = [] }) {
               <th>Branch Name</th>
               <th>Stock Out Risk</th>
               <th>Predicted Qty</th>
-              <th>Avg Unit Cost</th>
+              <th>Reasoning</th>
             </tr>
           </thead>
 
@@ -26,9 +26,7 @@ export default function ComponentDemandTable({ rows = [] }) {
               return (
                 <tr key={row.id}>
                   <td>{row.componentCategory}</td>
-
                   <td>{row.branchName}</td>
-
                   <td>
                     <span
                       className={`riskBadge ${
@@ -42,14 +40,8 @@ export default function ComponentDemandTable({ rows = [] }) {
                       {row.stockOutRisk ?? "—"}
                     </span>
                   </td>
-
                   <td>{Number(row.predictedQty).toLocaleString()}</td>
-
-                  <td>
-                    {row.avgUnitCost != null
-                      ? `₹ ${Number(row.avgUnitCost).toLocaleString("en-IN")}`
-                      : "—"}
-                  </td>
+                  <td className="reasoningCell">{row.reasoning || "—"}</td>
                 </tr>
               );
             })}

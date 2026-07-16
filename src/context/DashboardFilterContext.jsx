@@ -34,7 +34,10 @@ const normalizeBranchOption = (option) => {
 
   const value = option.value ?? option.branch_id ?? option.branchId ?? "ALL";
   const label =
-    option.label ?? option.branch_name ?? option.branchName ?? value;
+    option.branch_name ??
+    option.branchName ??
+    option.label ??
+    value;
 
   return {
     value,

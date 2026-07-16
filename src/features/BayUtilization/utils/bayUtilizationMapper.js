@@ -1,3 +1,5 @@
+import { formatBranchLabel } from "../../../utils/branchFilters";
+
 const pick = (...values) =>
   values.find((value) => value !== undefined && value !== null);
 
@@ -19,7 +21,7 @@ const buildHeatmap = (rows = []) => {
 
   rows.forEach((item) => {
     const branchId = item.branch_id ?? item.branchId ?? item.branch;
-    const branchName = item.branch_name ?? item.branch ?? branchId;
+    const branchName = formatBranchLabel(item.branch_name ?? item.branch ?? branchId);
     const bayType = item.bay_type ?? item.bayType;
     const utilization = pick(
       item.avg_util_30d,
@@ -165,7 +167,7 @@ export const mapBayUtilizationData = (response, forecastDays = 30) => {
 
   const rows = tableRows.map((row) => ({
     id: row.prediction_id ?? `${row.branch_id}-${row.bay_type}-${row.period_date}`,
-    branch: row.branch_name ?? row.branch_id,
+    branch: formatBranchLabel(row.branch_name ?? row.branch_id),
     branchId: row.branch_id,
     bayType: row.bay_type,
     period: row.period_date,

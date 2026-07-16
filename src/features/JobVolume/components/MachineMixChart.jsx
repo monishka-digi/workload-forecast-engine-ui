@@ -79,14 +79,13 @@ export default function MachineMixChart({ data, selectedBranch = "ALL" }) {
         <div
           style={{
             position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-240%, -50%)",
+            inset: 0,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             pointerEvents: "none",
+            textAlign: "center",
           }}
         >
           <h2

@@ -1,7 +1,23 @@
 import { machineColors } from "../../../config/chartColors";
-import { filterRowsByBranch, isAllBranches } from "../../../utils/branchFilters";
+import {
+  filterRowsByBranch,
+  formatBranchLabel,
+  isAllBranches,
+} from "../../../utils/branchFilters";
 
-export const mapJobVolumeData = (response, branchId = "ALL") => {
+const getHorizonSuffix = (forecastDays = 30) => `${Number(forecastDays) || 30}d`;
+
+const pickHorizonValue = (row, baseKey, horizonSuffix) =>
+  row?.[`${baseKey}_${horizonSuffix}`] ??
+  row?.[baseKey] ??
+  row?.[`${baseKey}_30d`] ??
+  0;
+
+export const mapJobVolumeData = (
+  response,
+  forecastDays = 30,
+  branchId = "ALL",
+) => {
   if (!response) return null;
 
   /* -------------------------------------------------------------------------- */
@@ -19,6 +35,8 @@ export const mapJobVolumeData = (response, branchId = "ALL") => {
     top_branches_by_demand,
   } = response;
 
+  const horizonSuffix = getHorizonSuffix(forecastDays);
+
   const trend = graph_data?.forecast_trend_line || [];
   const machine = graph_data?.machine_type_demand_bar || [];
   const branches = graph_data?.jobs_by_branch_bar || [];
@@ -27,6 +45,7 @@ export const mapJobVolumeData = (response, branchId = "ALL") => {
   const geographyHeatmap = graph_data?.geography_heatmap || [];
   const monsoonOverlay = graph_data?.monsoon_impact_overlay || [];
   const forecastVsActual = graph_data?.forecast_vs_actual_accuracy || [];
+  const branchJobsKey = `predicted_jobs_${horizonSuffix}`;
 
   // Flatten all priority buckets from forecast_table into a single array
   const tableRows = Object.values(forecast_table || {}).flat();
@@ -62,15 +81,15 @@ export const mapJobVolumeData = (response, branchId = "ALL") => {
   const kpis = [
     {
       id: "predicted_jobs",
-      title: "Predicted Jobs (30D)",
-      value: summary.total_predicted_jobs_30d,
+      title: `Predicted Jobs (${forecastDays}D)`,
+      value: summary[`total_predicted_jobs_${horizonSuffix}`] ?? summary.total_predicted_jobs_30d,
       alert: false,
     },
 
     {
-      id: "avg_daily_jobs_30d",
-      title: "Avg Daily Jobs (30 Days)",
-      value: `${summary.avg_daily_jobs_30d}`,
+      id: `avg_daily_jobs_${horizonSuffix}`,
+      title: `Avg Daily Jobs (${forecastDays}D)`,
+      value: summary[`avg_daily_jobs_${horizonSuffix}`] ?? summary.avg_daily_jobs_30d,
       positive: summary.forecast_accuracy_pct >= 90,
       alert: false,
     },
@@ -96,7 +115,7 @@ export const mapJobVolumeData = (response, branchId = "ALL") => {
       id: "forecast_accuracy",
       title: "Forecast Accuracy",
       value: `${summary.forecast_accuracy_pct}%`,
-      subText: `MAPE ${model_performance?.mape ?? summary.mape_last_30d}%`,
+      subText: `MAPE ${model_performance?.mape ?? summary[`mape_last_${horizonSuffix}`] ?? summary.mape_last_30d}%`,
       positive: summary.forecast_accuracy_pct >= 90,
       alert: summary.forecast_accuracy_pct < 80,
     },
@@ -175,12 +194,14 @@ export const mapJobVolumeData = (response, branchId = "ALL") => {
   const branchScope = selectedBranches.length ? selectedBranches : branches;
 
   const branchChart = {
-    labels: branchScope.map((item) => item.branch_name),
+    labels: branchScope.map((item) => formatBranchLabel(item.branch_name)),
     branchIds: branchScope.map((item) => item.branch_id),
     datasets: [
       {
         label: "Predicted Jobs",
-        data: branchScope.map((item) => item.predicted_jobs_30d),
+        data: branchScope.map(
+          (item) => item[branchJobsKey] ?? item.predicted_jobs_30d ?? 0,
+        ),
         backgroundColor: "#f5b400",
         borderRadius: 8,
         borderSkipped: false,
@@ -195,8 +216,8 @@ export const mapJobVolumeData = (response, branchId = "ALL") => {
 
   const capacity = branchScope.map((branch) => ({
     id: branch.branch_id,
-    branch: branch.branch_name,
-    jobs: branch.predicted_jobs_30d,
+    branch: formatBranchLabel(branch.branch_name),
+    jobs: branch[branchJobsKey] ?? branch.predicted_jobs_30d ?? 0,
     load: branch.load_pct,
     rating: branch.capacity_rating,
     // capacity_breach_flag is not on branch-level data; derive from load_pct
@@ -219,16 +240,17 @@ export const mapJobVolumeData = (response, branchId = "ALL") => {
 
   const predictionTable = (selectedRows.length ? selectedRows : tableRows).map((row) => ({
     id: row.prediction_id,
-    branch: row.branch_name,
+    branch: formatBranchLabel(row.branch_name),
     branchId: row.branch_id,
     geography: row.geography_zone,
     period: row.period_date,
     horizon: row.forecast_horizon_days,
 
     // Core forecast values
-    predictedJobs: row.predicted_job_count,
+    predictedJobs: pickHorizonValue(row, "predicted_job_count", horizonSuffix),
     predictedJobs60d: row.predicted_job_count_60d,
     predictedJobs90d: row.predicted_job_count_90d,
+    forecastLabel: `Forecast (${forecastDays}D)`,
     lower: row.predicted_job_count_p10,
     upper: row.predicted_job_count_p90,
 
@@ -259,7 +281,10 @@ export const mapJobVolumeData = (response, branchId = "ALL") => {
     filters: filter_definitions,
     kpis,
     modelPerformance: model_performance,
-    topBranches: top_branches_by_demand,
+    topBranches: (top_branches_by_demand || []).map((item) => ({
+      ...item,
+      branch_name: formatBranchLabel(item.branch_name),
+    })),
 
     charts: {
       forecast: forecastChart,
@@ -282,7 +307,7 @@ export const mapJobVolumeData = (response, branchId = "ALL") => {
 
     statistics: {
       totalBranchJobs: branchScope.reduce(
-        (sum, item) => sum + Number(item.predicted_jobs_30d || 0),
+        (sum, item) => sum + Number(item[branchJobsKey] ?? item.predicted_jobs_30d ?? 0),
         0
       ),
       averageLoad:

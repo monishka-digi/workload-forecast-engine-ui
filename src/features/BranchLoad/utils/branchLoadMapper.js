@@ -1,6 +1,16 @@
-import { filterRowsByBranch, isAllBranches } from "../../../utils/branchFilters";
+import {
+  filterRowsByBranch,
+  formatBranchLabel,
+  isAllBranches,
+} from "../../../utils/branchFilters";
 
-const horizonKey = (forecastDays) => `${forecastDays}d`;
+const horizonKey = (forecastDays) => `${Number(forecastDays) || 30}d`;
+
+const pickHorizonValue = (source = {}, baseKey, horizon, fallback = 0) =>
+  source?.[`${baseKey}_${horizon}`] ??
+  source?.[baseKey] ??
+  source?.[`${baseKey}_30d`] ??
+  fallback;
 
 export const mapBranchLoadData = (
   response,
@@ -20,20 +30,21 @@ export const mapBranchLoadData = (
   } = response;
 
   const horizon = horizonKey(forecastDays);
+  const currentHorizon = Number(forecastDays) || 30;
 
   const kpis = [
     {
-      title: "Average Predicted Load",
-      value: `${summary[`avg_load_pct_${horizon}`] ?? 0}%`,
+      title: `Average Predicted Load (${currentHorizon}D)`,
+      value: `${pickHorizonValue(summary, "avg_load_pct", horizon, 0)}%`,
       positive: true,
       alert: false,
     },
     {
-      title: "Capacity Breach Alerts",
-      value: summary[`branches_over_capacity_${horizon}`] ?? 0,
+      title: `Capacity Breach Alerts (${currentHorizon}D)`,
+      value: pickHorizonValue(summary, "branches_over_capacity", horizon, 0),
       subText: "Branches Over Capacity",
       positive: false,
-      alert: (summary[`branches_over_capacity_${horizon}`] ?? 0) > 0,
+      alert: pickHorizonValue(summary, "branches_over_capacity", horizon, 0) > 0,
     },
     {
       title: "Total Branches",
@@ -42,15 +53,15 @@ export const mapBranchLoadData = (
       alert: false,
     },
     {
-      title: "High Load Branches",
-      value: summary[`branches_high_load_${horizon}`] ?? 0,
-      subText: `${summary[`branches_medium_load_${horizon}`] ?? 0} Medium Load`,
+      title: `High Load Branches (${currentHorizon}D)`,
+      value: pickHorizonValue(summary, "branches_high_load", horizon, 0),
+      subText: `${pickHorizonValue(summary, "branches_medium_load", horizon, 0)} Medium Load`,
       positive: false,
-      alert: (summary[`branches_high_load_${horizon}`] ?? 0) > 0,
+      alert: pickHorizonValue(summary, "branches_high_load", horizon, 0) > 0,
     },
     {
-      title: "Peak Load",
-      value: `${summary[`peak_load_pct_${horizon}`] ?? 0}%`,
+      title: `Peak Load (${currentHorizon}D)`,
+      value: `${pickHorizonValue(summary, "peak_load_pct", horizon, 0)}%`,
       subText: summary[`peak_load_branch_id_${horizon}`] ?? "",
       positive: false,
       alert: false,
@@ -67,10 +78,10 @@ export const mapBranchLoadData = (
 
   const gaugeChart = branchRows.map((item) => ({
     id: item.branch_id,
-    branch: item.branch_name,
+    branch: formatBranchLabel(item.branch_name),
     geography: item.geography_zone,
-    load: Number(item[`combined_load_pct_${horizon}`] ?? 0),
-    jobs: item[`predicted_jobs_${horizon}`] ?? 0,
+    load: Number(item[`combined_load_pct_${horizon}`] ?? item.combined_load_pct ?? 0),
+    jobs: item[`predicted_jobs_${horizon}`] ?? item.predicted_jobs_30d ?? 0,
     capacity: item.available_bays,
     breach: item[`load_status_${horizon}`] === "CRITICAL",
   }));
@@ -97,8 +108,8 @@ export const mapBranchLoadData = (
       {
         label: "Actual",
         data: trend.map((item) => Number(item.avg_load_pct?.toFixed(1) ?? 0)),
-        borderColor: "#37d8c3",
-        backgroundColor: "#37d8c3",
+        borderColor: "#12BE83",
+        backgroundColor: "#12BE83",
         tension: 0.4,
         borderWidth: 3,
         pointRadius: 4,
@@ -111,24 +122,35 @@ export const mapBranchLoadData = (
     (key) => tableBuckets[key] || [],
   );
 
-  const scopedTableRows = isAllBranches(branchId)
-    ? allRows
-    : filterRowsByBranch(allRows, branchId);
+  const horizonRows = allRows.filter(
+    (row) => Number(row.forecast_horizon_days ?? currentHorizon) === currentHorizon,
+  );
 
-  const rows = (scopedTableRows.length ? scopedTableRows : allRows).map((row) => ({
-    id: row.prediction_id,
-    branch: row.branch_name,
-    geography: row.geography_zone,
-    period: `${row.forecast_horizon_days} Days`,
-    predictedLoad: Number(row.load_pct ?? 0),
-    capacityGap: row.capacity_gap_bays,
-    breach: row.load_status === "CRITICAL",
-    bindingConstraint: row.binding_constraint,
-    actions: {
-      canReallocate: row.actions?.can_trigger_redeployment ?? false,
-      canView: row.actions?.can_view_detail ?? false,
-    },
-  }));
+  const scopedTableRows = isAllBranches(branchId)
+    ? horizonRows
+    : filterRowsByBranch(horizonRows, branchId);
+
+  const rows = (scopedTableRows.length ? scopedTableRows : horizonRows.length ? horizonRows : allRows).map(
+      (row) => ({
+      id: row.prediction_id,
+      branch: formatBranchLabel(row.branch_name),
+      geography: row.geography_zone,
+      period: `${row.forecast_horizon_days ?? currentHorizon} Days`,
+      predictedLoad: Number(
+        row[`load_pct_${horizon}`] ?? row.load_pct ?? 0,
+      ),
+      capacityGap:
+        row[`capacity_gap_bays_${horizon}`] ?? row.capacity_gap_bays,
+      breach:
+        (row[`load_status_${horizon}`] ?? row.load_status) === "CRITICAL",
+      bindingConstraint:
+        row[`binding_constraint_${horizon}`] ?? row.binding_constraint,
+      actions: {
+        canReallocate: row.actions?.can_trigger_redeployment ?? false,
+        canView: row.actions?.can_view_detail ?? false,
+      },
+    }),
+  );
 
   return {
     metadata,

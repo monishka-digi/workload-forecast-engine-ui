@@ -4,6 +4,12 @@ export const isAllBranches = (branchId) =>
 export const getRowBranchId = (row) =>
   row?.branch_id ?? row?.branchId ?? row?.branch ?? row?.branch_name ?? null;
 
+export const formatBranchLabel = (value) => {
+  const label = String(value ?? "").replace(/\bBranch\b/gi, "").replace(/\s+/g, " ").trim();
+
+  return label || String(value ?? "").trim();
+};
+
 export const matchesBranch = (row, branchId) => {
   if (isAllBranches(branchId)) return true;
 

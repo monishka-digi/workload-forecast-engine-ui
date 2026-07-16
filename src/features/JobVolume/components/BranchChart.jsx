@@ -43,6 +43,11 @@ export default function BranchChart({ data, selectedBranch = "ALL" }) {
 
   const branchCount = filteredData.labels?.length ?? 0;
   const chartHeight = Math.max(240, Math.min(720, branchCount * 36 + 56));
+  const options = getHorizontalBarOptions(theme);
+  options.scales.x.title = {
+    display: true,
+    text: "Predicted Jobs",
+  };
 
   const chartTitleStyle = {
     display: "flex",
@@ -88,7 +93,7 @@ export default function BranchChart({ data, selectedBranch = "ALL" }) {
             width: "100%",
           }}
         >
-          <Bar data={filteredData} options={getHorizontalBarOptions(theme)} />
+          <Bar data={filteredData} options={options} />
         </div>
       </div>
     </Card>

@@ -60,7 +60,7 @@ export default function JobVolume() {
           selectedBranch={selectedBranch}
         />
       }
-      table={<PredictionTable rows={dashboard.table.rows} />}
+      table={<PredictionTable rows={dashboard.table.rows} forecastDays={forecastDays} />}
     />
   );
 }

@@ -17,8 +17,6 @@ export default function TechnicianDemandTable({ rows = [] }) {
               <th>BRANCH</th>
               <th>SKILL</th>
               <th>PERIOD</th>
-              {/* <th>REQUIRED (P50)</th> */}
-              {/* <th>ROSTERED</th> */}
               <th>
                 <div
                   style={{
@@ -44,8 +42,8 @@ export default function TechnicianDemandTable({ rows = [] }) {
                     alignItems: "center",
                     gap: 6,
                   }}
-                  >
-                    <span>SHORTFALL</span>
+                >
+                  <span>SHORTFALL</span>
 
                   <InfoTooltip
                     position="bottom"
@@ -69,8 +67,6 @@ export default function TechnicianDemandTable({ rows = [] }) {
 
                 <td>{row.period}</td>
 
-                {/* <td>{row.required}</td> */}
-
                 <td>{row.rostered}</td>
 
                 <td>
@@ -92,22 +88,6 @@ export default function TechnicianDemandTable({ rows = [] }) {
                 <td>
                   {row.actions.canViewDetail && (
                     <button className="approveBtn">View</button>
-                  )}
-
-                  {row.actions.canOverride && (
-                    <button className="editBtn">Override</button>
-                  )}
-
-                  {row.actions.canRaiseHiringRequest && (
-                    <button className="approveBtn">Hire</button>
-                  )}
-
-                  {row.actions.canTriggerRedeployment && (
-                    <button className="editBtn">Redeploy</button>
-                  )}
-
-                  {row.actions.canExport && (
-                    <button className="editBtn">Export</button>
                   )}
                 </td>
               </tr>

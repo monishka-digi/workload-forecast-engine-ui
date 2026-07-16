@@ -104,6 +104,15 @@ export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) 
 
             scales: {
               x: {
+                title: {
+                  display: true,
+                  text: "Time",
+                  color: colors.text,
+                  font: {
+                    size: 12,
+                    weight: 600,
+                  },
+                },
                 ticks: {
                   color: colors.muted,
                 },
@@ -114,6 +123,15 @@ export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) 
               },
 
               y: {
+                title: {
+                  display: true,
+                  text: "Load %",
+                  color: colors.text,
+                  font: {
+                    size: 12,
+                    weight: 600,
+                  },
+                },
                 ticks: {
                   color: colors.muted,
                   callback: (v) => `${v}%`,
