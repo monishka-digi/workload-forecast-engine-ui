@@ -13,6 +13,7 @@ import { useTheme } from "../../../context/ThemeContext";
 import { getChartColors } from "../../../config/chartOptions";
 import "./BranchLoadTrendChart.css";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import { isAllBranches } from "../../../utils/branchFilters";
 
 ChartJS.register(
   CategoryScale,
@@ -23,9 +24,29 @@ ChartJS.register(
   Legend,
 );
 
-export default function BranchLoadTrendChart({ chart }) {
+export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) {
   const { theme } = useTheme();
   const colors = getChartColors(theme);
+  const filteredChart =
+    isAllBranches(selectedBranch) || !chart.branchIds
+      ? chart
+      : (() => {
+          const matchingIndices = chart.branchIds
+            .map((branchId, index) => (branchId === selectedBranch ? index : -1))
+            .filter((index) => index >= 0);
+
+          if (!matchingIndices.length) return chart;
+
+          return {
+            ...chart,
+            labels: matchingIndices.map((index) => chart.labels[index]),
+            branchIds: matchingIndices.map((index) => chart.branchIds[index]),
+            datasets: chart.datasets.map((dataset) => ({
+              ...dataset,
+              data: matchingIndices.map((index) => dataset.data[index]),
+            })),
+          };
+        })();
 
   return (
     <div className="branchTrendCard">
@@ -52,7 +73,7 @@ export default function BranchLoadTrendChart({ chart }) {
 
       <div className="branchTrendBody">
         <Line
-          data={chart}
+          data={filteredChart}
           options={{
             responsive: true,
             maintainAspectRatio: false,

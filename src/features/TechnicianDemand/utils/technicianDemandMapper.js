@@ -1,271 +1,295 @@
-export const mapTechnicianDemandData = (response) => {
+import { filterRowsByBranch, isAllBranches } from "../../../utils/branchFilters";
+
+const pick = (...values) =>
+  values.find((value) => value !== undefined && value !== null);
+
+const toNumber = (value) => Number(value ?? 0);
+
+const formatPercent = (value) => `${toNumber(value).toFixed(1)}%`;
+
+const formatDate = (value) =>
+  new Date(value).toLocaleDateString("en-CA", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+
+const buildLineChart = (rows = []) => ({
+  labels: rows.map((item) =>
+    new Date(item.period_date).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+    }),
+  ),
+  datasets: [
+    {
+      label: "Required",
+      data: rows.map((item) => toNumber(item.required)),
+      borderColor: "#f5b400",
+      backgroundColor: "rgba(245,180,0,0.10)",
+      fill: true,
+      tension: 0.3,
+      borderWidth: 2,
+      pointRadius: 3,
+      pointBackgroundColor: "#f5b400",
+    },
+    {
+      label: "Available",
+      data: rows.map((item) => toNumber(item.available)),
+      borderColor: "#12BE83",
+      backgroundColor: "transparent",
+      fill: false,
+      tension: 0.3,
+      borderWidth: 2,
+      pointRadius: 3,
+      pointBackgroundColor: "#12BE83",
+    },
+  ],
+});
+
+const buildSkillChart = (rows = []) => ({
+  labels: rows.map((item) => item.skill_level),
+  datasets: [
+    {
+      label: "Required (30D)",
+      data: rows.map((item) => toNumber(item.required_30d)),
+      backgroundColor: "#f5b400",
+      borderRadius: 6,
+      maxBarThickness: 24,
+    },
+    {
+      label: "Available",
+      data: rows.map((item) => toNumber(item.available)),
+      backgroundColor: "#12BE83",
+      borderRadius: 6,
+      maxBarThickness: 24,
+    },
+  ],
+});
+
+const buildBranchGapChart = (rows = []) => ({
+  labels: rows.map((item) => item.branch_name),
+  branchIds: rows.map((item) => item.branch_id),
+  datasets: [
+    {
+      label: "Required (30D)",
+      data: rows.map((item) => toNumber(item.required_30d)),
+      backgroundColor: "#f5b400",
+      borderRadius: 6,
+      maxBarThickness: 24,
+    },
+    {
+      label: "Available",
+      data: rows.map((item) => toNumber(item.available)),
+      backgroundColor: "#12BE83",
+      borderRadius: 6,
+      maxBarThickness: 24,
+    },
+  ],
+});
+
+export const mapTechnicianDemandData = (
+  response,
+  forecastDays = 30,
+  branchId = "ALL",
+) => {
   if (!response) return null;
 
   const {
-    metadata,
-    summary,
-    graph_data,
-    forecast_table,
-    redeployment_recommendations,
-    hiring_pipeline,
-    model_performance,
-    filter_definitions,
+    metadata = {},
+    summary = {},
+    graph_data = {},
+    forecast_table = {},
+    redeployment_recommendations = [],
+    hiring_pipeline = [],
+    filter_definitions = {},
+    applied_filters = {},
+    model_performance = {},
   } = response;
 
-  // ---------------- KPIs ----------------
+  const skillRows = graph_data.skill_mix_required_vs_available_bar || [];
+  const trendRows = graph_data.headcount_requirement_trend || [];
+  const gapRows = graph_data.branch_headcount_gap_bar || [];
+  const overtimeRows = graph_data.overtime_risk_line || [];
+  const tableRows = Object.values(forecast_table || {}).flat();
+
+  const currentHorizon = Number(
+    applied_filters.forecast_horizon_days ??
+      metadata.forecast_horizons?.[0] ??
+      forecastDays,
+  );
+
+  const skillLevelLabels = (filter_definitions.skill_level_options || [])
+    .filter((option) => option.value !== "ALL")
+    .map((option) => option.label)
+    .join(" / ");
+
+  const topRedeployment = [...redeployment_recommendations].sort(
+    (left, right) =>
+      toNumber(
+        right.recommended_headcount ??
+          right.technicians_to_move ??
+          right.recommended_move_count,
+      ) -
+      toNumber(
+        left.recommended_headcount ??
+          left.technicians_to_move ??
+          left.recommended_move_count,
+      ),
+  )[0];
+
+  const topHiring = [...hiring_pipeline].sort(
+    (left, right) => toNumber(right.shortfall_30d) - toNumber(left.shortfall_30d),
+  )[0];
+
+  const secondHiring = [...hiring_pipeline].sort(
+    (left, right) => toNumber(right.shortfall_30d) - toNumber(left.shortfall_30d),
+  )[1];
+
+  const scopedGapRows = isAllBranches(branchId)
+    ? gapRows
+    : filterRowsByBranch(gapRows, branchId);
+  const branchRows = scopedGapRows.length ? scopedGapRows : gapRows;
+
+  const branchGapSummary = branchRows.map((item) => ({
+    branchId: item.branch_id,
+    branch: item.branch_name,
+    gap: toNumber(item.gap),
+    gapPct: toNumber(item.gap_pct),
+  }));
+
+  const requiredKey = `total_technicians_required_${currentHorizon}d`;
+  const gapKey = `total_headcount_gap_${currentHorizon}d`;
 
   const kpis = [
     {
-      title: "Total Required Headcount",
-      value: summary.total_technicians_required_30d,
-      // subText: `${summary.total_headcount_gap_30d} Gap`,
+      title: "Current Technicians",
+      value: toNumber(summary.total_technicians_current),
+      subText: `${toNumber(summary.total_branches_forecasted ?? branchRows.length)} branches forecasted`,
       positive: true,
       alert: false,
     },
     {
-      title: "Total Skill Shortfall",
-      value: summary.total_headcount_gap_30d,
-      subText: summary.critical_skill_shortfall_category,
+      title: `Required Headcount (${currentHorizon}D)`,
+      value: toNumber(summary[requiredKey] ?? summary.total_technicians_required_30d),
+      subText: `Model confidence ${summary.model_confidence_avg_pct || "n/a"}`,
+      positive: true,
+      alert: false,
+    },
+    {
+      title: `Headcount Gap (${currentHorizon}D)`,
+      value: toNumber(summary[gapKey] ?? summary.total_headcount_gap_30d),
+      subText: `Average overtime ${formatPercent(summary.overtime_utilization_pct_avg)}`,
       positive: false,
-      alert: true,
+      alert: toNumber(summary.total_headcount_gap_30d) > 0,
     },
     {
       title: "Branches With Shortfall",
-      value: summary.branches_with_shortfall,
-      // subText: `${summary.branches_with_surplus} Surplus`,
+      value: toNumber(summary.branches_with_shortfall),
+      subText: `${toNumber(summary.branches_with_surplus)} branches with surplus`,
       positive: true,
-      alert: false,
+      alert: toNumber(summary.branches_with_shortfall) > 0,
     },
     {
-      title: "Skill Categories",
-      value: filter_definitions.skill_level_options.length - 1,
-      subText: "L1 / L2 / L3 / Specialist",
+      title: "Critical Skill Shortfall",
+      value: summary.critical_skill_shortfall_category || "N/A",
+      subText: skillLevelLabels || "L1 / L2 / L3 / Specialist",
       positive: true,
       alert: false,
     },
-    // {
-    //   title: "Avg MAE",
-    //   value: model_performance.mae_headcount,
-    //   subText: `${model_performance.accuracy_pct}% Accuracy`,
-    //   positive: true,
-    //   alert: false,
-    // },
   ];
-
-  // ---------------- Skill Chart ----------------
-
-  const skillChart = {
-    labels: ["L1", "L2", "L3", "Specialist"],
-
-    datasets: [
-      {
-        label: "Required (30D)",
-        data: [24, 22, 20, 12],
-        backgroundColor: "#2A78D6",
-        borderRadius: 6,
-        barThickness: 18,
-      },
-      {
-        label: "Available",
-        data: [26, 20, 14, 5],
-        backgroundColor: "#12BE83",
-        borderRadius: 6,
-        barThickness: 18,
-      },
-    ],
-  };
-
-  // ---------------- Headcount Trend ----------------
-
-  const trend = graph_data?.headcount_requirement_trend || [];
-
-  const headcountTrend = {
-    labels: trend.map((item) =>
-      new Date(item.period_date).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-      }),
-    ),
-
-    datasets: [
-      {
-        label: "Required",
-        data: trend.map((item) => item.required),
-        borderColor: "#2A78D6",
-        backgroundColor: "rgba(42,120,214,0.08)",
-        fill: true,
-        tension: 0.3,
-        borderWidth: 2,
-        pointRadius: 3,
-        pointBackgroundColor: "#2A78D6",
-      },
-
-      {
-        label: "Available",
-        data: trend.map((item) => item.available),
-        borderColor: "#12BE83",
-        backgroundColor: "transparent",
-        fill: false,
-        tension: 0.3,
-        borderWidth: 2,
-        pointRadius: 3,
-        pointBackgroundColor: "#12BE83",
-      },
-    ],
-  };
-
-  // ---------------- Branch Headcount Gap ----------------
-
-  const gapData = graph_data?.branch_headcount_gap_bar || [];
-
-  const branchGap = {
-    labels: gapData.map((item) => item.branch_name),
-
-    datasets: [
-      {
-        label: "Required (30D)",
-        data: gapData.map((item) => item.required_30d),
-        backgroundColor: "#2A78D6",
-        borderRadius: 6,
-        barThickness: 18,
-      },
-
-      {
-        label: "Available",
-        data: gapData.map((item) => item.available),
-        backgroundColor: "#12BE83",
-        borderRadius: 6,
-        barThickness: 18,
-      },
-    ],
-  };
-
-  const branchGapSummary = gapData.map((item) => ({
-    branch: item.branch_name,
-    gap: item.gap,
-    gapPct: item.gap_pct,
-  }));
-
-  // ---------------- Workforce Planning ----------------
-
-  console.log(Object.keys(redeployment_recommendations[0]));
-  console.log(redeployment_recommendations[0]);
-
-  // ---------------- Workforce Planning ----------------
-
-  // const planning = [
-  //   ...(redeployment_recommendations || []).map((item) => ({
-  //     id: item.recommendation_id,
-  //     type: "Redeployment",
-  //     title: "Redeployment Candidate",
-  //     description: `${item.technicians_to_move} × ${item.skill_level} technicians, ${item.from_branch_name} → ${item.to_branch_name}`,
-  //     priority: item.priority,
-  //   })),
-
-  //   ...(hiring_pipeline || []).map((item) => ({
-  //     id: item.skill_level,
-  //     type: "Hiring",
-  //     title: `${item.skill_level} Hiring`,
-  //     description: `Recommended hires: ${item.recommended_hires} • 30-day shortfall: ${item.shortfall_30d}`,
-  //     priority: item.shortfall_30d > 0 ? "High" : "Normal",
-  //   })),
-  // ];
-  // ---------------- Workforce Planning ----------------
-
-  const topRedeployment = (redeployment_recommendations || []).sort(
-    (a, b) => b.recommended_headcount - a.recommended_headcount,
-  )[0];
-
-  const topHiring = (hiring_pipeline || []).sort(
-    (a, b) => b.shortfall_30d - a.shortfall_30d,
-  )[0];
-
-  const secondHiring = (hiring_pipeline || []).sort(
-    (a, b) => b.shortfall_30d - a.shortfall_30d,
-  )[1];
 
   const planning = [
     {
       type: "redeployment",
-
-      title: "REDEPLOYMENT CANDIDATE",
-
+      title: "REDEPLOYMENT",
       description: topRedeployment
-        ? topRedeployment.rationale
-        : "No redeployment recommendation available",
+        ? topRedeployment.rationale ||
+          topRedeployment.reasoning ||
+          `${topRedeployment.from_branch_name || topRedeployment.from_branch_id} -> ${topRedeployment.to_branch_name || topRedeployment.to_branch_id}`
+        : summary.summary_reasoning || "No redeployment recommendation available",
     },
-
     {
       type: "pipeline",
-
-      title: "CERTIFICATION PIPELINE (30D)",
-
+      title: "HIRING PIPELINE (30D)",
       description: topHiring
-        ? `${topHiring.recommended_hires} technicians recommended for ${topHiring.skill_level}. Current 30-day shortfall: ${topHiring.shortfall_30d}.`
-        : "No certification pipeline available",
+        ? `${toNumber(topHiring.recommended_hires)} hires recommended for ${topHiring.skill_level}. 30-day shortfall: ${toNumber(topHiring.shortfall_30d)}.`
+        : "No hiring pipeline available",
     },
-
     {
-      type: "attrition",
-
-      title: "ATTRITION RISK",
-
-      description: secondHiring
-        ? `${secondHiring.skill_level} technicians expected to remain constrained with a ${secondHiring.shortfall_30d} headcount gap.`
-        : "No attrition risk identified",
+      type: "watch",
+      title: "OVERTIME WATCH",
+      description: `Average overtime utilization is ${formatPercent(summary.overtime_utilization_pct_avg)}.${
+        secondHiring ? ` ${secondHiring.skill_level} is the next skill to watch.` : ""
+      }`,
     },
   ];
 
-  // ---------------- Table ----------------
+  const scopedTableRows = isAllBranches(branchId)
+    ? tableRows
+    : filterRowsByBranch(tableRows, branchId);
 
-  const rows = Object.values(forecast_table || {})
-    .flat()
-    .map((row) => ({
-      id: row.prediction_id,
-
-      branch: row.branch_name,
-
-      skill: row.skill_category,
-
-      period: row.period_date,
-
-      required: row.predicted_headcount_required,
-
-      rostered: row.effective_available_headcount,
-
-      shortfall:
-        row.predicted_headcount_required - row.effective_available_headcount,
-
-      confidence:
-        row.prediction_confidence_pct ??
-        `${Math.round((row.prediction_confidence ?? 0) * 100)}%`,
-
-      actions: {
-        canApprove: row.actions?.can_approve ?? true,
-        canEdit: row.actions?.can_edit ?? true,
-      },
-    }));
+  const rows = (scopedTableRows.length ? scopedTableRows : tableRows).map((row) => ({
+    id: row.prediction_id,
+    branch: row.branch_name,
+    branchId: row.branch_id,
+    skill: row.skill_category,
+    period: formatDate(row.period_date),
+    required: toNumber(row.predicted_headcount_required),
+    rostered: toNumber(row.effective_available_headcount),
+    shortfall: pick(
+      row.predicted_skill_shortfall,
+      toNumber(row.predicted_headcount_required) - toNumber(row.effective_available_headcount),
+    ),
+    confidence: Math.round(toNumber(row.prediction_confidence) * 100),
+    confidenceLabel:
+      row.prediction_confidence_pct ||
+      `${Math.round(toNumber(row.prediction_confidence) * 100)}%`,
+    gapStatus: row.gap_status,
+    overtimeUtilization: row.overtime_utilization_pct_4wk,
+    actions: {
+      canViewDetail: row.actions?.can_view_detail ?? true,
+      canOverride: row.actions?.can_override ?? false,
+      canRaiseHiringRequest: row.actions?.can_raise_hiring_request ?? false,
+      canTriggerRedeployment: row.actions?.can_trigger_redeployment ?? false,
+      canExport: row.actions?.can_export ?? true,
+    },
+  }));
 
   return {
     metadata,
-
     summary,
-
     filters: filter_definitions,
-
+    appliedFilters: applied_filters,
+    modelPerformance: model_performance,
     kpis,
-
     planning,
     branchGapSummary,
-
     charts: {
-      skill: skillChart,
-
-      headcountTrend,
-
-      branchGap,
+      skill: buildSkillChart(skillRows),
+      headcountTrend: buildLineChart(trendRows),
+      branchGap: buildBranchGapChart(branchRows),
+      overtimeRisk: {
+        labels: overtimeRows.map((item) =>
+          new Date(item.period_date).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+          }),
+        ),
+        datasets: [
+          {
+            label: "Overtime Utilization",
+            data: overtimeRows.map((item) => toNumber(item.overtime_utilization_pct)),
+            borderColor: "#F5B400",
+            backgroundColor: "rgba(245,180,0,0.12)",
+            fill: true,
+            tension: 0.3,
+            borderWidth: 2,
+            pointRadius: 3,
+          },
+        ],
+      },
     },
-
     table: {
       rows,
       totalRows: rows.length,

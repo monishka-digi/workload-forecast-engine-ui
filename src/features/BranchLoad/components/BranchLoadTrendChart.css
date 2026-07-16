@@ -4,7 +4,10 @@
     border-radius: 14px;
     padding: 18px 18px 22px;
     box-shadow: var(--shadow);
-    height: 95%;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .branchTrendHeader{
@@ -27,5 +30,7 @@
 }
 
 .branchTrendBody{
-    height:340px;
+    flex: 1;
+    min-height: 0;
+    height: 280px;
 }

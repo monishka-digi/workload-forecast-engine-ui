@@ -6,12 +6,38 @@ import Card from "../../../components/Common/Card";
 import { getDoughnutOptions } from "../../../config/chartOptions";
 import { useTheme } from "../../../context/ThemeContext";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import { isAllBranches } from "../../../utils/branchFilters";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function MachineMixChart({ data }) {
+export default function MachineMixChart({ data, selectedBranch = "ALL" }) {
   const { theme } = useTheme();
   if (!data) return null;
+
+  const filteredData =
+    isAllBranches(selectedBranch) || !data.branchIds
+      ? data
+      : (() => {
+          const matchingIndices = data.branchIds
+            .map((branchId, index) => (branchId === selectedBranch ? index : -1))
+            .filter((index) => index >= 0);
+
+          if (!matchingIndices.length) return data;
+
+          return {
+            ...data,
+            labels: matchingIndices.map((index) => data.labels[index]),
+            branchIds: matchingIndices.map((index) => data.branchIds[index]),
+            datasets: data.datasets.map((dataset) => ({
+              ...dataset,
+              data: matchingIndices.map((index) => dataset.data[index]),
+            })),
+            total: matchingIndices.reduce(
+              (sum, index) => sum + Number(data.datasets[0].data[index] ?? 0),
+              0,
+            ),
+          };
+        })();
 
   const chartTitleStyle = {
   display: "flex",
@@ -48,14 +74,14 @@ export default function MachineMixChart({ data }) {
           margin: "20px auto",
         }}
       >
-        <Doughnut data={data} options={getDoughnutOptions(theme)} />
+        <Doughnut data={filteredData} options={getDoughnutOptions(theme)} />
 
         <div
           style={{
             position: "absolute",
             top: "50%",
             left: "50%",
-            transform: "translate(-190%, -50%)",
+            transform: "translate(-240%, -50%)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -72,7 +98,7 @@ export default function MachineMixChart({ data }) {
               fontWeight: 700,
             }}
           >
-            {data.total}
+            {filteredData.total}
           </h2>
 
           <span

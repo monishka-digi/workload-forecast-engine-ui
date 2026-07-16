@@ -1,8 +1,18 @@
+import "./CapacityPressure.css";
 import Card from "../../../components/Common/Card";
 import GaugeRow from "./GaugeRow";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import { filterRowsByBranch } from "../../../utils/branchFilters";
 
-export default function CapacityPressure({ data = [] }) {
+export default function CapacityPressure({
+  data = [],
+  selectedBranch = "ALL",
+}) {
+  const scopedData =
+    selectedBranch === "ALL"
+      ? data
+      : filterRowsByBranch(data, selectedBranch);
+  const rows = scopedData.length ? scopedData : data;
 
   const chartTitleStyle = {
     display: "flex",
@@ -30,15 +40,8 @@ export default function CapacityPressure({ data = [] }) {
           }
           height="350px"
         >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 18,
-          marginTop: 10,
-        }}
-      >
-        {data.map((branch) => (
+      <div className="capacityPressureList">
+        {rows.map((branch) => (
           <GaugeRow
             key={branch.id}
             branch={branch.branch}

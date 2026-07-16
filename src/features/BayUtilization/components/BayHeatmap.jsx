@@ -49,8 +49,8 @@ export default function BayHeatmap({ data = [] }) {
         ))}
 
         {data.map((row) => (
-          <>
-            <div key={row.branch} className="branchName">
+          <div key={row.branchId || row.branch} style={{ display: "contents" }}>
+            <div className="branchName">
               {row.branch}
             </div>
 
@@ -59,10 +59,10 @@ export default function BayHeatmap({ data = [] }) {
                 key={`${row.branch}-${type}`}
                 className={`heatCell ${getClass(row[type])}`}
               >
-                {row[type] ? `${row[type]}%` : "-"}
+                {row[type] != null ? `${row[type]}%` : "-"}
               </div>
             ))}
-          </>
+          </div>
         ))}
       </div>
     </div>

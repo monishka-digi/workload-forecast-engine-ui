@@ -68,6 +68,10 @@
       x: {
         ticks: {
           color: colors.muted,
+          autoSkip: true,
+          maxTicksLimit: 7,
+          maxRotation: 0,
+          minRotation: 0,
         },
 
         grid: {
@@ -85,6 +89,7 @@
 
         ticks: {
           color: colors.muted,
+          autoSkip: true,
         },
 
         grid: {
@@ -156,22 +161,27 @@
         },
       },
       scales: {
-        x: {
-          beginAtZero: true,
-          ticks: {
-            color: colors.muted,
-          },
-          grid: {
-            color: colors.grid,
-          },
+      x: {
+        beginAtZero: true,
+        ticks: {
+          color: colors.muted,
+          autoSkip: true,
+          maxTicksLimit: 6,
+          maxRotation: 0,
+          minRotation: 0,
         },
-        y: {
-          ticks: {
-            color: colors.text,
-          },
-          grid: {
-            display: false,
-          },
+        grid: {
+          color: colors.grid,
+        },
+      },
+      y: {
+        ticks: {
+          color: colors.text,
+          autoSkip: false,
+        },
+        grid: {
+          display: false,
+        },
         },
       },
     };
@@ -224,6 +234,10 @@
 
         ticks: {
           color: colors.muted,
+          autoSkip: true,
+          maxTicksLimit: 6,
+          maxRotation: 0,
+          minRotation: 0,
         },
 
         grid: {
@@ -238,6 +252,7 @@
       y: {
         ticks: {
           color: colors.text,
+          autoSkip: false,
 
           font: {
             weight: 600,

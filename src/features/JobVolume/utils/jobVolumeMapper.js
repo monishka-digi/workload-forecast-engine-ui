@@ -1,6 +1,7 @@
 import { machineColors } from "../../../config/chartColors";
+import { filterRowsByBranch, isAllBranches } from "../../../utils/branchFilters";
 
-export const mapJobVolumeData = (response) => {
+export const mapJobVolumeData = (response, branchId = "ALL") => {
   if (!response) return null;
 
   /* -------------------------------------------------------------------------- */
@@ -14,21 +15,32 @@ export const mapJobVolumeData = (response) => {
     filter_definitions,
     graph_data,
     forecast_table,
+    model_performance,
+    top_branches_by_demand,
   } = response;
 
-  const trend = graph_data.forecast_trend_line || [];
+  const trend = graph_data?.forecast_trend_line || [];
+  const machine = graph_data?.machine_type_demand_bar || [];
+  const branches = graph_data?.jobs_by_branch_bar || [];
+  const jobTypeDonut = graph_data?.job_type_distribution_donut || [];
+  const horizonComparison = graph_data?.horizon_comparison_bar || [];
+  const geographyHeatmap = graph_data?.geography_heatmap || [];
+  const monsoonOverlay = graph_data?.monsoon_impact_overlay || [];
+  const forecastVsActual = graph_data?.forecast_vs_actual_accuracy || [];
 
-  const machine = graph_data.machine_type_demand_bar || [];
-
-  const branches = graph_data.jobs_by_branch_bar || [];
-
+  // Flatten all priority buckets from forecast_table into a single array
   const tableRows = Object.values(forecast_table || {}).flat();
 
   /* -------------------------------------------------------------------------- */
   /*                               CALCULATED DATA                              */
   /* -------------------------------------------------------------------------- */
 
-  const machineTotal = machine.reduce(
+  const scopedMachine = isAllBranches(branchId)
+    ? machine
+    : filterRowsByBranch(machine, branchId);
+  const machineScope = scopedMachine.length ? scopedMachine : machine;
+
+  const machineTotal = machineScope.reduce(
     (sum, item) => sum + Number(item.value || 0),
     0
   );
@@ -43,12 +55,7 @@ export const mapJobVolumeData = (response) => {
         )
       : 0;
 
-  const totalBranchJobs = branches.reduce(
-    (sum, item) => sum + Number(item.predicted_jobs_30d || 0),
-    0
-  );
-
-    /* -------------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------------- */
   /*                                   KPI DATA                                 */
   /* -------------------------------------------------------------------------- */
 
@@ -57,8 +64,6 @@ export const mapJobVolumeData = (response) => {
       id: "predicted_jobs",
       title: "Predicted Jobs (30D)",
       value: summary.total_predicted_jobs_30d,
-      // subText: `${summary.yoy_growth_pct}% YoY`,
-      // positive: summary.yoy_growth_pct >= 0,
       alert: false,
     },
 
@@ -66,7 +71,6 @@ export const mapJobVolumeData = (response) => {
       id: "avg_daily_jobs_30d",
       title: "Avg Daily Jobs (30 Days)",
       value: `${summary.avg_daily_jobs_30d}`,
-      // subText: `MAPE ${summary.mape_last_30d}%`,
       positive: summary.forecast_accuracy_pct >= 90,
       alert: false,
     },
@@ -75,7 +79,6 @@ export const mapJobVolumeData = (response) => {
       id: "total_branches_forecasted",
       title: "Total Branches",
       value: summary.total_branches_forecasted,
-      // subText: `Forecast Generated`,
       positive: true,
       alert: false,
     },
@@ -90,12 +93,12 @@ export const mapJobVolumeData = (response) => {
     },
 
     {
-      id: "total_amc_due_30d",
-      title: "Total AMC Due (30 Days)",
-      value: summary.total_amc_due_30d,
-      // subText: `Avg Load ${averageLoad}%`,
-      positive: averageLoad < 85,
-      alert: averageLoad >= 95,
+      id: "forecast_accuracy",
+      title: "Forecast Accuracy",
+      value: `${summary.forecast_accuracy_pct}%`,
+      subText: `MAPE ${model_performance?.mape ?? summary.mape_last_30d}%`,
+      positive: summary.forecast_accuracy_pct >= 90,
+      alert: summary.forecast_accuracy_pct < 80,
     },
   ];
 
@@ -114,41 +117,25 @@ export const mapJobVolumeData = (response) => {
     datasets: [
       {
         label: "Forecast",
-
         data: trend.map((item) => item.predicted_job_count),
-
         borderColor: "#f5b400",
-
         backgroundColor: "rgba(245,180,0,0.15)",
-
         borderWidth: 3,
-
         pointRadius: 3,
-
         pointHoverRadius: 5,
-
         tension: 0.4,
-
         fill: false,
       },
 
       {
         label: "Actual",
-
         data: trend.map((item) => item.actual_job_count),
-
         borderColor: "#34d6b8",
-
         backgroundColor: "#34d6b8",
-
         borderWidth: 3,
-
         pointRadius: 4,
-
         pointHoverRadius: 6,
-
         tension: 0.4,
-
         fill: false,
       },
     ],
@@ -159,46 +146,45 @@ export const mapJobVolumeData = (response) => {
   /* -------------------------------------------------------------------------- */
 
   const machineMix = {
-  total: machineTotal,
+    total: machineTotal,
+    labels: machineScope.map((item) => item.label),
+    ...(machineScope.some((item) => item.branch_id)
+      ? { branchIds: machineScope.map((item) => item.branch_id) }
+      : {}),
+    datasets: [
+      {
+        data: machineScope.map((item) => item.value),
+        backgroundColor: machineColors,
+        borderColor: "#ffffff",
+        borderWidth: 1,
+        spacing: 2,
+        hoverOffset: 6,
+        radius: "80%",
+      },
+    ],
+  };
 
-  labels: machine.map((item) => item.label),
-
-  datasets: [
-    {
-      data: machine.map((item) => item.value),
-
-      backgroundColor: machineColors,
-
-      borderColor: "#ffffff",      // or "#1d232c" for dark
-      borderWidth: 1,
-
-      spacing: 2,
-      hoverOffset: 6,
-
-      radius: "80%",
-    },
-  ],
-};
-    /* -------------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------------- */
   /*                              BRANCH CHART                                  */
   /* -------------------------------------------------------------------------- */
 
-  const branchChart = {
-    labels: branches.map((item) => item.branch_name),
+  const selectedBranches = isAllBranches(branchId)
+    ? branches
+    : filterRowsByBranch(branches, branchId);
 
+  const branchScope = selectedBranches.length ? selectedBranches : branches;
+
+  const branchChart = {
+    labels: branchScope.map((item) => item.branch_name),
+    branchIds: branchScope.map((item) => item.branch_id),
     datasets: [
       {
         label: "Predicted Jobs",
-
-        data: branches.map((item) => item.predicted_jobs_30d),
-
+        data: branchScope.map((item) => item.predicted_jobs_30d),
         backgroundColor: "#f5b400",
-
         borderRadius: 8,
-
         borderSkipped: false,
-
-        barThickness: 18,
+        maxBarThickness: 24,
       },
     ],
   };
@@ -207,83 +193,59 @@ export const mapJobVolumeData = (response) => {
   /*                             CAPACITY PRESSURE                              */
   /* -------------------------------------------------------------------------- */
 
-  const capacity = branches.map((branch) => ({
-
+  const capacity = branchScope.map((branch) => ({
     id: branch.branch_id,
-
     branch: branch.branch_name,
-
     jobs: branch.predicted_jobs_30d,
-
     load: branch.load_pct,
-
     rating: branch.capacity_rating,
-
-    breach: branch.capacity_breach_flag,
-
+    // capacity_breach_flag is not on branch-level data; derive from load_pct
+    breach: branch.load_pct >= 100,
     color:
       branch.load_pct >= 100
         ? "var(--danger)"
         : branch.load_pct >= 90
         ? "var(--warning)"
         : "var(--primary)",
-
   }));
 
   /* -------------------------------------------------------------------------- */
   /*                             PREDICTION TABLE                               */
   /* -------------------------------------------------------------------------- */
 
-  const predictionTable = tableRows.map((row) => ({
+  const selectedRows = isAllBranches(branchId)
+    ? tableRows
+    : filterRowsByBranch(tableRows, branchId);
 
+  const predictionTable = (selectedRows.length ? selectedRows : tableRows).map((row) => ({
     id: row.prediction_id,
-
     branch: row.branch_name,
-
     branchId: row.branch_id,
-
     geography: row.geography_zone,
-
-    machine: row.machine_type,
-
-    segment: row.customer_segment,
-
     period: row.period_date,
-
     horizon: row.forecast_horizon_days,
 
+    // Core forecast values
     predictedJobs: row.predicted_job_count,
-
+    predictedJobs60d: row.predicted_job_count_60d,
+    predictedJobs90d: row.predicted_job_count_90d,
     lower: row.predicted_job_count_p10,
-
     upper: row.predicted_job_count_p90,
 
-    confidence:
-
-      Math.round((row.prediction_confidence ?? 0) * 100),
-
+    // Confidence
+    confidence: Math.round((row.prediction_confidence ?? 0) * 100),
     confidenceLabel:
-
       row.prediction_confidence_pct ??
-
       `${Math.round((row.prediction_confidence ?? 0) * 100)}%`,
 
+    // Load info
     loadStatus: row.load_status,
-
     loadPercentage: row.load_pct,
-
     capacity: row.branch_capacity_rating,
-
     capacityBreach: row.capacity_breach_flag,
 
-    amcDue: row.amc_due_count_30d,
-
-    monsoon: row.is_monsoon_season,
-
-    repeatBreakdownRate: row.repeat_breakdown_rate_30d,
-
+    // Actions
     actions: row.actions,
-
   }));
 
   /* -------------------------------------------------------------------------- */
@@ -291,47 +253,48 @@ export const mapJobVolumeData = (response) => {
   /* -------------------------------------------------------------------------- */
 
   return {
-
     metadata,
-
     summary,
-
     alerts,
-
     filters: filter_definitions,
-
     kpis,
+    modelPerformance: model_performance,
+    topBranches: top_branches_by_demand,
 
     charts: {
-
       forecast: forecastChart,
-
       machineMix,
-
       branch: branchChart,
-
       capacity,
 
+      // Additional graph data passed through for future use
+      jobTypeDonut,
+      horizonComparison,
+      geographyHeatmap,
+      monsoonOverlay,
+      forecastVsActual,
     },
 
     table: {
-
       rows: predictionTable,
-
       totalRows: predictionTable.length,
-
     },
 
     statistics: {
-
-      totalBranchJobs,
-
-      averageLoad,
-
+      totalBranchJobs: branchScope.reduce(
+        (sum, item) => sum + Number(item.predicted_jobs_30d || 0),
+        0
+      ),
+      averageLoad:
+        branchScope.length > 0
+          ? Math.round(
+              branchScope.reduce(
+                (sum, branch) => sum + Number(branch.load_pct || 0),
+                0
+              ) / branchScope.length
+            )
+          : 0,
       totalMachineDemand: machineTotal,
-
     },
-
   };
-
 };

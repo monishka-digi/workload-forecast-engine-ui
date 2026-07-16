@@ -65,7 +65,7 @@ export default function BranchLoadTable({ rows = [] }) {
 
                 <td>{row.geography}</td>
 
-                <td>{new Date(row.period).toLocaleDateString("en-CA")}</td>
+                <td>{row.period}</td>
 
                 <td>{Number(row.predictedLoad).toFixed(1)}%</td>
 

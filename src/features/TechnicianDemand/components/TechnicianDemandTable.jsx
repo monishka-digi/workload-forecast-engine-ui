@@ -44,8 +44,8 @@ export default function TechnicianDemandTable({ rows = [] }) {
                     alignItems: "center",
                     gap: 6,
                   }}
-                >
-                  <span>SHORTFALL</span>
+                  >
+                    <span>SHORTFALL</span>
 
                   <InfoTooltip
                     position="bottom"
@@ -55,6 +55,7 @@ export default function TechnicianDemandTable({ rows = [] }) {
                   </InfoTooltip>
                 </div>
               </th>
+              <th>STATUS</th>
               <th>ACTIONS</th>
             </tr>
           </thead>
@@ -82,21 +83,32 @@ export default function TechnicianDemandTable({ rows = [] }) {
                           : "low"
                     }`}
                   >
-                    {row.shortfall}
+                    {Number(row.shortfall).toFixed(1)}
                   </span>
                 </td>
 
-                <td>
-                  <button
-                    className="approveBtn"
-                    disabled={!row.actions.canApprove}
-                  >
-                    Approve
-                  </button>
+                <td>{row.gapStatus}</td>
 
-                  <button className="editBtn" disabled={!row.actions.canEdit}>
-                    Edit
-                  </button>
+                <td>
+                  {row.actions.canViewDetail && (
+                    <button className="approveBtn">View</button>
+                  )}
+
+                  {row.actions.canOverride && (
+                    <button className="editBtn">Override</button>
+                  )}
+
+                  {row.actions.canRaiseHiringRequest && (
+                    <button className="approveBtn">Hire</button>
+                  )}
+
+                  {row.actions.canTriggerRedeployment && (
+                    <button className="editBtn">Redeploy</button>
+                  )}
+
+                  {row.actions.canExport && (
+                    <button className="editBtn">Export</button>
+                  )}
                 </td>
               </tr>
             ))}

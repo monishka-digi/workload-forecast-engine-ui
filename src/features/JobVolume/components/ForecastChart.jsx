@@ -36,6 +36,9 @@ export default function ForecastChart({ data }) {
         borderRadius: 12,
         padding: 20,
         marginBottom: 10,
+        minWidth: 0,
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       {/* Header */}
@@ -45,6 +48,9 @@ export default function ForecastChart({ data }) {
           justifyContent: "space-between",
           alignItems: "center",
           marginBottom: 18,
+          gap: 12,
+          flexWrap: "wrap",
+          minWidth: 0,
         }}
       >
         <div
@@ -52,6 +58,7 @@ export default function ForecastChart({ data }) {
             display: "flex",
             alignItems: "center",
             gap: 8,
+            minWidth: 0,
           }}
         >
           <h3
@@ -74,7 +81,7 @@ export default function ForecastChart({ data }) {
         </div>
       </div>
 
-      <div style={{ height: "280px" }}>
+      <div style={{ height: "280px", minHeight: 0, minWidth: 0 }}>
         <Line
           data={data}
           options={getCommonOptions(theme)}

@@ -1,13 +1,19 @@
-.capacityCard{
+.capacityPressureList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  padding-right: 6px;
+}
 
-background:#171c24;
+.capacityPressureList::-webkit-scrollbar {
+  width: 8px;
+}
 
-padding:20px;
-
-border-radius:10px;
-
-border:1px solid #2a3140;
-
-height:380px;
-
+.capacityPressureList::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
 }

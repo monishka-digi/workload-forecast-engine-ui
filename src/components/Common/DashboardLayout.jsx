@@ -17,6 +17,26 @@ export default function DashboardLayout({
 
   table,
 }) {
+  const renderRow = (left, right) => {
+    const items = [left, right].filter(Boolean);
+
+    if (!items.length) {
+      return null;
+    }
+
+    return (
+      <div
+        className={`dashboardGrid ${
+          items.length === 1 ? "dashboardGrid--single" : ""
+        }`}
+      >
+        {items.map((item, index) => (
+          <div key={index}>{item}</div>
+        ))}
+      </div>
+    );
+  };
+
   if (loading) return <div>Loading...</div>;
 
   if (error) return <div>Error...</div>;
@@ -26,28 +46,13 @@ export default function DashboardLayout({
       {kpis}
 
       {/* First Row */}
-      {(topLeft || topRight) && (
-        <div className="dashboardGrid">
-          <div>{topLeft}</div>
-          <div>{topRight}</div>
-        </div>
-      )}
+      {renderRow(topLeft, topRight)}
 
       {/* Second Row */}
-      {(middleLeft || middleRight) && (
-        <div className="dashboardGrid">
-          <div>{middleLeft}</div>
-          <div>{middleRight}</div>
-        </div>
-      )}
+      {renderRow(middleLeft, middleRight)}
 
       {/* Third Row */}
-      {(bottomLeft || bottomRight) && (
-        <div className="dashboardGrid">
-          <div>{bottomLeft}</div>
-          <div>{bottomRight}</div>
-        </div>
-      )}
+      {renderRow(bottomLeft, bottomRight)}
 
       {table}
     </>

@@ -4,337 +4,585 @@
   "result": {
     "metadata": {
       "model_name": "job_volume_prediction",
-      "model_version": "v1.0.0",
-      "forecast_run_date": "2026-06-24",
-      "forecast_period": "2026-06-24 to 2026-09-21",
+      "model_version": "v1.0",
+      "forecast_run_date": "2026-07-15",
+      "forecast_period": "2026-07-15 to 2026-10-13",
       "granularity": "weekly",
-      "generated_timestamp": "2026-06-24T02:00:00",
-      "generated_timestamp_relative": "6h ago",
+      "generated_timestamp": "2026-07-15T09:50:58",
+      "generated_timestamp_relative": "just now",
       "confidence_level": "80%",
       "forecast_horizons": [30, 60, 90],
-      "input_dataset_ref": "gold_job_volume_v20260624",
-      "model_run_id": "RUN-JV-20260624-001"
+      "input_dataset_ref": "golden_job_volume_training_dataset",
+      "model_run_id": "RUN-JV-20260715-001"
     },
-
-    "forecast_reasoning": {
-      "scope_note": "Job volume is now forecast for two branches: Nagpur (BR-NAG-01, West) and Chennai (BR-CHN-02, South). All totals, distributions and alerts are computed over these two branches.",
-      "horizon_note": "Weekly forecast covers the full 90-day window. Volume peaks in the week of 2026-07-15 (monsoon breakdown surge, +21% over the non-monsoon baseline) then eases toward baseline by mid-September.",
-      "branch_level": {
-        "BR-NAG-01": "Nagpur is the demand-vs-capacity risk. 362 jobs against a 389 capacity rating = 93% at 30 days, and the central estimate breaches 100% at the 60-day monsoon peak. Aging fleet and high breakdown share drive it.",
-        "BR-CHN-02": "Chennai carries higher absolute volume (541 jobs) but on a larger capacity base (659), so it stays high-but-safe at 82%. It is the network's demand leader, not its risk."
-      },
-      "methodology": "Weekly job counts are the sum of AMC-due signal, breakdown propensity (monsoon-weighted) and planned PM/PDI. load_pct = predicted_jobs / capacity_rating. p10/p90 bands widen with horizon (confidence 89% → 79% from 30 to 90 days)."
-    },
-
     "summary": {
-      "total_predicted_jobs_30d": 903,
-      "total_predicted_jobs_60d": 1795,
-      "total_predicted_jobs_90d": 2608,
-      "avg_daily_jobs_30d": 30.1,
-      "avg_daily_jobs_60d": 29.9,
-      "avg_daily_jobs_90d": 29.0,
-      "total_branches_forecasted": 2,
-      "branches_at_high_load": 1,
-      "branches_at_critical_load": 1,
+      "total_predicted_jobs_30d": 21,
+      "total_predicted_jobs_60d": 24,
+      "total_predicted_jobs_90d": 20,
+      "avg_daily_jobs_30d": 0.7,
+      "avg_daily_jobs_60d": 0.4,
+      "avg_daily_jobs_90d": 0.2,
+      "total_branches_forecasted": 10,
+      "branches_at_high_load": 0,
+      "branches_at_critical_load": 0,
       "mape_last_30d": 8.4,
+      "mape_last_60d": 10.1,
+      "mape_last_90d": 12.7,
       "wape_last_30d": 7.2,
+      "wape_last_60d": 8.9,
+      "wape_last_90d": 10.8,
       "forecast_accuracy_pct": 91.6,
-      "model_confidence_avg": 0.87,
-      "model_confidence_avg_pct": "87%",
-      "peak_demand_week": "2026-07-15",
-      "peak_demand_week_jobs": 248,
-      "yoy_growth_pct": 12.4,
-      "mom_growth_pct": 4.8,
-      "jobs_vs_capacity_ratio": 0.87,
-      "total_amc_due_30d": 59,
+      "model_confidence_avg": 0.89,
+      "model_confidence_avg_pct": "89%",
+      "peak_demand_week": "2026-07-27",
+      "peak_demand_week_jobs": 4,
+      "jobs_vs_capacity_ratio": 0.01,
+      "capacity_breach_branches": 0,
       "monsoon_impact_flag": true,
-      "quarter_end_flag": false,
-      "capacity_breach_branches": 1,
-      "data_freshness": "2026-06-24T01:45:00",
-      "data_freshness_relative": "6h 15m ago",
-      "summary_reasoning": "The two branches will handle ~903 jobs in 30 days, rising with the monsoon to a peak of 248 jobs in the week of 15-Jul. Nagpur is the single capacity-breach branch; Chennai leads on volume but has headroom. Network runs at 0.87 jobs-to-capacity."
+      "data_freshness": "2026-07-15T09:50:58",
+      "data_freshness_relative": "just now"
     },
-
     "graph_data": {
-
       "forecast_trend_line": [
-        { "period_date": "2026-06-24", "predicted_job_count": 205, "predicted_job_count_p10": 178, "predicted_job_count_p90": 232, "actual_job_count": 198, "is_forecast": false },
-        { "period_date": "2026-07-01", "predicted_job_count": 214, "predicted_job_count_p10": 186, "predicted_job_count_p90": 242, "actual_job_count": 220, "is_forecast": false },
-        { "period_date": "2026-07-08", "predicted_job_count": 232, "predicted_job_count_p10": 202, "predicted_job_count_p90": 262, "actual_job_count": null, "is_forecast": true },
-        { "period_date": "2026-07-15", "predicted_job_count": 248, "predicted_job_count_p10": 216, "predicted_job_count_p90": 280, "actual_job_count": null, "is_forecast": true },
-        { "period_date": "2026-07-22", "predicted_job_count": 240, "predicted_job_count_p10": 209, "predicted_job_count_p90": 271, "actual_job_count": null, "is_forecast": true },
-        { "period_date": "2026-07-29", "predicted_job_count": 224, "predicted_job_count_p10": 195, "predicted_job_count_p90": 253, "actual_job_count": null, "is_forecast": true },
-        { "period_date": "2026-08-05", "predicted_job_count": 216, "predicted_job_count_p10": 188, "predicted_job_count_p90": 244, "actual_job_count": null, "is_forecast": true },
-        { "period_date": "2026-08-12", "predicted_job_count": 220, "predicted_job_count_p10": 191, "predicted_job_count_p90": 249, "actual_job_count": null, "is_forecast": true },
-        { "period_date": "2026-08-19", "predicted_job_count": 226, "predicted_job_count_p10": 197, "predicted_job_count_p90": 255, "actual_job_count": null, "is_forecast": true },
-        { "period_date": "2026-08-26", "predicted_job_count": 221, "predicted_job_count_p10": 192, "predicted_job_count_p90": 250, "actual_job_count": null, "is_forecast": true },
-        { "period_date": "2026-09-02", "predicted_job_count": 214, "predicted_job_count_p10": 186, "predicted_job_count_p90": 242, "actual_job_count": null, "is_forecast": true },
-        { "period_date": "2026-09-09", "predicted_job_count": 209, "predicted_job_count_p10": 182, "predicted_job_count_p90": 236, "actual_job_count": null, "is_forecast": true },
-        { "period_date": "2026-09-16", "predicted_job_count": 205, "predicted_job_count_p10": 178, "predicted_job_count_p90": 232, "actual_job_count": null, "is_forecast": true }
-      ],
-
-      "jobs_by_branch_bar": [
-        { "branch_id": "BR-CHN-02", "branch_name": "Chennai Branch", "predicted_jobs_30d": 541, "predicted_jobs_60d": 1075, "predicted_jobs_90d": 1560, "capacity_rating": 659, "load_pct": 82.1, "reasoning": "Volume leader on a large capacity base — 82% load leaves ~118 jobs of monthly headroom." },
-        { "branch_id": "BR-NAG-01", "branch_name": "Nagpur Branch", "predicted_jobs_30d": 362, "predicted_jobs_60d": 720, "predicted_jobs_90d": 1048, "capacity_rating": 389, "load_pct": 93.1, "reasoning": "Lower absolute volume but a small capacity base pushes load to 93%; breaches at the 60-day monsoon peak." }
-      ],
-
-      "job_type_distribution_donut": [
-        { "label": "Breakdown", "value": 307, "pct": 34.0 },
-        { "label": "PM", "value": 225, "pct": 24.9 },
-        { "label": "AMC", "value": 184, "pct": 20.4 },
-        { "label": "Overhaul", "value": 99, "pct": 11.0 },
-        { "label": "Warranty", "value": 54, "pct": 6.0 },
-        { "label": "PDI", "value": 34, "pct": 3.7 }
-      ],
-
-      "machine_type_demand_bar": [
-        { "label": "Excavator", "value": 361, "pct": 40.0 },
-        { "label": "Motor Grader", "value": 163, "pct": 18.0 },
-        { "label": "Bulldozer", "value": 126, "pct": 14.0 },
-        { "label": "Wheel Loader", "value": 99, "pct": 11.0 },
-        { "label": "Backhoe Loader", "value": 81, "pct": 9.0 },
-        { "label": "Motor Scraper", "value": 54, "pct": 6.0 },
-        { "label": "Others", "value": 19, "pct": 2.0 }
-      ],
-
-      "geography_heatmap": [
-        { "region": "South", "branch_count": 1, "total_predicted_jobs_30d": 541, "avg_load_pct": 82.1, "intensity": "HIGH" },
-        { "region": "West", "branch_count": 1, "total_predicted_jobs_30d": 362, "avg_load_pct": 93.1, "intensity": "HIGH" }
-      ],
-
-      "forecast_vs_actual_accuracy": [
-        { "period_date": "2026-05-01", "actual_job_count": 192, "predicted_job_count": 198, "abs_error": 6, "pct_error": 3.1 },
-        { "period_date": "2026-05-08", "actual_job_count": 210, "predicted_job_count": 205, "abs_error": 5, "pct_error": 2.4 },
-        { "period_date": "2026-05-15", "actual_job_count": 221, "predicted_job_count": 234, "abs_error": 13, "pct_error": 5.9 },
-        { "period_date": "2026-05-22", "actual_job_count": 201, "predicted_job_count": 194, "abs_error": 7, "pct_error": 3.5 },
-        { "period_date": "2026-05-29", "actual_job_count": 184, "predicted_job_count": 179, "abs_error": 5, "pct_error": 2.7 },
-        { "period_date": "2026-06-05", "actual_job_count": 206, "predicted_job_count": 212, "abs_error": 6, "pct_error": 2.9 },
-        { "period_date": "2026-06-12", "actual_job_count": 214, "predicted_job_count": 210, "abs_error": 4, "pct_error": 1.9 }
-      ],
-
-      "amc_demand_signal_line": [
-        { "period_date": "2026-06-24", "amc_due_count_30d": 59, "predicted_job_contribution": 12 },
-        { "period_date": "2026-07-01", "amc_due_count_30d": 62, "predicted_job_contribution": 13 },
-        { "period_date": "2026-07-08", "amc_due_count_30d": 70, "predicted_job_contribution": 14 },
-        { "period_date": "2026-07-15", "amc_due_count_30d": 66, "predicted_job_contribution": 14 },
-        { "period_date": "2026-07-22", "amc_due_count_30d": 63, "predicted_job_contribution": 13 },
-        { "period_date": "2026-07-29", "amc_due_count_30d": 50, "predicted_job_contribution": 10 },
-        { "period_date": "2026-08-05", "amc_due_count_30d": 54, "predicted_job_contribution": 11 }
-      ],
-
-      "customer_segment_stacked_bar": [
-        { "period_date": "2026-06-24", "Enterprise": 86, "Fleet": 62, "Government": 34, "Retail": 23 },
-        { "period_date": "2026-07-01", "Enterprise": 90, "Fleet": 64, "Government": 36, "Retail": 24 },
-        { "period_date": "2026-07-08", "Enterprise": 98, "Fleet": 70, "Government": 40, "Retail": 24 },
-        { "period_date": "2026-07-15", "Enterprise": 105, "Fleet": 75, "Government": 43, "Retail": 25 },
-        { "period_date": "2026-07-22", "Enterprise": 101, "Fleet": 73, "Government": 42, "Retail": 24 }
-      ],
-
-      "monsoon_impact_overlay": [
-        { "period_date": "2026-06-24", "is_monsoon_season": 1, "rainfall_mm_7d_avg": 34.2, "predicted_job_count": 205, "baseline_without_monsoon": 186 },
-        { "period_date": "2026-07-01", "is_monsoon_season": 1, "rainfall_mm_7d_avg": 48.6, "predicted_job_count": 214, "baseline_without_monsoon": 190 },
-        { "period_date": "2026-07-08", "is_monsoon_season": 1, "rainfall_mm_7d_avg": 62.1, "predicted_job_count": 232, "baseline_without_monsoon": 198 },
-        { "period_date": "2026-07-15", "is_monsoon_season": 1, "rainfall_mm_7d_avg": 71.4, "predicted_job_count": 248, "baseline_without_monsoon": 205 },
-        { "period_date": "2026-07-22", "is_monsoon_season": 1, "rainfall_mm_7d_avg": 58.9, "predicted_job_count": 240, "baseline_without_monsoon": 202 }
-      ],
-
-      "horizon_comparison_bar": [
-        { "label": "30-Day Forecast", "total_jobs": 903, "avg_confidence": 0.89, "avg_confidence_pct": "89%", "mape": 8.4, "reasoning": "Near-term signal (AMC-due, current backlog) is strong, so confidence is highest and error lowest." },
-        { "label": "60-Day Forecast", "total_jobs": 1795, "avg_confidence": 0.84, "avg_confidence_pct": "84%", "mape": 10.1, "reasoning": "Covers the monsoon peak; breakdown timing adds uncertainty, widening the error band." },
-        { "label": "90-Day Forecast", "total_jobs": 2608, "avg_confidence": 0.79, "avg_confidence_pct": "79%", "mape": 12.7, "reasoning": "Longest horizon; weather and post-monsoon demand normalisation are less certain, so confidence is lowest." }
-      ]
-    },
-
-    "forecast_table": {
-      "CRITICAL": [
         {
-          "prediction_id": "PRED-JV-20260624-NAG-001",
-          "branch_id": "BR-NAG-01",
-          "branch_name": "Nagpur Branch",
-          "geography_zone": "West",
-          "machine_type": "Excavator",
-          "customer_segment": "Fleet",
-          "period_date": "2026-07-29",
-          "forecast_horizon_days": 60,
-          "predicted_job_count": 398.0,
-          "predicted_job_count_p10": 348.0,
-          "predicted_job_count_p90": 448.0,
-          "prediction_confidence": 0.82,
-          "prediction_confidence_pct": "82%",
-          "model_name": "job_volume_prediction",
-          "model_version": "v1.0.0",
-          "input_dataset_ref": "gold_job_volume_v20260624",
-          "prediction_timestamp": "2026-06-24T02:00:00",
-          "prediction_timestamp_relative": "6h ago",
-          "branch_capacity_rating": 389,
-          "load_status": "CRITICAL",
-          "load_pct": 102.3,
-          "capacity_breach_flag": true,
-          "is_monsoon_season": true,
-          "amc_due_count_30d": 23,
-          "repeat_breakdown_rate_30d": 0.18,
-          "reasoning": "At the 60-day monsoon peak, Nagpur is predicted at 398 jobs vs 389 capacity = 102.3% breach. High repeat-breakdown rate (18%) on an aging fleet compounds volume. Trigger redeployment to Chennai or add temporary capacity.",
-          "actions": {
-            "can_view_detail": true,
-            "can_override": true,
-            "can_trigger_alert": true,
-            "can_export": true
-          }
-        }
-      ],
-      "HIGH": [
-        {
-          "prediction_id": "PRED-JV-20260624-NAG-002",
-          "branch_id": "BR-NAG-01",
-          "branch_name": "Nagpur Branch",
-          "geography_zone": "West",
-          "machine_type": "Excavator",
-          "customer_segment": "Fleet",
-          "period_date": "2026-07-08",
-          "forecast_horizon_days": 30,
-          "predicted_job_count": 362.0,
-          "predicted_job_count_p10": 315.0,
-          "predicted_job_count_p90": 409.0,
-          "prediction_confidence": 0.85,
-          "prediction_confidence_pct": "85%",
-          "model_name": "job_volume_prediction",
-          "model_version": "v1.0.0",
-          "input_dataset_ref": "gold_job_volume_v20260624",
-          "prediction_timestamp": "2026-06-24T02:00:00",
-          "prediction_timestamp_relative": "6h ago",
-          "branch_capacity_rating": 389,
-          "load_status": "HIGH",
-          "load_pct": 93.1,
-          "capacity_breach_flag": false,
-          "is_monsoon_season": true,
-          "amc_due_count_30d": 21,
-          "repeat_breakdown_rate_30d": 0.16,
-          "reasoning": "30-day Nagpur volume (362) already loads the branch to 93%. Sub-breach today but the p90 (409) crosses capacity — the early-warning window to act before the 60-day breach.",
-          "actions": {
-            "can_view_detail": true,
-            "can_override": true,
-            "can_trigger_alert": true,
-            "can_export": true
-          }
+          "period_date": "2026-05-25",
+          "predicted_job_count": null,
+          "predicted_job_count_p10": null,
+          "predicted_job_count_p90": null,
+          "actual_job_count": 26,
+          "is_forecast": false
         },
         {
-          "prediction_id": "PRED-JV-20260624-CHN-001",
-          "branch_id": "BR-CHN-02",
-          "branch_name": "Chennai Branch",
-          "geography_zone": "South",
-          "machine_type": "Excavator",
-          "customer_segment": "Enterprise",
-          "period_date": "2026-07-08",
-          "forecast_horizon_days": 30,
-          "predicted_job_count": 541.0,
-          "predicted_job_count_p10": 471.0,
-          "predicted_job_count_p90": 611.0,
-          "prediction_confidence": 0.88,
-          "prediction_confidence_pct": "88%",
-          "model_name": "job_volume_prediction",
-          "model_version": "v1.0.0",
-          "input_dataset_ref": "gold_job_volume_v20260624",
-          "prediction_timestamp": "2026-06-24T02:00:00",
-          "prediction_timestamp_relative": "6h ago",
-          "branch_capacity_rating": 659,
-          "load_status": "HIGH",
-          "load_pct": 82.1,
-          "capacity_breach_flag": false,
-          "is_monsoon_season": true,
-          "amc_due_count_30d": 38,
-          "repeat_breakdown_rate_30d": 0.11,
-          "reasoning": "Chennai is the volume leader (541 jobs) but on 659 capacity, so it holds at 82% with headroom. High confidence (88%) on a large, stable enterprise fleet; can absorb ~20 redeployed jobs from Nagpur.",
-          "actions": {
-            "can_view_detail": true,
-            "can_override": true,
-            "can_trigger_alert": true,
-            "can_export": true
-          }
-        }
-      ],
-      "MEDIUM": [
+          "period_date": "2026-06-01",
+          "predicted_job_count": null,
+          "predicted_job_count_p10": null,
+          "predicted_job_count_p90": null,
+          "actual_job_count": 22,
+          "is_forecast": false
+        },
         {
-          "prediction_id": "PRED-JV-20260624-CHN-002",
-          "branch_id": "BR-CHN-02",
-          "branch_name": "Chennai Branch",
-          "geography_zone": "South",
-          "machine_type": "Motor Grader",
-          "customer_segment": "Government",
-          "period_date": "2026-07-08",
-          "forecast_horizon_days": 30,
-          "predicted_job_count": 148.0,
-          "predicted_job_count_p10": 129.0,
-          "predicted_job_count_p90": 167.0,
-          "prediction_confidence": 0.86,
-          "prediction_confidence_pct": "86%",
-          "model_name": "job_volume_prediction",
-          "model_version": "v1.0.0",
-          "input_dataset_ref": "gold_job_volume_v20260624",
-          "prediction_timestamp": "2026-06-24T02:00:00",
-          "prediction_timestamp_relative": "6h ago",
-          "branch_capacity_rating": 200,
-          "load_status": "MEDIUM",
-          "load_pct": 74.0,
-          "capacity_breach_flag": false,
-          "is_monsoon_season": true,
-          "amc_due_count_30d": 18,
-          "repeat_breakdown_rate_30d": 0.08,
-          "reasoning": "Chennai's government grader segment is steadier and lower-load (74%) — planned contract work rather than breakdown-driven, so it is the safe pool to accept overflow.",
-          "actions": {
-            "can_view_detail": true,
-            "can_override": true,
-            "can_trigger_alert": false,
-            "can_export": true
-          }
+          "period_date": "2026-06-08",
+          "predicted_job_count": null,
+          "predicted_job_count_p10": null,
+          "predicted_job_count_p90": null,
+          "actual_job_count": 25,
+          "is_forecast": false
+        },
+        {
+          "period_date": "2026-06-15",
+          "predicted_job_count": null,
+          "predicted_job_count_p10": null,
+          "predicted_job_count_p90": null,
+          "actual_job_count": 37,
+          "is_forecast": false
+        },
+        {
+          "period_date": "2026-06-22",
+          "predicted_job_count": null,
+          "predicted_job_count_p10": null,
+          "predicted_job_count_p90": null,
+          "actual_job_count": 31,
+          "is_forecast": false
+        },
+        {
+          "period_date": "2026-06-29",
+          "predicted_job_count": null,
+          "predicted_job_count_p10": null,
+          "predicted_job_count_p90": null,
+          "actual_job_count": 12,
+          "is_forecast": false
+        },
+        {
+          "period_date": "2026-07-06",
+          "predicted_job_count": 3,
+          "predicted_job_count_p10": 2,
+          "predicted_job_count_p90": 3,
+          "actual_job_count": null,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-07-13",
+          "predicted_job_count": 3,
+          "predicted_job_count_p10": 2,
+          "predicted_job_count_p90": 3,
+          "actual_job_count": null,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-07-20",
+          "predicted_job_count": 3,
+          "predicted_job_count_p10": 3,
+          "predicted_job_count_p90": 4,
+          "actual_job_count": null,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-07-27",
+          "predicted_job_count": 4,
+          "predicted_job_count_p10": 3,
+          "predicted_job_count_p90": 4,
+          "actual_job_count": null,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-08-03",
+          "predicted_job_count": 3,
+          "predicted_job_count_p10": 3,
+          "predicted_job_count_p90": 4,
+          "actual_job_count": null,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-08-10",
+          "predicted_job_count": 3,
+          "predicted_job_count_p10": 2,
+          "predicted_job_count_p90": 3,
+          "actual_job_count": null,
+          "is_forecast": true
+        },
+        {
+          "period_date": "2026-08-17",
+          "predicted_job_count": 3,
+          "predicted_job_count_p10": 2,
+          "predicted_job_count_p90": 3,
+          "actual_job_count": null,
+          "is_forecast": true
         }
       ],
-      "LOW": []
+      "jobs_by_branch_bar": [
+        {
+          "branch_id": "B2002",
+          "branch_name": "Chennai Industrial Branch",
+          "geography_zone": "Chennai",
+          "predicted_jobs_30d": 12,
+          "predicted_jobs_60d": 11,
+          "predicted_jobs_90d": 10,
+          "predicted_jobs_p10": 10,
+          "predicted_jobs_p90": 13,
+          "capacity_rating": 450,
+          "load_pct": 2.6,
+          "load_status": "LOW"
+        },
+        {
+          "branch_id": "B1005",
+          "branch_name": "Nagpur East Branch",
+          "geography_zone": "Nagpur",
+          "predicted_jobs_30d": 4,
+          "predicted_jobs_60d": 8,
+          "predicted_jobs_90d": 4,
+          "predicted_jobs_p10": 4,
+          "predicted_jobs_p90": 5,
+          "capacity_rating": 300,
+          "load_pct": 1.4,
+          "load_status": "LOW"
+        },
+        {
+          "branch_id": "B1003",
+          "branch_name": "Nagpur North Branch",
+          "geography_zone": "Nagpur",
+          "predicted_jobs_30d": 3,
+          "predicted_jobs_60d": 3,
+          "predicted_jobs_90d": 2,
+          "predicted_jobs_p10": 2,
+          "predicted_jobs_p90": 3,
+          "capacity_rating": 350,
+          "load_pct": 0.7,
+          "load_status": "LOW"
+        },
+        {
+          "branch_id": "B2003",
+          "branch_name": "Chennai South Branch",
+          "geography_zone": "Chennai",
+          "predicted_jobs_30d": 2,
+          "predicted_jobs_60d": 2,
+          "predicted_jobs_90d": 3,
+          "predicted_jobs_p10": 2,
+          "predicted_jobs_p90": 2,
+          "capacity_rating": 370,
+          "load_pct": 0.6,
+          "load_status": "LOW"
+        },
+        {
+          "branch_id": "B1001",
+          "branch_name": "Nagpur Central Branch",
+          "geography_zone": "Nagpur",
+          "predicted_jobs_30d": 0,
+          "predicted_jobs_60d": 0,
+          "predicted_jobs_90d": 0,
+          "predicted_jobs_p10": 0,
+          "predicted_jobs_p90": 0,
+          "capacity_rating": 420,
+          "load_pct": 0,
+          "load_status": "LOW"
+        },
+        {
+          "branch_id": "B1002",
+          "branch_name": "Nagpur Industrial Branch",
+          "geography_zone": "Nagpur",
+          "predicted_jobs_30d": 0,
+          "predicted_jobs_60d": 0,
+          "predicted_jobs_90d": 0,
+          "predicted_jobs_p10": 0,
+          "predicted_jobs_p90": 0,
+          "capacity_rating": 380,
+          "load_pct": 0,
+          "load_status": "LOW"
+        },
+        {
+          "branch_id": "B1004",
+          "branch_name": "Nagpur South Branch",
+          "geography_zone": "Nagpur",
+          "predicted_jobs_30d": 0,
+          "predicted_jobs_60d": 0,
+          "predicted_jobs_90d": 0,
+          "predicted_jobs_p10": 0,
+          "predicted_jobs_p90": 0,
+          "capacity_rating": 360,
+          "load_pct": 0.1,
+          "load_status": "LOW"
+        },
+        {
+          "branch_id": "B1006",
+          "branch_name": "Chennai West Branch",
+          "geography_zone": "Chennai",
+          "predicted_jobs_30d": 0,
+          "predicted_jobs_60d": 0,
+          "predicted_jobs_90d": 0,
+          "predicted_jobs_p10": 0,
+          "predicted_jobs_p90": 0,
+          "capacity_rating": 390,
+          "load_pct": 0,
+          "load_status": "LOW"
+        },
+        {
+          "branch_id": "B2001",
+          "branch_name": "Chennai Central Branch",
+          "geography_zone": "Chennai",
+          "predicted_jobs_30d": 0,
+          "predicted_jobs_60d": 0,
+          "predicted_jobs_90d": 0,
+          "predicted_jobs_p10": 0,
+          "predicted_jobs_p90": 0,
+          "capacity_rating": 410,
+          "load_pct": 0,
+          "load_status": "LOW"
+        },
+        {
+          "branch_id": "B2004",
+          "branch_name": "Chennai South Branch",
+          "geography_zone": "Chennai",
+          "predicted_jobs_30d": 0,
+          "predicted_jobs_60d": 0,
+          "predicted_jobs_90d": 0,
+          "predicted_jobs_p10": 0,
+          "predicted_jobs_p90": 0,
+          "capacity_rating": 355,
+          "load_pct": 0,
+          "load_status": "LOW"
+        }
+      ],
+      "job_type_distribution_donut": [
+        { "label": "Engine",       "value": 3, "pct": 33.3 },
+        { "label": "Breakdown",    "value": 2, "pct": 22.2 },
+        { "label": "Transmission", "value": 2, "pct": 22.2 },
+        { "label": "Overhaul",     "value": 1, "pct": 11.1 },
+        { "label": "Hydraulic",    "value": 1, "pct": 11.1 },
+        { "label": "Electrical",   "value": 0, "pct": 0    }
+      ],
+      "machine_type_demand_bar": [
+        { "label": "Excavator",      "value": 8, "pct": 40 },
+        { "label": "Motor Grader",   "value": 4, "pct": 18 },
+        { "label": "Bulldozer",      "value": 3, "pct": 14 },
+        { "label": "Wheel Loader",   "value": 2, "pct": 11 },
+        { "label": "Backhoe Loader", "value": 2, "pct": 9  },
+        { "label": "Others",         "value": 2, "pct": 8  }
+      ],
+      "horizon_comparison_bar": [
+        { "label": "30-Day Forecast", "total_jobs": 21, "avg_confidence": 0.89, "avg_confidence_pct": "89%", "mape": 8.4  },
+        { "label": "60-Day Forecast", "total_jobs": 24, "avg_confidence": 0.84, "avg_confidence_pct": "84%", "mape": 10.1 },
+        { "label": "90-Day Forecast", "total_jobs": 20, "avg_confidence": 0.79, "avg_confidence_pct": "79%", "mape": 12.7 }
+      ],
+      "geography_heatmap": [
+        { "region": "Nagpur",  "branch_count": 5, "total_predicted_jobs_30d": 7,  "avg_load_pct": 0.5, "intensity": "LOW" },
+        { "region": "Chennai", "branch_count": 5, "total_predicted_jobs_30d": 14, "avg_load_pct": 0.6, "intensity": "LOW" }
+      ],
+      "forecast_vs_actual_accuracy": [
+        { "period_date": "2026-06-24", "actual_job_count": 31, "predicted_job_count": 32, "abs_error": 1,  "pct_error": 3.8    },
+        { "period_date": "2026-06-25", "actual_job_count": 25, "predicted_job_count": 25, "abs_error": 0,  "pct_error": 1.2    },
+        { "period_date": "2026-06-26", "actual_job_count": 21, "predicted_job_count": 24, "abs_error": 3,  "pct_error": 12.2   },
+        { "period_date": "2026-06-27", "actual_job_count": 18, "predicted_job_count": 19, "abs_error": 1,  "pct_error": 4      },
+        { "period_date": "2026-06-28", "actual_job_count": 12, "predicted_job_count": 19, "abs_error": 7,  "pct_error": 56.9   },
+        { "period_date": "2026-06-29", "actual_job_count": 11, "predicted_job_count": 22, "abs_error": 11, "pct_error": 100    },
+        { "period_date": "2026-06-30", "actual_job_count": 0,  "predicted_job_count": 21, "abs_error": 21, "pct_error": 2118.6 }
+      ],
+      "monsoon_impact_overlay": [
+        { "period_date": "2026-07-06", "is_monsoon_season": true, "predicted_job_count": 3, "baseline_without_monsoon": 2 },
+        { "period_date": "2026-07-13", "is_monsoon_season": true, "predicted_job_count": 3, "baseline_without_monsoon": 2 },
+        { "period_date": "2026-07-20", "is_monsoon_season": true, "predicted_job_count": 3, "baseline_without_monsoon": 3 },
+        { "period_date": "2026-07-27", "is_monsoon_season": true, "predicted_job_count": 4, "baseline_without_monsoon": 3 },
+        { "period_date": "2026-08-03", "is_monsoon_season": true, "predicted_job_count": 3, "baseline_without_monsoon": 3 }
+      ]
     },
-
+    "forecast_table": {
+      "CRITICAL": [],
+      "HIGH": [],
+      "MEDIUM": [],
+      "LOW": [
+        {
+          "prediction_id": "PRED-JV-20260715-B2002-001",
+          "branch_id": "B2002",
+          "branch_name": "Chennai Industrial Branch",
+          "geography_zone": "Chennai",
+          "period_date": "2026-07-22",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 11.6,
+          "predicted_job_count_p10": 10.1,
+          "predicted_job_count_p90": 13.1,
+          "predicted_job_count_60d": 11,
+          "predicted_job_count_90d": 9.8,
+          "prediction_confidence": 0.89,
+          "prediction_confidence_pct": "89%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0",
+          "branch_capacity_rating": 450,
+          "load_status": "LOW",
+          "load_pct": 2.6,
+          "capacity_breach_flag": false,
+          "prediction_timestamp": "2026-07-15T09:50:58",
+          "prediction_timestamp_relative": "just now",
+          "actions": { "can_view_detail": true, "can_override": true, "can_trigger_alert": false, "can_export": true }
+        },
+        {
+          "prediction_id": "PRED-JV-20260715-B1005-001",
+          "branch_id": "B1005",
+          "branch_name": "Nagpur East Branch",
+          "geography_zone": "Nagpur",
+          "period_date": "2026-07-22",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 4.3,
+          "predicted_job_count_p10": 3.7,
+          "predicted_job_count_p90": 4.8,
+          "predicted_job_count_60d": 7.6,
+          "predicted_job_count_90d": 4.3,
+          "prediction_confidence": 0.89,
+          "prediction_confidence_pct": "89%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0",
+          "branch_capacity_rating": 300,
+          "load_status": "LOW",
+          "load_pct": 1.4,
+          "capacity_breach_flag": false,
+          "prediction_timestamp": "2026-07-15T09:50:58",
+          "prediction_timestamp_relative": "just now",
+          "actions": { "can_view_detail": true, "can_override": true, "can_trigger_alert": false, "can_export": true }
+        },
+        {
+          "prediction_id": "PRED-JV-20260715-B1003-001",
+          "branch_id": "B1003",
+          "branch_name": "Nagpur North Branch",
+          "geography_zone": "Nagpur",
+          "period_date": "2026-07-22",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 2.5,
+          "predicted_job_count_p10": 2.2,
+          "predicted_job_count_p90": 2.8,
+          "predicted_job_count_60d": 3.4,
+          "predicted_job_count_90d": 2,
+          "prediction_confidence": 0.89,
+          "prediction_confidence_pct": "89%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0",
+          "branch_capacity_rating": 350,
+          "load_status": "LOW",
+          "load_pct": 0.7,
+          "capacity_breach_flag": false,
+          "prediction_timestamp": "2026-07-15T09:50:58",
+          "prediction_timestamp_relative": "just now",
+          "actions": { "can_view_detail": true, "can_override": true, "can_trigger_alert": false, "can_export": true }
+        },
+        {
+          "prediction_id": "PRED-JV-20260715-B2003-001",
+          "branch_id": "B2003",
+          "branch_name": "Chennai South Branch",
+          "geography_zone": "Chennai",
+          "period_date": "2026-07-22",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 2.1,
+          "predicted_job_count_p10": 1.9,
+          "predicted_job_count_p90": 2.4,
+          "predicted_job_count_60d": 1.7,
+          "predicted_job_count_90d": 3.1,
+          "prediction_confidence": 0.89,
+          "prediction_confidence_pct": "89%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0",
+          "branch_capacity_rating": 370,
+          "load_status": "LOW",
+          "load_pct": 0.6,
+          "capacity_breach_flag": false,
+          "prediction_timestamp": "2026-07-15T09:50:58",
+          "prediction_timestamp_relative": "just now",
+          "actions": { "can_view_detail": true, "can_override": true, "can_trigger_alert": false, "can_export": true }
+        },
+        {
+          "prediction_id": "PRED-JV-20260715-B1004-001",
+          "branch_id": "B1004",
+          "branch_name": "Nagpur South Branch",
+          "geography_zone": "Nagpur",
+          "period_date": "2026-07-22",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 0.2,
+          "predicted_job_count_p10": 0.2,
+          "predicted_job_count_p90": 0.2,
+          "predicted_job_count_60d": 0.1,
+          "predicted_job_count_90d": 0.1,
+          "prediction_confidence": 0.89,
+          "prediction_confidence_pct": "89%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0",
+          "branch_capacity_rating": 360,
+          "load_status": "LOW",
+          "load_pct": 0.1,
+          "capacity_breach_flag": false,
+          "prediction_timestamp": "2026-07-15T09:50:58",
+          "prediction_timestamp_relative": "just now",
+          "actions": { "can_view_detail": true, "can_override": true, "can_trigger_alert": false, "can_export": true }
+        },
+        {
+          "prediction_id": "PRED-JV-20260715-B1001-001",
+          "branch_id": "B1001",
+          "branch_name": "Nagpur Central Branch",
+          "geography_zone": "Nagpur",
+          "period_date": "2026-07-22",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 0.1,
+          "predicted_job_count_p10": 0.1,
+          "predicted_job_count_p90": 0.1,
+          "predicted_job_count_60d": 0,
+          "predicted_job_count_90d": 0.2,
+          "prediction_confidence": 0.89,
+          "prediction_confidence_pct": "89%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0",
+          "branch_capacity_rating": 420,
+          "load_status": "LOW",
+          "load_pct": 0,
+          "capacity_breach_flag": false,
+          "prediction_timestamp": "2026-07-15T09:50:58",
+          "prediction_timestamp_relative": "just now",
+          "actions": { "can_view_detail": true, "can_override": true, "can_trigger_alert": false, "can_export": true }
+        },
+        {
+          "prediction_id": "PRED-JV-20260715-B1002-001",
+          "branch_id": "B1002",
+          "branch_name": "Nagpur Industrial Branch",
+          "geography_zone": "Nagpur",
+          "period_date": "2026-07-22",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 0.2,
+          "predicted_job_count_p10": 0.2,
+          "predicted_job_count_p90": 0.2,
+          "predicted_job_count_60d": 0.1,
+          "predicted_job_count_90d": 0.1,
+          "prediction_confidence": 0.89,
+          "prediction_confidence_pct": "89%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0",
+          "branch_capacity_rating": 380,
+          "load_status": "LOW",
+          "load_pct": 0,
+          "capacity_breach_flag": false,
+          "prediction_timestamp": "2026-07-15T09:50:58",
+          "prediction_timestamp_relative": "just now",
+          "actions": { "can_view_detail": true, "can_override": true, "can_trigger_alert": false, "can_export": true }
+        },
+        {
+          "prediction_id": "PRED-JV-20260715-B1006-001",
+          "branch_id": "B1006",
+          "branch_name": "Chennai West Branch",
+          "geography_zone": "Chennai",
+          "period_date": "2026-07-22",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 0,
+          "predicted_job_count_p10": 0,
+          "predicted_job_count_p90": 0,
+          "predicted_job_count_60d": 0,
+          "predicted_job_count_90d": 0.1,
+          "prediction_confidence": 0.89,
+          "prediction_confidence_pct": "89%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0",
+          "branch_capacity_rating": 390,
+          "load_status": "LOW",
+          "load_pct": 0,
+          "capacity_breach_flag": false,
+          "prediction_timestamp": "2026-07-15T09:50:58",
+          "prediction_timestamp_relative": "just now",
+          "actions": { "can_view_detail": true, "can_override": true, "can_trigger_alert": false, "can_export": true }
+        },
+        {
+          "prediction_id": "PRED-JV-20260715-B2001-001",
+          "branch_id": "B2001",
+          "branch_name": "Chennai Central Branch",
+          "geography_zone": "Chennai",
+          "period_date": "2026-07-22",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 0.1,
+          "predicted_job_count_p10": 0.1,
+          "predicted_job_count_p90": 0.1,
+          "predicted_job_count_60d": 0,
+          "predicted_job_count_90d": 0.1,
+          "prediction_confidence": 0.89,
+          "prediction_confidence_pct": "89%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0",
+          "branch_capacity_rating": 410,
+          "load_status": "LOW",
+          "load_pct": 0,
+          "capacity_breach_flag": false,
+          "prediction_timestamp": "2026-07-15T09:50:58",
+          "prediction_timestamp_relative": "just now",
+          "actions": { "can_view_detail": true, "can_override": true, "can_trigger_alert": false, "can_export": true }
+        },
+        {
+          "prediction_id": "PRED-JV-20260715-B2004-001",
+          "branch_id": "B2004",
+          "branch_name": "Chennai South Branch",
+          "geography_zone": "Chennai",
+          "period_date": "2026-07-22",
+          "forecast_horizon_days": 30,
+          "predicted_job_count": 0.1,
+          "predicted_job_count_p10": 0.1,
+          "predicted_job_count_p90": 0.1,
+          "predicted_job_count_60d": 0.1,
+          "predicted_job_count_90d": 0.1,
+          "prediction_confidence": 0.89,
+          "prediction_confidence_pct": "89%",
+          "model_name": "job_volume_prediction",
+          "model_version": "v1.0",
+          "branch_capacity_rating": 355,
+          "load_status": "LOW",
+          "load_pct": 0,
+          "capacity_breach_flag": false,
+          "prediction_timestamp": "2026-07-15T09:50:58",
+          "prediction_timestamp_relative": "just now",
+          "actions": { "can_view_detail": true, "can_override": true, "can_trigger_alert": false, "can_export": true }
+        }
+      ]
+    },
+    "alerts": [],
     "top_branches_by_demand": [
-      { "rank": 1, "branch_id": "BR-CHN-02", "branch_name": "Chennai Branch", "predicted_jobs_30d": 541, "load_pct": 82.1, "status": "HIGH" },
-      { "rank": 2, "branch_id": "BR-NAG-01", "branch_name": "Nagpur Branch", "predicted_jobs_30d": 362, "load_pct": 93.1, "status": "CRITICAL" }
+      { "rank": 1,  "branch_id": "B2002", "branch_name": "Chennai Industrial Branch", "predicted_jobs_30d": 12, "load_pct": 2.6, "status": "LOW" },
+      { "rank": 2,  "branch_id": "B1005", "branch_name": "Nagpur East Branch",         "predicted_jobs_30d": 4,  "load_pct": 1.4, "status": "LOW" },
+      { "rank": 3,  "branch_id": "B1003", "branch_name": "Nagpur North Branch",         "predicted_jobs_30d": 3,  "load_pct": 0.7, "status": "LOW" },
+      { "rank": 4,  "branch_id": "B2003", "branch_name": "Chennai South Branch",        "predicted_jobs_30d": 2,  "load_pct": 0.6, "status": "LOW" },
+      { "rank": 5,  "branch_id": "B1004", "branch_name": "Nagpur South Branch",         "predicted_jobs_30d": 0,  "load_pct": 0.1, "status": "LOW" },
+      { "rank": 6,  "branch_id": "B1002", "branch_name": "Nagpur Industrial Branch",    "predicted_jobs_30d": 0,  "load_pct": 0,   "status": "LOW" },
+      { "rank": 7,  "branch_id": "B2004", "branch_name": "Chennai South Branch",        "predicted_jobs_30d": 0,  "load_pct": 0,   "status": "LOW" },
+      { "rank": 8,  "branch_id": "B2001", "branch_name": "Chennai Central Branch",      "predicted_jobs_30d": 0,  "load_pct": 0,   "status": "LOW" },
+      { "rank": 9,  "branch_id": "B1001", "branch_name": "Nagpur Central Branch",       "predicted_jobs_30d": 0,  "load_pct": 0,   "status": "LOW" },
+      { "rank": 10, "branch_id": "B1006", "branch_name": "Chennai West Branch",         "predicted_jobs_30d": 0,  "load_pct": 0,   "status": "LOW" }
     ],
-
-    "alerts": [
-      {
-        "alert_id": "ALT-JV-001",
-        "alert_type": "CAPACITY_BREACH",
-        "severity": "CRITICAL",
-        "branch_id": "BR-NAG-01",
-        "branch_name": "Nagpur Branch",
-        "message": "Nagpur Branch predicted to exceed 100% capacity for w/c 29-Jul-2026 (60-day horizon). Predicted 398 jobs vs capacity of 389.",
-        "reasoning": "Monsoon-peak breakdown volume plus aging-fleet repeat failures push Nagpur past capacity. Only Chennai can absorb overflow, and distance limits transfers to Overhaul-type jobs.",
-        "generated_at": "2026-06-24T02:05:00",
-        "generated_at_relative": "6h ago",
-        "recommended_action": "Initiate inter-branch reallocation to Chennai and pre-approve temporary/overtime capacity for July"
-      },
-      {
-        "alert_id": "ALT-JV-002",
-        "alert_type": "MONSOON_SURGE",
-        "severity": "HIGH",
-        "branch_id": "BR-CHN-02",
-        "branch_name": "Chennai Branch",
-        "message": "Monsoon-driven demand surge expected +21% above baseline for July 2026 in the South region (Chennai).",
-        "reasoning": "Rainfall climbs from 34 to 71 mm/7d into mid-July; breakdown jobs scale with it, lifting Chennai volume even though load stays sub-breach.",
-        "generated_at": "2026-06-24T02:05:00",
-        "generated_at_relative": "6h ago",
-        "recommended_action": "Pre-position spare parts and ensure technician availability for breakdown-heavy weeks"
-      },
-      {
-        "alert_id": "ALT-JV-003",
-        "alert_type": "AMC_SURGE",
-        "severity": "MEDIUM",
-        "branch_id": "BR-CHN-02",
-        "branch_name": "Chennai Branch",
-        "message": "38 AMC visits due in next 30 days at Chennai — 22% above the monthly average.",
-        "reasoning": "AMC visits cluster in the same weeks as the monsoon breakdown peak; scheduling them early prevents week-end bunching that would spike load.",
-        "generated_at": "2026-06-24T02:05:00",
-        "generated_at_relative": "6h ago",
-        "recommended_action": "Schedule AMC jobs in advance to avoid week-end bunching"
-      }
-    ],
-
     "model_performance": {
       "mape": 8.4,
       "wape": 7.2,
@@ -342,45 +590,33 @@
       "forecast_bias": -0.8,
       "accuracy_pct": 91.6,
       "accuracy_pct_str": "91.6%",
-      "evaluation_period_start": "2026-05-01",
-      "evaluation_period_end": "2026-06-23",
       "drift_score": 0.04,
       "retrain_triggered_flag": false,
       "retrain_trigger_reason": null,
-      "evaluated_at": "2026-06-24T01:30:00",
-      "evaluated_at_relative": "6h 30m ago",
       "mape_by_horizon": {
         "30_day": 8.4,
         "60_day": 10.1,
         "90_day": 12.7
       }
     },
-
     "filter_definitions": {
       "branch_options": [
-        { "value": "ALL", "label": "All Branches" },
-        { "value": "BR-NAG-01", "label": "Nagpur Branch" },
-        { "value": "BR-CHN-02", "label": "Chennai Branch" }
+        { "value": "ALL",   "label": "All Branches"             },
+        { "value": "B1001", "label": "Nagpur Central Branch"    },
+        { "value": "B1002", "label": "Nagpur Industrial Branch" },
+        { "value": "B1003", "label": "Nagpur North Branch"      },
+        { "value": "B1004", "label": "Nagpur South Branch"      },
+        { "value": "B1005", "label": "Nagpur East Branch"       },
+        { "value": "B1006", "label": "Chennai West Branch"      },
+        { "value": "B2001", "label": "Chennai Central Branch"   },
+        { "value": "B2002", "label": "Chennai Industrial Branch"},
+        { "value": "B2003", "label": "Chennai South Branch"     },
+        { "value": "B2004", "label": "Chennai South Branch"     }
       ],
       "geography_zone_options": [
-        { "value": "ALL", "label": "All Regions" },
-        { "value": "South", "label": "South" },
-        { "value": "West", "label": "West" }
-      ],
-      "machine_type_options": [
-        { "value": "ALL", "label": "All Machine Types" },
-        { "value": "Excavator", "label": "Excavator" },
-        { "value": "Motor Grader", "label": "Motor Grader" },
-        { "value": "Bulldozer", "label": "Bulldozer" },
-        { "value": "Wheel Loader", "label": "Wheel Loader" },
-        { "value": "Backhoe Loader", "label": "Backhoe Loader" }
-      ],
-      "customer_segment_options": [
-        { "value": "ALL", "label": "All Segments" },
-        { "value": "Enterprise", "label": "Enterprise" },
-        { "value": "Fleet", "label": "Fleet" },
-        { "value": "Government", "label": "Government" },
-        { "value": "Retail", "label": "Retail" }
+        { "value": "ALL",     "label": "All Regions" },
+        { "value": "Nagpur",  "label": "Nagpur"      },
+        { "value": "Chennai", "label": "Chennai"     }
       ],
       "horizon_options": [
         { "value": 30, "label": "30 Days" },
@@ -388,31 +624,18 @@
         { "value": 90, "label": "90 Days" }
       ],
       "load_status_options": [
-        { "value": "ALL", "label": "All" },
+        { "value": "ALL",      "label": "All"              },
         { "value": "CRITICAL", "label": "Critical (>100%)" },
-        { "value": "HIGH", "label": "High (85–100%)" },
-        { "value": "MEDIUM", "label": "Medium (70–85%)" },
-        { "value": "LOW", "label": "Low (<70%)" }
+        { "value": "HIGH",     "label": "High (85–100%)"   },
+        { "value": "MEDIUM",   "label": "Medium (70–85%)"  },
+        { "value": "LOW",      "label": "Low (<70%)"       }
       ]
     },
-
     "applied_filters": {
       "branch_id": "ALL",
       "geography_zone": "ALL",
-      "machine_type": "ALL",
-      "customer_segment": "ALL",
       "forecast_horizon_days": 30,
-      "load_status": "ALL",
-      "date_range": "next_30_days"
-    },
-
-    "pagination": {
-      "total": 4,
-      "page": 1,
-      "page_size": 20,
-      "total_pages": 1,
-      "has_next": false,
-      "has_prev": false
+      "load_status": "ALL"
     }
   }
 }

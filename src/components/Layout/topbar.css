@@ -30,22 +30,27 @@
   gap: 15px;
 
   align-items: center;
+  flex-wrap: wrap;
 }
 
-select {
-  background: var(--panel);
-
-  border: 1px solid var(--border);
-
+.topbarSelect {
+  width: 220px;
+  background: transparent;
   color: var(--text);
-
-  padding: 10px 14px;
-
-  border-radius: 8px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 8px 2px;
+  font: inherit;
   outline: none;
 }
 
-select option {
+.topbarSelect:hover,
+.topbarSelect:focus {
+  border-bottom-color: var(--primary);
+}
+
+.topbarSelect option {
   background: var(--card-bg);
   color: var(--text);
 }

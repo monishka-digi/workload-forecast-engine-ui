@@ -2,18 +2,28 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 import { Doughnut } from "react-chartjs-2";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import { filterRowsByBranch } from "../../../utils/branchFilters";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 import "./BranchLoadGauge.css";
 
-export default function BranchLoadGauge({ data }) {
+export default function BranchLoadGauge({
+  data = [],
+  selectedBranch = "ALL",
+}) {
+  const scopedData =
+    selectedBranch === "ALL"
+      ? data
+      : filterRowsByBranch(data, selectedBranch);
+  const rows = scopedData.length ? scopedData : data;
+
   const chartData = {
-    labels: data.map((x) => x.branch),
+    labels: rows.map((x) => x.branch),
 
     datasets: [
       {
-        data: data.map((x) => x.load),
+        data: rows.map((x) => x.load),
 
         backgroundColor: [
           "#12BE83",
@@ -65,7 +75,7 @@ export default function BranchLoadGauge({ data }) {
       >
         <div
           style={{
-            width: 290,
+            width: 350,
             height: 290,
           }}
         >

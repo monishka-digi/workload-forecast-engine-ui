@@ -153,3 +153,24 @@ td {
 .editBtn:hover {
   background: var(--card-hover);
 }
+
+.tableBtn {
+  background: transparent;
+  border: 1px solid #2cc6a3;
+  color: #2cc6a3;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin-right: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.tableBtn:hover {
+  background: #2cc6a315;
+}
+
+.tableBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,7 +17,31 @@ import InfoTooltip from "../../../components/Common/InfoTooltip";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-export default function BranchGapChart({ data, summary = [] }) {
+const filterChartByBranch = (data, selectedBranch) => {
+  if (!data || selectedBranch === "ALL") return data;
+
+  const matchingIndices = (data.branchIds || [])
+    .map((branchId, index) => (branchId === selectedBranch ? index : -1))
+    .filter((index) => index >= 0);
+
+  if (!matchingIndices.length) return data;
+
+  return {
+    ...data,
+    labels: matchingIndices.map((index) => data.labels[index]),
+    branchIds: matchingIndices.map((index) => data.branchIds[index]),
+    datasets: data.datasets.map((dataset) => ({
+      ...dataset,
+      data: matchingIndices.map((index) => dataset.data[index]),
+    })),
+  };
+};
+
+export default function BranchGapChart({
+  data,
+  summary = [],
+  selectedBranch = "ALL",
+}) {
   const { theme } = useTheme();
   const chartTitleStyle = {
     display: "flex",
@@ -27,40 +52,69 @@ export default function BranchGapChart({ data, summary = [] }) {
     color: "var(--text)",
     lineHeight: 1.2,
   };
+
   if (!data) return null;
 
-  return (
-    <Card
-      title={
-        <div style={chartTitleStyle}>
-          <span style={chartTitleStyle}>Branch Headcount Gap</span>
+  const filteredData = useMemo(
+    () => {
+      const chart = filterChartByBranch(data, selectedBranch);
 
-          <InfoTooltip
-            position="bottom"
-            content="Required vs available technicians by branch — Nagpur carries the larger shortfall (29.4%) versus Chennai's near-balanced 6.8% gap"
-          >
-            <span className="infoIcon">i</span>
-          </InfoTooltip>
-        </div>
+      if (!chart) {
+        return chart;
       }
-      tag="Technician Demand"
-      height="320px"
+
+      return {
+        ...chart,
+        datasets: chart.datasets.map((dataset) => ({
+          ...dataset,
+          barPercentage: 0.72,
+          categoryPercentage: 0.62,
+          maxBarThickness: 16,
+        })),
+      };
+    },
+    [data, selectedBranch],
+  );
+
+  const filteredSummary = useMemo(() => {
+    if (selectedBranch === "ALL") return summary;
+
+    const matchingSummary = summary.filter(
+      (item) => item.branchId === selectedBranch,
+    );
+
+    return matchingSummary.length ? matchingSummary : summary;
+  }, [summary, selectedBranch]);
+
+  return (
+   <Card
+    title={
+        <div style={chartTitleStyle}>
+            <span style={chartTitleStyle}>
+                Branch Headcount Gap
+            </span>
+
+            <InfoTooltip
+                position="bottom"
+                content="Compares required technician headcount against available technicians across branches over the next 30 days."
+            >
+                <span className="infoIcon">i</span>
+            </InfoTooltip>
+        </div>
+    }
+    tag="Technician Demand"
+    height="420px"
+>
+    <div
+        style={{
+            height:320
+        }}
     >
-      <div className="branchGapChartWrapper">
-        <Bar data={data} options={getGroupedHorizontalBarOptions(theme)} />
-      </div>
-
-      <div className="branchGapSummary">
-        {summary.map((item) => (
-          <div key={item.branch} className="branchGapItem">
-            <p>{item.branch}</p>
-
-            <h3 className={item.gap > 5 ? "danger" : "warning"}>
-              -{item.gap} ({item.gapPct})
-            </h3>
-          </div>
-        ))}
-      </div>
-    </Card>
+        <Bar
+            data={filteredData}
+            options={getGroupedHorizontalBarOptions(theme)}
+        />
+    </div>
+</Card>
   );
 }

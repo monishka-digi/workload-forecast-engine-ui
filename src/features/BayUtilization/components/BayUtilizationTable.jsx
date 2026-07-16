@@ -72,12 +72,20 @@ export default function BayUtilizationTable({ rows = [] }) {
                 </td>
 
                 <td>
-                  {row.actions?.can_reallocate && (
-                    <button className="outlineBtn">Reallocate</button>
+                  {row.actions?.canScheduleMaintenance && (
+                    <button className="outlineBtn">Schedule Maintenance</button>
                   )}
 
-                  {row.actions?.can_view && (
+                  {row.actions?.canTriggerOverflowAlert && (
+                    <button className="outlineBtn">Trigger Alert</button>
+                  )}
+
+                  {row.actions?.canViewDetail && (
                     <button className="ghostBtn">View</button>
+                  )}
+
+                  {row.actions?.canExport && (
+                    <button className="ghostBtn">Export</button>
                   )}
                 </td>
               </tr>

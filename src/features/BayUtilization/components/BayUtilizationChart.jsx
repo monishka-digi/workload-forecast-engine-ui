@@ -1,7 +1,7 @@
 import "./BayUtilizationChart.css";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
 
-export default function BayUtilizationChart({ data = [] }) {
+export default function BayUtilizationChart({ data = [], forecastDays = 30 }) {
   return (
     <div className="bayCard">
       <div className="bayCardHeader">
@@ -22,7 +22,7 @@ export default function BayUtilizationChart({ data = [] }) {
           </InfoTooltip>
         </div>
 
-        <span>Average 30 Days</span>
+        <span>Average {forecastDays} Days</span>
       </div>
 
       <div className="bayCardBody">

@@ -10,7 +10,7 @@ export default function Card({
   height = "420px",
 }) {
   return (
-    <div className="dashboardCard" style={{ height }}>
+    <div className="dashboardCard" style={{ minHeight: height }}>
       <div className="cardTop">
         <h3>{title}</h3>
 

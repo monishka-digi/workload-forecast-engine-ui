@@ -75,6 +75,10 @@ export default function BranchCategoryMixChart({ data }) {
 
         ticks: {
           color: colors.muted,
+          autoSkip: true,
+          maxTicksLimit: 8,
+          maxRotation: 0,
+          minRotation: 0,
         },
 
         grid: {
@@ -114,9 +118,11 @@ export default function BranchCategoryMixChart({ data }) {
     >
       <div
         style={{
-          flex: 1,
           position: "relative",
           minHeight: 0,
+          height: "270px",
+          maxHeight: "270px",
+          overflow: "hidden",
         }}
       >
         <Bar data={data} options={options} />

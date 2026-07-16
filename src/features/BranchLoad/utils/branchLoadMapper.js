@@ -1,4 +1,12 @@
-export const mapBranchLoadData = (response) => {
+import { filterRowsByBranch, isAllBranches } from "../../../utils/branchFilters";
+
+const horizonKey = (forecastDays) => `${forecastDays}d`;
+
+export const mapBranchLoadData = (
+  response,
+  forecastDays = 30,
+  branchId = "ALL",
+) => {
   if (!response) return null;
 
   const {
@@ -11,173 +19,130 @@ export const mapBranchLoadData = (response) => {
     filter_definitions,
   } = response;
 
-  // ---------------- KPIs ----------------
+  const horizon = horizonKey(forecastDays);
 
   const kpis = [
     {
       title: "Average Predicted Load",
-      value: summary.avg_load_display,
-      // subText: `${summary.active_branches} Active Branches`,
+      value: `${summary[`avg_load_pct_${horizon}`] ?? 0}%`,
       positive: true,
       alert: false,
     },
-
     {
       title: "Capacity Breach Alerts",
-      value: summary.capacity_breach_alerts,
-      subText: "Capacity Breach",
+      value: summary[`branches_over_capacity_${horizon}`] ?? 0,
+      subText: "Branches Over Capacity",
       positive: false,
-      alert: true,
+      alert: (summary[`branches_over_capacity_${horizon}`] ?? 0) > 0,
     },
-
     {
       title: "Total Branches",
-      value: summary.total_branches,
-      // subText: "Forecast Generated",
+      value: summary.total_branches ?? 0,
       positive: true,
       alert: false,
     },
-
     {
-      title: "High Load Alerts",
-      value: summary.high_load_alerts,
-      // subText: "Jobs",
+      title: "High Load Branches",
+      value: summary[`branches_high_load_${horizon}`] ?? 0,
+      subText: `${summary[`branches_medium_load_${horizon}`] ?? 0} Medium Load`,
       positive: false,
-      alert: false,
+      alert: (summary[`branches_high_load_${horizon}`] ?? 0) > 0,
     },
-
     {
-      title: "Avg SLA",
-      value: summary.avg_sla_compliance_display,
-      subText: `${summary.avg_tat_days} Days TAT`,
-      positive: true,
+      title: "Peak Load",
+      value: `${summary[`peak_load_pct_${horizon}`] ?? 0}%`,
+      subText: summary[`peak_load_branch_id_${horizon}`] ?? "",
+      positive: false,
       alert: false,
     },
   ];
 
-  // ---------------- Gauge Chart ----------------
+  const scopedBranchRows = isAllBranches(branchId)
+    ? graph_data?.branch_load_bar || []
+    : filterRowsByBranch(graph_data?.branch_load_bar || [], branchId);
 
-  const gaugeChart = (graph_data?.branch_load_bar_30d || []).map((item) => ({
+  const branchRows = scopedBranchRows.length
+    ? scopedBranchRows
+    : graph_data?.branch_load_bar || [];
+
+  const gaugeChart = branchRows.map((item) => ({
     id: item.branch_id,
-
     branch: item.branch_name,
-
     geography: item.geography_zone,
-
-    load: Number((item.predicted_load_pct * 100).toFixed(1)),
-
-    display: item.predicted_load_display,
-
-    jobs: item.predicted_job_volume,
-
-    capacity: item.branch_capacity_rating,
-
-    breach: item.capacity_breach_flag,
+    load: Number(item[`combined_load_pct_${horizon}`] ?? 0),
+    jobs: item[`predicted_jobs_${horizon}`] ?? 0,
+    capacity: item.available_bays,
+    breach: item[`load_status_${horizon}`] === "CRITICAL",
   }));
-
-  // ---------------- Trend Chart ----------------
 
   const trend = graph_data?.load_forecast_timeseries || [];
 
   const trendChart = {
-  labels: trend.map(item =>
-    new Date(item.period_date).toLocaleDateString(
-      "en-IN",
-      {
+    labels: trend.map((item) =>
+      new Date(item.period_date).toLocaleDateString("en-IN", {
         day: "2-digit",
         month: "short",
-      }
-    )
-  ),
+      }),
+    ),
+    datasets: [
+      {
+        label: "Forecast",
+        data: trend.map((item) => Number(item.max_load_pct?.toFixed(1) ?? 0)),
+        borderColor: "#f5b400",
+        backgroundColor: "#f5b400",
+        tension: 0.4,
+        borderWidth: 3,
+        pointRadius: 4,
+      },
+      {
+        label: "Actual",
+        data: trend.map((item) => Number(item.avg_load_pct?.toFixed(1) ?? 0)),
+        borderColor: "#37d8c3",
+        backgroundColor: "#37d8c3",
+        tension: 0.4,
+        borderWidth: 3,
+        pointRadius: 4,
+      },
+    ],
+  };
 
-  datasets: [
-    {
-      label: "Forecast",
+  const tableBuckets = branch_load_table || {};
+  const allRows = ["CRITICAL", "HIGH", "MEDIUM", "LOW"].flatMap(
+    (key) => tableBuckets[key] || [],
+  );
 
-      data: trend.map(item =>
-        Number((item.max_load_pct * 100).toFixed(1))
-      ),
+  const scopedTableRows = isAllBranches(branchId)
+    ? allRows
+    : filterRowsByBranch(allRows, branchId);
 
-      borderColor: "#f5b400",
-
-      backgroundColor: "#f5b400",
-
-      tension: 0.4,
-
-      borderWidth: 3,
-
-      pointRadius: 4,
+  const rows = (scopedTableRows.length ? scopedTableRows : allRows).map((row) => ({
+    id: row.prediction_id,
+    branch: row.branch_name,
+    geography: row.geography_zone,
+    period: `${row.forecast_horizon_days} Days`,
+    predictedLoad: Number(row.load_pct ?? 0),
+    capacityGap: row.capacity_gap_bays,
+    breach: row.load_status === "CRITICAL",
+    bindingConstraint: row.binding_constraint,
+    actions: {
+      canReallocate: row.actions?.can_trigger_redeployment ?? false,
+      canView: row.actions?.can_view_detail ?? false,
     },
-
-    {
-      label: "Actual",
-
-      data: trend.map(item =>
-        Number((item.avg_load_pct * 100).toFixed(1))
-      ),
-
-      borderColor: "#37d8c3",
-
-      backgroundColor: "#37d8c3",
-
-      tension: 0.4,
-
-      borderWidth: 3,
-
-      pointRadius: 4,
-    },
-  ],
-};
-
-  // ---------------- Table ----------------
-
-  const rows = (branch_load_table?.all_branches || []).map((row) => ({
-  id: row.prediction_id,
-
-  branch: row.branch_name,
-
-  geography: row.geography_zone,
-
-  period: row.period_date,
-
-  predictedLoad: Number((row.predicted_load_pct * 100).toFixed(1)),
-
-  lower: Number((row.predicted_load_pct_p10 * 100).toFixed(1)),
-
-  upper: Number((row.predicted_load_pct_p90 * 100).toFixed(1)),
-
-  capacityGap: row.predicted_capacity_gap,
-
-  breach: row.capacity_breach_flag,
-
-  actions: {
-    canReallocate: row.actions?.can_reallocate ?? true,
-    canView: row.actions?.can_view ?? true,
-  },
-}));
+  }));
 
   return {
     metadata,
-
     summary,
-
     filters: filter_definitions,
-
     alerts: load_alerts,
-
     recommendations: rebalancing_recommendations,
-
     kpis,
-
     charts: {
       gauge: gaugeChart,
-
       trend: trendChart,
     },
-
     table: {
       rows,
-
       totalRows: rows.length,
     },
   };

@@ -1,52 +1,76 @@
-import useTechnicianDemand from "./hooks/useTechnicianDemand";
+import { useEffect } from "react";
+
 import DashboardLayout from "../../components/Common/DashboardLayout";
 import KpiCard from "../../components/Common/KpiCard";
-import SkillDemandChart from "./components/SkillDemandChart";
-import WorkforcePlanning from "./components/WorkforcePlanning";
-import TechnicianDemandTable from "./components/TechnicianDemandTable";
-import HeadcountTrendChart from "./components/HeadcountTrendChart";
+import useDashboardFilters from "../../context/useDashboardFilters";
 import BranchGapChart from "./components/BranchGapChart";
+import HeadcountTrendChart from "./components/HeadcountTrendChart";
+import SkillDemandChart from "./components/SkillDemandChart";
+import TechnicianDemandTable from "./components/TechnicianDemandTable";
+import WorkforcePlanning from "./components/WorkforcePlanning";
+import useTechnicianDemand from "./hooks/useTechnicianDemand";
+import BranchGapSummary from "./components/BranchGapSummary";
 
 export default function TechnicianDemand() {
-  const { dashboard, loading, error } = useTechnicianDemand();
+  const { forecastDays, selectedBranch, setBranchOptions } =
+    useDashboardFilters();
+  const { dashboard, loading, error } = useTechnicianDemand(
+    selectedBranch,
+    forecastDays,
+  );
 
-  if (loading) return <div>Loading...</div>;
+  useEffect(() => {
+    if (dashboard?.filters?.branch_options?.length) {
+      setBranchOptions(dashboard.filters.branch_options);
+    }
+  }, [dashboard, setBranchOptions]);
 
-  if (error) return <div>Error loading dashboard.</div>;
+  if (!dashboard && !loading && !error) {
+    return null;
+  }
 
-  console.log("Dashboard", dashboard);
-  console.log("Planning", dashboard.planning);
+  const KPISection = dashboard ? (
+    <div className="kpiSection">
+      {dashboard.kpis.map((item) => (
+        <KpiCard key={item.title} {...item} />
+      ))}
+    </div>
+  ) : null;
 
   return (
     <DashboardLayout
       loading={loading}
       error={error}
-      kpis={
-        <div className="kpiSection">
-          {dashboard.kpis.map((item) => (
-            <KpiCard
-              key={item.title}
-              title={item.title}
-              value={item.value}
-              subText={item.subText}
-              positive={item.positive}
-              alert={item.alert}
-            />
-          ))}
-        </div>
+      kpis={KPISection}
+      topLeft={
+        dashboard ? <SkillDemandChart data={dashboard.charts.skill} /> : null
       }
-      topLeft={<SkillDemandChart data={dashboard.charts.skill} />}
+      topRight={
+        dashboard ? <WorkforcePlanning planning={dashboard.planning} /> : null
+      }
       middleLeft={
-        <HeadcountTrendChart data={dashboard.charts.headcountTrend} />
+        dashboard ? (
+          <HeadcountTrendChart data={dashboard.charts.headcountTrend} />
+        ) : null
       }
       middleRight={
-        <BranchGapChart
-          data={dashboard.charts.branchGap}
-          summary={dashboard.branchGapSummary}
-        />
+        dashboard ? (
+          <BranchGapChart
+            data={dashboard.charts.branchGap}
+            summary={dashboard.branchGapSummary}
+            selectedBranch={selectedBranch}
+          />
+        ) : null
       }
-      topRight={<WorkforcePlanning planning={dashboard.planning} />}
-      table={<TechnicianDemandTable rows={dashboard.table.rows} />}
+      bottomLeft={
+        dashboard ? (
+          <BranchGapSummary summary={dashboard.branchGapSummary} />
+        ) : null
+      }
+      bottomRight={null}
+      table={
+        dashboard ? <TechnicianDemandTable rows={dashboard.table.rows} /> : null
+      }
     />
   );
 }

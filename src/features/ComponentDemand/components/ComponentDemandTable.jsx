@@ -1,6 +1,3 @@
-import Card from "../../../components/Common/Card";
-import MethodBadge from "./MethodBadge";
-
 import "./ComponentDemandTable.css";
 
 export default function ComponentDemandTable({ rows = [] }) {
@@ -23,35 +20,39 @@ export default function ComponentDemandTable({ rows = [] }) {
           </thead>
 
           <tbody>
-            {rows.map((row) => (
-              <tr key={row.id}>
-                <td>{row.componentCategory}</td>
+            {rows.map((row) => {
+              const riskValue = parseInt(row.stockOutRisk ?? 0, 10);
 
-                <td>{row.branchName}</td>
+              return (
+                <tr key={row.id}>
+                  <td>{row.componentCategory}</td>
 
-                <td>
-                  <span
-                    className={`riskBadge ${
-                      parseInt(row.stockOutRisk) >= 50
-                        ? "high"
-                        : parseInt(row.stockOutRisk) >= 25
-                        ? "medium"
-                        : "low"
-                    }`}
-                  >
-                    {row.stockOutRisk}
-                  </span>
-                </td>
+                  <td>{row.branchName}</td>
 
-                <td>
-                  {Number(row.predictedQty).toLocaleString()}
-                </td>
+                  <td>
+                    <span
+                      className={`riskBadge ${
+                        riskValue >= 50
+                          ? "high"
+                          : riskValue >= 25
+                            ? "medium"
+                            : "low"
+                      }`}
+                    >
+                      {row.stockOutRisk ?? "—"}
+                    </span>
+                  </td>
 
-                <td>
-                  ₹ {Number(row.avgUnitCost).toLocaleString("en-IN")}
-                </td>
-              </tr>
-            ))}
+                  <td>{Number(row.predictedQty).toLocaleString()}</td>
+
+                  <td>
+                    {row.avgUnitCost != null
+                      ? `₹ ${Number(row.avgUnitCost).toLocaleString("en-IN")}`
+                      : "—"}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
