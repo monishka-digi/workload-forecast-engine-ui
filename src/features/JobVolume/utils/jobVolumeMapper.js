@@ -89,7 +89,13 @@ export const mapJobVolumeData = (
     {
       id: `avg_daily_jobs_${horizonSuffix}`,
       title: `Avg Daily Jobs (${forecastDays}D)`,
-      value: summary[`avg_daily_jobs_${horizonSuffix}`] ?? summary.avg_daily_jobs_30d,
+      value: Math.ceil(
+        Number(
+          summary[`avg_daily_jobs_${horizonSuffix}`] ??
+            summary.avg_daily_jobs_30d ??
+            0,
+        ),
+      ),
       positive: summary.forecast_accuracy_pct >= 90,
       alert: false,
     },
@@ -201,7 +207,10 @@ export const mapJobVolumeData = (
       {
         label: "Predicted Jobs",
         data: branchScope.map(
-          (item) => item[branchJobsKey] ?? item.predicted_jobs_30d ?? 0,
+          (item) =>
+            Math.ceil(
+              Number(item[branchJobsKey] ?? item.predicted_jobs_30d ?? 0),
+            ),
         ),
         backgroundColor: "#f5b400",
         borderRadius: 8,
