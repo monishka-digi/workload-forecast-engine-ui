@@ -18,6 +18,43 @@ const formatDate = (value) =>
     day: "2-digit",
   });
 
+const filterRowsByForecastHorizon = (
+  rows = [],
+  currentHorizon = 30,
+  forecastRunDate = null,
+) => {
+  if (!rows.length) return rows;
+
+  const numericHorizon = Number(currentHorizon) || 30;
+  const hasExplicitHorizon = rows.some(
+    (item) => item.forecast_horizon_days != null,
+  );
+
+  if (hasExplicitHorizon) {
+    return rows.filter(
+      (item) => Number(item.forecast_horizon_days ?? numericHorizon) === numericHorizon,
+    );
+  }
+
+  const hasPeriodDates = rows.some((item) => item.period_date);
+
+  if (hasPeriodDates && forecastRunDate) {
+    const startDate = new Date(forecastRunDate);
+
+    if (!Number.isNaN(startDate.getTime())) {
+      const cutoffDate = new Date(startDate);
+      cutoffDate.setDate(cutoffDate.getDate() + numericHorizon);
+
+      return rows.filter((item) => {
+        const periodDate = new Date(item.period_date);
+        return !Number.isNaN(periodDate.getTime()) && periodDate <= cutoffDate;
+      });
+    }
+  }
+
+  return rows;
+};
+
 const buildLineChart = (rows = []) => ({
   labels: rows.map((item) =>
     new Date(item.period_date).toLocaleDateString("en-IN", {
@@ -51,19 +88,27 @@ const buildLineChart = (rows = []) => ({
   ],
 });
 
-const buildSkillChart = (rows = []) => ({
+const buildSkillChart = (rows = [], currentHorizon = 30) => ({
   labels: rows.map((item) => item.skill_level),
   datasets: [
     {
-      label: "Required (30D)",
-      data: rows.map((item) => toNumber(item.required_30d)),
+      label: `Required (${currentHorizon}D)`,
+      data: rows.map((item) =>
+        toNumber(
+          item.required ??
+            item[`required_${Number(currentHorizon) || 30}d`] ??
+            item.required_30d,
+        ),
+      ),
       backgroundColor: "#f5b400",
       borderRadius: 6,
       maxBarThickness: 24,
     },
     {
       label: "Available",
-      data: rows.map((item) => toNumber(item.available)),
+      data: rows.map((item) =>
+        toNumber(item.available ?? item[`available_${Number(currentHorizon) || 30}d`]),
+      ),
       backgroundColor: "#12BE83",
       borderRadius: 6,
       maxBarThickness: 24,
@@ -71,20 +116,28 @@ const buildSkillChart = (rows = []) => ({
   ],
 });
 
-const buildBranchGapChart = (rows = []) => ({
+const buildBranchGapChart = (rows = [], currentHorizon = 30) => ({
   labels: rows.map((item) => formatBranchLabel(item.branch_name)),
   branchIds: rows.map((item) => item.branch_id),
   datasets: [
     {
-      label: "Required (30D)",
-      data: rows.map((item) => toNumber(item.required_30d)),
+      label: `Required (${currentHorizon}D)`,
+      data: rows.map((item) =>
+        toNumber(
+          item.required ??
+            item[`required_${Number(currentHorizon) || 30}d`] ??
+            item.required_30d,
+        ),
+      ),
       backgroundColor: "#f5b400",
       borderRadius: 6,
       maxBarThickness: 24,
     },
     {
       label: "Available",
-      data: rows.map((item) => toNumber(item.available)),
+      data: rows.map((item) =>
+        toNumber(item.available ?? item[`available_${Number(currentHorizon) || 30}d`]),
+      ),
       backgroundColor: "#12BE83",
       borderRadius: 6,
       maxBarThickness: 24,
@@ -92,7 +145,7 @@ const buildBranchGapChart = (rows = []) => ({
   ],
 });
 
-const buildHeatmapMatrix = (rows = []) => {
+const buildHeatmapMatrix = (rows = [], currentHorizon = 30) => {
   const skillLevels = Array.from(
     new Set(
       rows.flatMap((row) =>
@@ -116,6 +169,7 @@ const buildHeatmapMatrix = (rows = []) => {
     columnLabels: skillLevels,
     rows: heatmapRows,
     maxValue,
+    forecastHorizonDays: Number(currentHorizon) || 30,
   };
 };
 
@@ -138,18 +192,33 @@ export const mapTechnicianDemandData = (
     model_performance = {},
   } = response;
 
-  const skillRows = graph_data.skill_mix_required_vs_available_bar || [];
-  const trendRows = graph_data.headcount_requirement_trend || [];
-  const gapRows = graph_data.branch_headcount_gap_bar || [];
-  const heatmapRows = graph_data.skill_demand_by_job_type_stacked || [];
-  const overtimeRows = graph_data.overtime_risk_line || [];
-  const tableRows = Object.values(forecast_table || {}).flat();
-
   const currentHorizon = Number(
     applied_filters.forecast_horizon_days ??
       metadata.forecast_horizons?.[0] ??
       forecastDays,
   );
+  const selectedHorizon = Number(currentHorizon) || 30;
+  const forecastRunDate =
+    metadata.forecast_run_date || applied_filters.forecast_run_date || null;
+
+  const skillRows = filterRowsByForecastHorizon(
+    graph_data.skill_mix_required_vs_available_bar || [],
+    selectedHorizon,
+    forecastRunDate,
+  );
+  const trendRows = filterRowsByForecastHorizon(
+    graph_data.headcount_requirement_trend || [],
+    selectedHorizon,
+    forecastRunDate,
+  );
+  const gapRows = graph_data.branch_headcount_gap_bar || [];
+  const heatmapRows = filterRowsByForecastHorizon(
+    graph_data.skill_demand_by_job_type_stacked || [],
+    selectedHorizon,
+    forecastRunDate,
+  );
+  const overtimeRows = graph_data.overtime_risk_line || [];
+  const tableRows = Object.values(forecast_table || {}).flat();
 
   const skillLevelLabels = (filter_definitions.skill_level_options || [])
     .filter((option) => option.value !== "ALL")
@@ -171,11 +240,15 @@ export const mapTechnicianDemandData = (
   )[0];
 
   const topHiring = [...hiring_pipeline].sort(
-    (left, right) => toNumber(right.shortfall_30d) - toNumber(left.shortfall_30d),
+    (left, right) =>
+      toNumber(right[`shortfall_${selectedHorizon}d`] ?? right.shortfall_30d) -
+      toNumber(left[`shortfall_${selectedHorizon}d`] ?? left.shortfall_30d),
   )[0];
 
   const secondHiring = [...hiring_pipeline].sort(
-    (left, right) => toNumber(right.shortfall_30d) - toNumber(left.shortfall_30d),
+    (left, right) =>
+      toNumber(right[`shortfall_${selectedHorizon}d`] ?? right.shortfall_30d) -
+      toNumber(left[`shortfall_${selectedHorizon}d`] ?? left.shortfall_30d),
   )[1];
 
   const scopedGapRows = isAllBranches(branchId)
@@ -202,14 +275,14 @@ export const mapTechnicianDemandData = (
       alert: false,
     },
     {
-      title: `Required Headcount (${currentHorizon}D)`,
+      title: `Required Headcount (${selectedHorizon}D)`,
       value: toNumber(summary[requiredKey] ?? summary.total_technicians_required_30d),
       subText: `Model confidence ${summary.model_confidence_avg_pct || "n/a"}`,
       positive: true,
       alert: false,
     },
     {
-      title: `Headcount Gap (${currentHorizon}D)`,
+      title: `Headcount Gap (${selectedHorizon}D)`,
       value: toNumber(summary[gapKey] ?? summary.total_headcount_gap_30d),
       subText: `Average overtime ${formatPercent(summary.overtime_utilization_pct_avg)}`,
       positive: false,
@@ -243,9 +316,9 @@ export const mapTechnicianDemandData = (
     },
     {
       type: "pipeline",
-      title: "HIRING PIPELINE (30D)",
+      title: `HIRING PIPELINE (${selectedHorizon}D)`,
       description: topHiring
-        ? `${toNumber(topHiring.recommended_hires)} hires recommended for ${topHiring.skill_level}. 30-day shortfall: ${toNumber(topHiring.shortfall_30d)}.`
+        ? `${toNumber(topHiring.recommended_hires)} hires recommended for ${topHiring.skill_level}. ${selectedHorizon}-day shortfall: ${toNumber(topHiring[`shortfall_${selectedHorizon}d`] ?? topHiring.shortfall_30d)}.`
         : "No hiring pipeline available",
     },
     {
@@ -298,10 +371,16 @@ export const mapTechnicianDemandData = (
     planning,
     branchGapSummary,
     charts: {
-      skill: buildSkillChart(skillRows),
-      headcountTrend: buildLineChart(trendRows),
-      branchGap: buildHeatmapMatrix(heatmapRows),
-      branchGapSummary: buildBranchGapChart(branchRows),
+      skill: {
+        ...buildSkillChart(skillRows, selectedHorizon),
+        forecastHorizonDays: selectedHorizon,
+      },
+      headcountTrend: {
+        ...buildLineChart(trendRows),
+        forecastHorizonDays: selectedHorizon,
+      },
+      branchGap: buildHeatmapMatrix(heatmapRows, selectedHorizon),
+      branchGapSummary: buildBranchGapChart(branchRows, selectedHorizon),
       overtimeRisk: {
         labels: overtimeRows.map((item) =>
           new Date(item.period_date).toLocaleDateString("en-IN", {

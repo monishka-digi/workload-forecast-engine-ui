@@ -49,6 +49,8 @@ export default function MachineMixChart({ data, selectedBranch = "ALL" }) {
   lineHeight: 1.2,
 };
 
+  const totalJobs = filteredData.total ?? 0;
+
   return (
     <Card
           title={
@@ -63,6 +65,7 @@ export default function MachineMixChart({ data, selectedBranch = "ALL" }) {
               </InfoTooltip>
             </div>
           }
+          tag={`Total Jobs: ${totalJobs}`}
           height="350px"
         >
       <div
@@ -75,41 +78,6 @@ export default function MachineMixChart({ data, selectedBranch = "ALL" }) {
         }}
       >
         <Doughnut data={filteredData} options={getDoughnutOptions(theme)} />
-
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            pointerEvents: "none",
-            textAlign: "center",
-          }}
-        >
-          <h2
-            style={{
-              margin: 0,
-              lineHeight: 1,
-              color: "var(--text)",
-              fontSize: 30,
-              fontWeight: 700,
-            }}
-          >
-            {filteredData.total}
-          </h2>
-
-          <span
-            style={{
-              marginTop: 6,
-              color: "var(--text-secondary)",
-              fontSize: 14,
-            }}
-          >
-            Jobs
-          </span>
-        </div>
       </div>
     </Card>
   );

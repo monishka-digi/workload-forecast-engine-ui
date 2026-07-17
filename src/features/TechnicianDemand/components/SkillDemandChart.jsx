@@ -19,6 +19,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export default function SkillDemandChart({ data }) {
   const { theme } = useTheme();
+  const horizonDays = data?.forecastHorizonDays || 30;
 
   const chartTitleStyle = {
     display: "flex",
@@ -60,7 +61,7 @@ export default function SkillDemandChart({ data }) {
 
           <InfoTooltip
             position="bottom"
-            content="Compares required technician headcount against currently available staff by skill level over the next 30 days. L1 has a small surplus, while L2, L3, and Specialist levels face growing shortfalls"
+            content={`Compares required technician headcount against currently available staff by skill level over the next ${horizonDays} days. L1 has a small surplus, while L2, L3, and Specialist levels face growing shortfalls`}
           >
             <span className="infoIcon">i</span>
           </InfoTooltip>
