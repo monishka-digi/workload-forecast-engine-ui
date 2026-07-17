@@ -234,7 +234,9 @@ export const mapTechnicianDemandData = (
     },
     {
       title: `Required Headcount (${selectedHorizon}D)`,
-      value: toNumber(summary[requiredKey] ?? summary.total_technicians_required_30d),
+      value: Math.ceil(
+        toNumber(summary[requiredKey] ?? summary.total_technicians_required_30d),
+      ),
       subText: `Model confidence ${summary.model_confidence_avg_pct || "n/a"}`,
       positive: true,
       alert: false,

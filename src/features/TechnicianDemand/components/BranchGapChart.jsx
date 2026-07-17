@@ -60,7 +60,7 @@ export default function BranchGapChart({ data }) {
     <Card
       title={
         <div style={chartTitleStyle}>
-          <span style={chartTitleStyle}>Branch Headcount Gap</span>
+          <span style={chartTitleStyle}>Demand By job type</span>
 
           <InfoTooltip
             position="bottom"

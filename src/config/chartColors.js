@@ -14,13 +14,21 @@ const chartColors = {
 };
 
 export const machineColors = [
-  chartColors.yellow,
-  chartColors.green,
-  chartColors.blue,
-  chartColors.red,
-  chartColors.purple,
-  chartColors.gray,
-  chartColors.slate,
+  "#f5b400",
+  "#36d7c2",
+  "#8bcf67",
+  "#34d6b8",
+  "#a3e635",
+  "#f59e0b",
+  "#22c55e",
+  "#14b8a6",
+  "#84cc16",
+  "#06b6d4",
+  "#0ea5e9",
+  "#ef5a5a",
+  "#8b5cf6",
+  "#64748b",
+  "#94a3b8",
 ];
 
 export default chartColors;

@@ -5,6 +5,13 @@
   padding: 16px;
 }
 
+.gapSummaryTitle {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
 .gapSummaryGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
