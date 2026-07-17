@@ -95,6 +95,7 @@ export const mapBranchLoadData = (
         month: "short",
       }),
     ),
+    periodDates: trend.map((item) => item.period_date),
     datasets: [
       {
         label: "Forecast",

@@ -3,6 +3,14 @@ display:flex;
 flex-direction:column;
 gap:22px;
 margin-top:12px;
+min-width:0;
+flex:1;
+}
+
+.categoryChart--scroll{
+overflow:auto;
+padding-right:6px;
+min-height:0;
 }
 
 .categoryRow{

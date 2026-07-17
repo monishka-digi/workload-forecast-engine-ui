@@ -2,14 +2,19 @@
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 14px;
-    padding: 15px 10px;
+    padding: 18px 12px 14px;
     box-shadow: var(--shadow);
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
 }
 .branchGaugeHeader{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    margin-bottom: 14px;
 }
 
 .branchGaugeHeader h3{
@@ -26,7 +31,10 @@
 
 .branchGaugeBody{
     display:flex;
-    flex-direction:column;
+    flex:1;
+    min-height:0;
+    align-items:center;
+    justify-content:center;
 }
 
 .gaugeRow{

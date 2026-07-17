@@ -3,6 +3,7 @@ import {
   formatBranchLabel,
   isAllBranches,
 } from "../../../utils/branchFilters";
+import { filterDataByPeriod } from "../../../utils/filterDataByPeriod";
 
 const pick = (...values) =>
   values.find((value) => value !== undefined && value !== null);
@@ -18,43 +19,6 @@ const formatDate = (value) =>
     day: "2-digit",
   });
 
-const filterRowsByForecastHorizon = (
-  rows = [],
-  currentHorizon = 30,
-  forecastRunDate = null,
-) => {
-  if (!rows.length) return rows;
-
-  const numericHorizon = Number(currentHorizon) || 30;
-  const hasExplicitHorizon = rows.some(
-    (item) => item.forecast_horizon_days != null,
-  );
-
-  if (hasExplicitHorizon) {
-    return rows.filter(
-      (item) => Number(item.forecast_horizon_days ?? numericHorizon) === numericHorizon,
-    );
-  }
-
-  const hasPeriodDates = rows.some((item) => item.period_date);
-
-  if (hasPeriodDates && forecastRunDate) {
-    const startDate = new Date(forecastRunDate);
-
-    if (!Number.isNaN(startDate.getTime())) {
-      const cutoffDate = new Date(startDate);
-      cutoffDate.setDate(cutoffDate.getDate() + numericHorizon);
-
-      return rows.filter((item) => {
-        const periodDate = new Date(item.period_date);
-        return !Number.isNaN(periodDate.getTime()) && periodDate <= cutoffDate;
-      });
-    }
-  }
-
-  return rows;
-};
-
 const buildLineChart = (rows = []) => ({
   labels: rows.map((item) =>
     new Date(item.period_date).toLocaleDateString("en-IN", {
@@ -62,6 +26,7 @@ const buildLineChart = (rows = []) => ({
       month: "short",
     }),
   ),
+  periodDates: rows.map((item) => item.period_date),
   datasets: [
     {
       label: "Required",
@@ -198,24 +163,17 @@ export const mapTechnicianDemandData = (
       forecastDays,
   );
   const selectedHorizon = Number(currentHorizon) || 30;
-  const forecastRunDate =
-    metadata.forecast_run_date || applied_filters.forecast_run_date || null;
-
-  const skillRows = filterRowsByForecastHorizon(
+  const skillRows = filterDataByPeriod(
     graph_data.skill_mix_required_vs_available_bar || [],
     selectedHorizon,
-    forecastRunDate,
+    "forecast_horizon_days",
   );
-  const trendRows = filterRowsByForecastHorizon(
-    graph_data.headcount_requirement_trend || [],
-    selectedHorizon,
-    forecastRunDate,
-  );
+  const trendRows = graph_data.headcount_requirement_trend || [];
   const gapRows = graph_data.branch_headcount_gap_bar || [];
-  const heatmapRows = filterRowsByForecastHorizon(
+  const heatmapRows = filterDataByPeriod(
     graph_data.skill_demand_by_job_type_stacked || [],
     selectedHorizon,
-    forecastRunDate,
+    "forecast_horizon_days",
   );
   const overtimeRows = graph_data.overtime_risk_line || [];
   const tableRows = Object.values(forecast_table || {}).flat();

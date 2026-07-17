@@ -1,6 +1,7 @@
 import "./CategoryDemandChart.css";
 import Card from "../../../components/Common/Card";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import "../../JobVolume/components/dashboardChartCard.css";
 
 export default function CategoryDemandChart({ data }) {
   if (!data) return null;
@@ -33,29 +34,31 @@ export default function CategoryDemandChart({ data }) {
         </div>
       }
       tag="Predicted Qty"
-      height="350px"
+      height="clamp(340px, 36vw, 430px)"
     >
-      <div className="categoryChart">
-        {data.labels.map((label, index) => {
-          const value = values[index];
+      <div className="dashboardChartCard__body">
+        <div className="categoryChart categoryChart--scroll">
+          {data.labels.map((label, index) => {
+            const value = values[index];
 
-          return (
-            <div className="categoryRow" key={label}>
-              <div className="categoryName">{label}</div>
+            return (
+              <div className="categoryRow" key={label}>
+                <div className="categoryName">{label}</div>
 
-              <div className="categoryProgress">
-                <div
-                  className="categoryFill"
-                  style={{
-                    width: `${(value / max) * 100}%`,
-                  }}
-                />
+                <div className="categoryProgress">
+                  <div
+                    className="categoryFill"
+                    style={{
+                      width: `${(value / max) * 100}%`,
+                    }}
+                  />
+                </div>
+
+                <div className="categoryValue">{value.toLocaleString()}</div>
               </div>
-
-              <div className="categoryValue">{value.toLocaleString()}</div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </Card>
   );

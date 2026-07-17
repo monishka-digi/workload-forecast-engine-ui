@@ -3,6 +3,7 @@ import Card from "../../../components/Common/Card";
 import GaugeRow from "./GaugeRow";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
 import { filterRowsByBranch } from "../../../utils/branchFilters";
+import "./dashboardChartCard.css";
 
 export default function CapacityPressure({
   data = [],
@@ -38,20 +39,22 @@ export default function CapacityPressure({
               </InfoTooltip>
             </div>
           }
-          height="350px"
+          height="clamp(360px, 40vw, 470px)"
         >
-      <div className="capacityPressureList">
-        {rows.map((branch) => (
-          <GaugeRow
-            key={branch.id}
-            branch={branch.branch}
-            value={branch.load}
-            jobs={branch.jobs}
-            rating={branch.rating}
-            color={branch.color}
-            breach={branch.breach}
-          />
-        ))}
+      <div className="dashboardChartCard__body">
+        <div className="capacityPressureList">
+          {rows.map((branch) => (
+            <GaugeRow
+              key={branch.id}
+              branch={branch.branch}
+              value={branch.load}
+              jobs={branch.jobs}
+              rating={branch.rating}
+              color={branch.color}
+              breach={branch.breach}
+            />
+          ))}
+        </div>
       </div>
     </Card>
   );

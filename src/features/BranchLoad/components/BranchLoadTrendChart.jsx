@@ -8,11 +8,14 @@ import {
   Legend,
 } from "chart.js";
 
+import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { useTheme } from "../../../context/ThemeContext";
 import { getChartColors } from "../../../config/chartOptions";
 import "./BranchLoadTrendChart.css";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import useDashboardFilters from "../../../context/useDashboardFilters";
+import { filterDataByPeriod } from "../../../utils/filterDataByPeriod";
 import { isAllBranches } from "../../../utils/branchFilters";
 
 ChartJS.register(
@@ -26,27 +29,37 @@ ChartJS.register(
 
 export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) {
   const { theme } = useTheme();
+  const { forecastDays } = useDashboardFilters();
   const colors = getChartColors(theme);
-  const filteredChart =
-    isAllBranches(selectedBranch) || !chart.branchIds
-      ? chart
-      : (() => {
-          const matchingIndices = chart.branchIds
-            .map((branchId, index) => (branchId === selectedBranch ? index : -1))
-            .filter((index) => index >= 0);
+  const branchFilteredChart = useMemo(() => {
+    if (isAllBranches(selectedBranch) || !chart?.branchIds) {
+      return chart;
+    }
 
-          if (!matchingIndices.length) return chart;
+    const matchingIndices = chart.branchIds
+      .map((branchId, index) => (branchId === selectedBranch ? index : -1))
+      .filter((index) => index >= 0);
 
-          return {
-            ...chart,
-            labels: matchingIndices.map((index) => chart.labels[index]),
-            branchIds: matchingIndices.map((index) => chart.branchIds[index]),
-            datasets: chart.datasets.map((dataset) => ({
-              ...dataset,
-              data: matchingIndices.map((index) => dataset.data[index]),
-            })),
-          };
-        })();
+    if (!matchingIndices.length) return chart;
+
+    return {
+      ...chart,
+      labels: matchingIndices.map((index) => chart.labels[index]),
+      branchIds: matchingIndices.map((index) => chart.branchIds[index]),
+      periodDates: Array.isArray(chart.periodDates)
+        ? matchingIndices.map((index) => chart.periodDates[index])
+        : chart.periodDates,
+      datasets: chart.datasets.map((dataset) => ({
+        ...dataset,
+        data: matchingIndices.map((index) => dataset.data[index]),
+      })),
+    };
+  }, [chart, selectedBranch]);
+
+  const filteredChart = useMemo(
+    () => filterDataByPeriod(branchFilteredChart, forecastDays, "periodDates"),
+    [branchFilteredChart, forecastDays],
+  );
 
   return (
     <div className="branchTrendCard">

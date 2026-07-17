@@ -2,11 +2,11 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 import { Doughnut } from "react-chartjs-2";
 
-import Card from "../../../components/Common/Card";
 import { getDoughnutOptions } from "../../../config/chartOptions";
 import { useTheme } from "../../../context/ThemeContext";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
 import { isAllBranches } from "../../../utils/branchFilters";
+import "./dashboardChartCard.css";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -39,46 +39,30 @@ export default function MachineMixChart({ data, selectedBranch = "ALL" }) {
           };
         })();
 
-  const chartTitleStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "8px",
-  fontSize: "20px",
-  fontWeight: 700,
-  color: "var(--text)",
-  lineHeight: 1.2,
-};
-
   const totalJobs = filteredData.total ?? 0;
 
   return (
-    <Card
-          title={
-            <div style={chartTitleStyle}>
-              <span style={chartTitleStyle}>Machine Type Mix</span>
-    
-              <InfoTooltip
-                position="bottom"
-                content="Breakdown of predicted job volume by machine type, showing which equipment categories will drive the most service demand."
-              >
-                <span className="infoIcon">i</span>
-              </InfoTooltip>
-            </div>
-          }
-          tag={`Total Jobs: ${totalJobs}`}
-          height="350px"
-        >
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          maxWidth: "380px",
-          height: "280px",
-          margin: "20px auto",
-        }}
-      >
-        <Doughnut data={filteredData} options={getDoughnutOptions(theme)} />
+    <div className="dashboardChartCard">
+      <div className="dashboardChartCard__top">
+        <div className="dashboardChartCard__titleGroup">
+          <h3 className="dashboardChartCard__title">Machine Type Mix</h3>
+
+          <InfoTooltip
+            position="bottom"
+            content="Breakdown of predicted job volume by machine type, showing which equipment categories will drive the most service demand."
+          >
+            <span className="infoIcon">i</span>
+          </InfoTooltip>
+        </div>
+
+        <span className="dashboardChartCard__meta">Total Jobs: {totalJobs}</span>
       </div>
-    </Card>
+
+      <div className="dashboardChartCard__body">
+        <div className="dashboardChartCard__chartShell">
+          <Doughnut data={filteredData} options={getDoughnutOptions(theme)} />
+        </div>
+      </div>
+    </div>
   );
 }

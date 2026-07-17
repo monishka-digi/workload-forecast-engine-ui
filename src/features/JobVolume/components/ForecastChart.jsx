@@ -8,10 +8,14 @@ import {
   Tooltip,
 } from "chart.js";
 
+import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { getCommonOptions } from "../../../config/chartOptions";
 import { useTheme } from "../../../context/ThemeContext";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import useDashboardFilters from "../../../context/useDashboardFilters";
+import { filterDataByPeriod } from "../../../utils/filterDataByPeriod";
+import "./dashboardChartCard.css";
 
 ChartJS.register(
   CategoryScale,
@@ -24,8 +28,13 @@ ChartJS.register(
 
 export default function ForecastChart({ data }) {
   const { theme } = useTheme();
+  const { forecastDays } = useDashboardFilters();
 
   if (!data) return null;
+  const filteredData = useMemo(
+    () => filterDataByPeriod(data, forecastDays, "periodDates"),
+    [data, forecastDays],
+  );
   const options = getCommonOptions(theme);
   options.scales.y.title = {
     display: true,
@@ -33,52 +42,13 @@ export default function ForecastChart({ data }) {
   };
 
   return (
-    <div
-      style={{
-        height: 350,
-        background: "var(--card-bg)",
-        border: "1px solid var(--border)",
-        borderRadius: 12,
-        padding: 20,
-        marginBottom: 10,
-        minWidth: 0,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 18,
-          gap: 12,
-          flexWrap: "wrap",
-          minWidth: 0,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            minWidth: 0,
-          }}
-        >
-          <h3
-            style={{
-              margin: 0,
-              fontSize: 20,
-              fontWeight: 700,
-              color: "var(--text)",
-            }}
-          >
-            Job Demand Trend
-          </h3>
+    <div className="dashboardChartCard">
+      <div className="dashboardChartCard__top">
+        <div className="dashboardChartCard__titleGroup">
+          <h3 className="dashboardChartCard__title">Job Demand Trend</h3>
 
           <InfoTooltip
-           position="bottom"
+            position="bottom"
             content="Forecasted vs. actual job volume over time. Actual values are shown only where historical data exists, while the forecast extends across the entire prediction horizon. This chart helps compare predicted workload against actual job counts week over week."
           >
             <span className="infoIcon">i</span>
@@ -86,8 +56,10 @@ export default function ForecastChart({ data }) {
         </div>
       </div>
 
-      <div style={{ height: "280px", minHeight: 0, minWidth: 0 }}>
-        <Line data={data} options={options} />
+      <div className="dashboardChartCard__body">
+        <div className="dashboardChartCard__chartShell">
+        <Line data={filteredData} options={options} />
+        </div>
       </div>
     </div>
   );

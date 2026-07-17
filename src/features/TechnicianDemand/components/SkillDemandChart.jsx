@@ -14,6 +14,7 @@ import Card from "../../../components/Common/Card";
 import { useTheme } from "../../../context/ThemeContext";
 import { getGroupedHorizontalBarOptions } from "../../../config/chartOptions";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import "../../JobVolume/components/dashboardChartCard.css";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -68,14 +69,12 @@ export default function SkillDemandChart({ data }) {
         </div>
       }
       tag="Technician Demand"
-      height="420px"
+      height="clamp(390px, 40vw, 480px)"
     >
-      <div
-        style={{
-          height: 320,
-        }}
-      >
-        <Bar data={data} options={options} />
+      <div className="dashboardChartCard__body">
+        <div className="dashboardChartCard__chartShell">
+          <Bar data={data} options={options} />
+        </div>
       </div>
     </Card>
   );

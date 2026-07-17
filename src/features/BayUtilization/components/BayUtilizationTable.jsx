@@ -32,7 +32,6 @@ export default function BayUtilizationTable({ rows = [] }) {
               
               <th>BRANCH</th>
               <th>BAY TYPE</th>
-              <th>PERIOD</th>
               <th>UTILIZATION</th>
               {/* <th>DAY 10 - DAY 90</th> */}
               <th>JOBS</th>
@@ -48,8 +47,6 @@ export default function BayUtilizationTable({ rows = [] }) {
                 <td>{row.branch}</td>
 
                 <td>{row.bayType}</td>
-
-                <td>{new Date(row.period).toLocaleDateString("en-CA")}</td>
 
                 <td>{Number(row.utilization).toFixed(1)}%</td>
 
@@ -72,20 +69,8 @@ export default function BayUtilizationTable({ rows = [] }) {
                 </td>
 
                 <td>
-                  {row.actions?.canScheduleMaintenance && (
-                    <button className="outlineBtn">Schedule Maintenance</button>
-                  )}
-
-                  {row.actions?.canTriggerOverflowAlert && (
-                    <button className="outlineBtn">Trigger Alert</button>
-                  )}
-
                   {row.actions?.canViewDetail && (
-                    <button className="ghostBtn">View</button>
-                  )}
-
-                  {row.actions?.canExport && (
-                    <button className="ghostBtn">Export</button>
+                    <button className="approveBtn">View</button>
                   )}
                 </td>
               </tr>

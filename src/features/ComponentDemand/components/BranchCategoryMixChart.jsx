@@ -13,6 +13,7 @@ import Card from "../../../components/Common/Card";
 import { useTheme } from "../../../context/ThemeContext";
 import { getChartColors } from "../../../config/chartOptions";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import "../../JobVolume/components/dashboardChartCard.css";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -108,18 +109,12 @@ export default function BranchCategoryMixChart({ data }) {
         </div>
       }
       tag="Stacked Forecast"
-      height="350px"
+      height="clamp(340px, 36vw, 430px)"
     >
-      <div
-        style={{
-          position: "relative",
-          minHeight: 0,
-          height: "270px",
-          maxHeight: "270px",
-          overflow: "hidden",
-        }}
-      >
-        <Bar data={data} options={options} />
+      <div className="dashboardChartCard__body">
+        <div className="dashboardChartCard__chartShell">
+          <Bar data={data} options={options} />
+        </div>
       </div>
     </Card>
   );

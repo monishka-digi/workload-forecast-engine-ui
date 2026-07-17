@@ -15,6 +15,10 @@ const DEFAULT_BRANCH_LIST = [
   { branch_id: "B2004", branch_name: "Chennai South Branch" },
 ];
 
+const DEFAULT_BRANCH_LOOKUP = new Map(
+  DEFAULT_BRANCH_LIST.map(({ branch_id, branch_name }) => [branch_id, branch_name]),
+);
+
 export const DEFAULT_BRANCH_OPTIONS = [
   { value: "ALL", label: "All Branches" },
   ...DEFAULT_BRANCH_LIST.map(({ branch_id, branch_name }) => ({
@@ -29,7 +33,10 @@ const normalizeBranchOption = (option) => {
   if (typeof option === "string") {
     return option === "ALL"
       ? { value: "ALL", label: "All Branches" }
-      : { value: option, label: option };
+      : {
+          value: option,
+          label: DEFAULT_BRANCH_LOOKUP.get(option) ?? option,
+        };
   }
 
   const value = option.value ?? option.branch_id ?? option.branchId ?? "ALL";
@@ -37,6 +44,7 @@ const normalizeBranchOption = (option) => {
     option.branch_name ??
     option.branchName ??
     option.label ??
+    DEFAULT_BRANCH_LOOKUP.get(value) ??
     value;
 
   return {

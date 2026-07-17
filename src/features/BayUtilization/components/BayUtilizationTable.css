@@ -66,30 +66,19 @@
   color: var(--status-critical-text);
 }
 
-.outlineBtn {
-  border: 1px solid #34d399;
-  background: none;
-  color: #34d399;
+.approveBtn {
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--primary-border);
   padding: 7px 14px;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   margin-right: 8px;
+  font-weight: 600;
+  transition: 0.2s;
 }
 
-.ghostBtn {
-  border: 1px solid #3b4557;
-  background: none;
-  color: #c9d2df;
-  padding: 7px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.outlineBtn:hover {
-  background: #34d399;
-  color: #111;
-}
-
-.ghostBtn:hover {
-  background: #2a3242;
+.approveBtn:hover {
+  background: var(--primary);
+  color: #fff;
 }

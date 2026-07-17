@@ -132,6 +132,7 @@ export const mapJobVolumeData = (
         month: "short",
       })
     ),
+    periodDates: trend.map((item) => item.period_date),
 
     datasets: [
       {

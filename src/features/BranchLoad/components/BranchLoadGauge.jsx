@@ -1,8 +1,11 @@
+import { useMemo } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 import { Doughnut } from "react-chartjs-2";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import useDashboardFilters from "../../../context/useDashboardFilters";
 import { filterRowsByBranch } from "../../../utils/branchFilters";
+import { buildBranchColorMap, getBranchColor } from "../../../utils/branchColors";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -12,11 +15,19 @@ export default function BranchLoadGauge({
   data = [],
   selectedBranch = "ALL",
 }) {
+  const { branchOptions } = useDashboardFilters();
   const scopedData =
     selectedBranch === "ALL"
       ? data
       : filterRowsByBranch(data, selectedBranch);
   const rows = scopedData.length ? scopedData : data;
+
+  const colorMap = useMemo(
+    () => buildBranchColorMap(branchOptions, rows.map((item) => item.id)),
+    [branchOptions, rows],
+  );
+
+  const backgroundColors = rows.map((item) => getBranchColor(item.id, colorMap));
 
   const chartData = {
     labels: rows.map((x) => x.branch),
@@ -25,19 +36,8 @@ export default function BranchLoadGauge({
       {
         data: rows.map((x) => x.load),
 
-        backgroundColor: [
-          "#12BE83",
-          "#D8DEE9",
-          // "#12BE83",
-          // "#1CC88A",
-          // "#36D399",
-          // "#7BDCB5",
-          // "#FFD54F",
-          // "#FFB300",
-          // "#FF8A65",
-          // "#EF5350",
-          // "#AB47BC",
-        ],
+        backgroundColor: backgroundColors,
+        hoverBackgroundColor: backgroundColors,
 
         borderWidth: 1,
       },
@@ -70,38 +70,43 @@ export default function BranchLoadGauge({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "320px",
+          width: "100%",
+          flex: 1,
+          minHeight: 0,
         }}
       >
-        <div
-          style={{
-            width: 350,
-            height: 290,
-          }}
-        >
-          <Doughnut
-            data={chartData}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              cutout: "58%",
+        <div className="branchGaugeBody">
+          <div
+            style={{
+              width: "100%",
+              maxWidth: 420,
+              aspectRatio: "1 / 1",
+            }}
+          >
+            <Doughnut
+              data={chartData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "58%",
 
-              plugins: {
-                legend: {
-                  position: "right",
-                  align: "center",
+                plugins: {
+                  legend: {
+                    position: "right",
+                    align: "center",
 
-                  labels: {
-                    boxWidth: 16,
-                    boxHeight: 16,
-                    padding: 14,
-                    usePointStyle: false,
-                    color: "var(--text)",
+                    labels: {
+                      boxWidth: 16,
+                      boxHeight: 16,
+                      padding: 14,
+                      usePointStyle: false,
+                      color: "var(--text)",
+                    },
                   },
                 },
-              },
-            }}
-          />
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
