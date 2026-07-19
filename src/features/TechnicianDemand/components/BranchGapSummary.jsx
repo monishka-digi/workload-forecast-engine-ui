@@ -9,6 +9,8 @@ export default function BranchGapSummary({ summary = [] }) {
 
   return (
     <div className="gapSummaryCard">
+      <h3 className="gapSummaryTitle">Headcount Gap Summary</h3>
+
       <div className="gapSummaryGrid">
         <div className="gapMiniCard">
           <span>Total Gap</span>

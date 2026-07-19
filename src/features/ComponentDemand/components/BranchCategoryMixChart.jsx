@@ -61,6 +61,15 @@ export default function BranchCategoryMixChart({ data }) {
     scales: {
       x: {
         stacked: true,
+        title: {
+          display: true,
+          text: "Branches",
+          color: colors.text,
+          font: {
+            size: 12,
+            weight: 600,
+          },
+        },
         ticks: {
           color: colors.muted,
           autoSkip: false,
@@ -78,7 +87,7 @@ export default function BranchCategoryMixChart({ data }) {
         stacked: true,
         title: {
           display: true,
-          text: "Branches",
+          text: "Quantity",
           color: colors.text,
           font: {
             size: 12,

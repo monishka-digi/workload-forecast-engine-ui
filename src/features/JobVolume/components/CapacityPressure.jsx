@@ -49,7 +49,7 @@ export default function CapacityPressure({
               branch={branch.branch}
               value={branch.load}
               jobs={branch.jobs}
-              rating={branch.rating}
+              // rating={branch.rating}
               color={branch.color}
               breach={branch.breach}
             />
