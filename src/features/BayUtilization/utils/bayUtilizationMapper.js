@@ -78,6 +78,7 @@ export const mapBayUtilizationData = (response, forecastDays = 30) => {
       metadata.forecast_horizon_days ??
       forecastDays,
   );
+  const horizonLabel = `${currentHorizon}D`;
 
   const avgUtilization = pick(
     summary.avg_utilization_pct,
@@ -107,7 +108,7 @@ export const mapBayUtilizationData = (response, forecastDays = 30) => {
 
   const kpis = [
     {
-      title: "Average Utilization (30D)",
+      title: `Average Utilization (${horizonLabel})`,
       value: `${toPercent(avgUtilization).toFixed(1)}%`,
       subText: `${currentHorizon}-day forecast horizon`,
       positive: true,
@@ -232,3 +233,4 @@ export const mapBayUtilizationData = (response, forecastDays = 30) => {
     },
   };
 };
+ 
