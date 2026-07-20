@@ -14,8 +14,6 @@ import { useTheme } from "../../../context/ThemeContext";
 import { getChartColors } from "../../../config/chartOptions";
 import "./BranchLoadTrendChart.css";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
-import useDashboardFilters from "../../../context/useDashboardFilters";
-import { filterDataByPeriod } from "../../../utils/filterDataByPeriod";
 import { isAllBranches } from "../../../utils/branchFilters";
 
 ChartJS.register(
@@ -29,7 +27,6 @@ ChartJS.register(
 
 export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) {
   const { theme } = useTheme();
-  const { forecastDays } = useDashboardFilters();
   const colors = getChartColors(theme);
   const branchFilteredChart = useMemo(() => {
     if (isAllBranches(selectedBranch) || !chart?.branchIds) {
@@ -56,11 +53,6 @@ export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) 
     };
   }, [chart, selectedBranch]);
 
-  const filteredChart = useMemo(
-    () => filterDataByPeriod(branchFilteredChart, forecastDays, "periodDates"),
-    [branchFilteredChart, forecastDays],
-  );
-
   return (
     <div className="branchTrendCard">
       <div className="branchTrendHeader">
@@ -86,7 +78,7 @@ export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) 
 
       <div className="branchTrendBody">
         <Line
-          data={filteredChart}
+          data={branchFilteredChart}
           options={{
             responsive: true,
             maintainAspectRatio: false,

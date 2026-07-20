@@ -1,4 +1,5 @@
 import "./PredictionTable.css";
+import InfoTooltip from "../../../components/Common/InfoTooltip";
 
 function LoadBadge({ status }) {
   const colorMap = {
@@ -122,7 +123,24 @@ export default function PredictionTable({
               <th>Geography</th>
               <th>Period</th>
               <th>{selectedForecastLabel}</th>
-              <th>P10 - P90</th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  <span>P10 - P90</span>
+
+                  <InfoTooltip
+                    position="bottom"
+                    content="Shows the expected forecast range, from lower-demand to higher-demand scenarios"
+                  >
+                    <span className="infoIcon">i</span>
+                  </InfoTooltip>
+                </div>
+              </th>
               <th>Load %</th>
               <th>Status</th>
               <th>Confidence</th>

@@ -40,7 +40,7 @@ export default function CapacityPressure({
             </div>
           }
           height="clamp(360px, 40vw, 470px)"
-        >
+        >         21   
       <div className="dashboardChartCard__body">
         <div className="capacityPressureList">
           {rows.map((branch) => (

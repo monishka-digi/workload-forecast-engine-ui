@@ -8,13 +8,10 @@ import {
   Tooltip,
 } from "chart.js";
 
-import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { getCommonOptions } from "../../../config/chartOptions";
 import { useTheme } from "../../../context/ThemeContext";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
-import useDashboardFilters from "../../../context/useDashboardFilters";
-import { filterDataByPeriod } from "../../../utils/filterDataByPeriod";
 import "./dashboardChartCard.css";
 
 ChartJS.register(
@@ -28,13 +25,8 @@ ChartJS.register(
 
 export default function ForecastChart({ data }) {
   const { theme } = useTheme();
-  const { forecastDays } = useDashboardFilters();
 
   if (!data) return null;
-  const filteredData = useMemo(
-    () => filterDataByPeriod(data, forecastDays, "periodDates"),
-    [data, forecastDays],
-  );
   const options = getCommonOptions(theme);
   options.scales.y.title = {
     display: true,
@@ -58,7 +50,7 @@ export default function ForecastChart({ data }) {
 
       <div className="dashboardChartCard__body">
         <div className="dashboardChartCard__chartShell">
-        <Line data={filteredData} options={options} />
+        <Line data={data} options={options} />
         </div>
       </div>
     </div>
