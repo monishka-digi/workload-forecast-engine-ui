@@ -1,0 +1,20 @@
+.capacityPressureList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+  min-height: 0;
+  min-width: 0;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.capacityPressureList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.capacityPressureList::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}

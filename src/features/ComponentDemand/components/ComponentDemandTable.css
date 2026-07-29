@@ -1,0 +1,73 @@
+.componentTableCard {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+.componentTableWrapper {
+    overflow-x: auto;
+}
+
+.componentTable {
+    width: 100%;
+    min-width: 980px;
+    border-collapse: collapse;
+}
+
+.componentTable th,
+.componentTable td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+}
+
+.componentTable th {
+    color: var(--text-secondary);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.componentTable td {
+    color: var(--text);
+    font-size: 14px;
+}
+
+.reasoningCell {
+    min-width: 320px;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.45;
+    max-width: 520px;
+}
+
+.riskBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+  height: 28px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.riskBadge.high {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+.riskBadge.medium {
+  background: var(--warning-light);
+  color: var(--warning);
+}
+
+.riskBadge.low {
+  background: var(--success-light);
+  color: var(--success);
+}

@@ -1,0 +1,90 @@
+.gapSummaryCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.gapSummaryTitle {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.gapSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.gapMiniCard {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  min-height: 76px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.gapMiniCard span {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.gapMiniCard strong {
+  font-size: 22px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.gapMiniCard small {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.gapTableWrap {
+  margin-top: 14px;
+  overflow-x: auto;
+}
+
+.gapTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.gapTable th,
+.gapTable td {
+  padding: 10px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.gapTable th {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.gapTable td {
+  color: var(--text);
+}
+
+.gapTable .danger {
+  color: var(--status-critical-text);
+  font-weight: 700;
+}
+
+.gapTable .ok {
+  color: var(--text);
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .gapSummaryGrid {
+    grid-template-columns: 1fr;
+  }
+}

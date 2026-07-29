@@ -1,6 +1,9 @@
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./topbar.css";
 import { useTheme } from "../../context/ThemeContext";
+import { DEFAULT_BRANCH_OPTIONS } from "../../context/DashboardFilterContext";
+import useDashboardFilters from "../../context/useDashboardFilters";
 
 export default function Topbar() {
   const { pathname } = useLocation();
@@ -34,6 +37,26 @@ export default function Topbar() {
     subtitle: "",
   };
 
+  const {
+    forecastDays,
+    setForecastDays,
+    selectedBranch,
+    setSelectedBranch,
+    branchOptions,
+  } = useDashboardFilters();
+
+  const branchSelectOptions = branchOptions?.length
+    ? branchOptions
+    : DEFAULT_BRANCH_OPTIONS;
+
+  useEffect(() => {
+    const options = branchOptions?.length ? branchOptions : DEFAULT_BRANCH_OPTIONS;
+
+    if (!options.some((option) => option.value === selectedBranch)) {
+      setSelectedBranch(options[0]?.value || "ALL");
+    }
+  }, [branchOptions, selectedBranch, setSelectedBranch]);
+
   return (
     <div className="topbar">
       <div>
@@ -43,16 +66,28 @@ export default function Topbar() {
       </div>
 
       <div className="right">
-        <select defaultValue="30">
-          <option value="30">Next 30 Days</option>
-          <option value="60">Next 60 Days</option>
-          <option value="90">Next 90 Days</option>
+        <select
+          className="topbarSelect"
+          value={forecastDays}
+          onChange={(e) => setForecastDays(Number(e.target.value))}
+          aria-label="Select forecast horizon"
+        >
+          <option value={30}>Next 30 Days</option>
+          <option value={60}>Next 60 Days</option>
+          <option value={90}>Next 90 Days</option>
         </select>
 
-        <select defaultValue="all">
-          <option value="all">All Branches</option>
-          <option value="chennai">Chennai</option>
-          <option value="nagpur">Nagpur</option>
+        <select
+          className="topbarSelect"
+          value={selectedBranch}
+          onChange={(e) => setSelectedBranch(e.target.value)}
+          aria-label="Select branch"
+        >
+          {branchSelectOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
         </select>
 
         <div className="live">● Live</div>

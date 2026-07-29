@@ -1,4 +1,4 @@
-import InfoTooltip from "./Tooltip/InfoTooltip";
+import InfoTooltip from "./InfoTooltip";
 
 export default function ChartTitle({
   title,

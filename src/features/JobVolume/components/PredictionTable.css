@@ -1,0 +1,176 @@
+.predictionCard {
+  background: var(--card-bg);
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  padding: 22px;
+
+  margin-top: 20px;
+  color: var(--text);
+}
+
+.tableHeader {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 18px;
+}
+
+.tableHeader h3 {
+  font-size: 24px;
+
+  font-weight: 600;
+
+  color: var(--text);
+}
+
+.tableHeader span {
+  font-size: 12px;
+
+  color: var(--text-secondary);
+}
+
+.tableWrapper {
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+thead tr {
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  padding: 16px 14px;
+
+  text-align: left;
+
+  font-size: 12px;
+
+  letter-spacing: 1px;
+
+  color: var(--text-secondary);
+
+  font-weight: 600;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--divider);
+
+  transition: 0.2s;
+}
+
+tbody tr:hover {
+  background: var(--card-hover);
+}
+
+td {
+  padding: 18px 14px;
+
+  font-size: 15px;
+
+  color: var(--text);
+
+  white-space: nowrap;
+}
+
+.confidenceCell {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.confidenceTrack {
+  width: 80px;
+
+  height: 7px;
+
+  background: var(--divider);
+
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+.confidenceFill {
+  height: 100%;
+
+  background: var(--primary);
+
+  border-radius: 20px;
+}
+
+.approveBtn {
+  background: var(--primary-light);
+
+  color: var(--primary);
+
+  border: 1px solid var(--primary-border);
+
+  padding: 7px 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  margin-right: 8px;
+
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.editBtn {
+  background: transparent;
+
+  border: 1px solid var(--border);
+
+  color: var(--text-secondary);
+
+  padding: 7px 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.approveBtn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.editBtn:hover {
+  background: var(--card-hover);
+}
+
+.tableBtn {
+  background: transparent;
+  border: 1px solid #2cc6a3;
+  color: #2cc6a3;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin-right: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.tableBtn:hover {
+  background: #2cc6a315;
+}
+
+.tableBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

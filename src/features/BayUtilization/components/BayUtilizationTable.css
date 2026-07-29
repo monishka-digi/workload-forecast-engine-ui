@@ -1,0 +1,84 @@
+.bayTableCard {
+  margin-top: 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.bayTableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.bayTableHeader h3 {
+  color: var(--chart-label);
+  font-size: 20px;
+  margin: 0;
+}
+
+.bayTableHeader span {
+  color: #8895aa;
+  font-size: 13px;
+}
+
+.bayTableWrapper {
+  overflow-x: auto;
+}
+
+.bayTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bayTable th {
+  color: #7d8aa4;
+  text-align: left;
+  padding: 16px;
+  font-size: 13px;
+  border-bottom: 1px solid #2b3342;
+}
+
+.bayTable td {
+  padding: 18px 16px;
+  color: var(--chart-label);
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.bayStatus {
+  padding: 6px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bayStatus.normal {
+  background: var(--status-normal-bg);
+  color: var(--status-normal-text);
+}
+
+.bayStatus.critical {
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.approveBtn {
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--primary-border);
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 8px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.approveBtn:hover {
+  background: var(--primary);
+  color: #fff;
+}
