@@ -78,6 +78,8 @@ export const mapBranchLoadData = (
 
   const gaugeChart = branchRows.map((item) => ({
     id: item.branch_id,
+    branch_id: item.branch_id,
+    branch_name: item.branch_name,
     branch: formatBranchLabel(item.branch_name),
     geography: item.geography_zone,
     load: Number(item[`combined_load_pct_${horizon}`] ?? item.combined_load_pct ?? 0),

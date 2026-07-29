@@ -41,6 +41,7 @@ export default function BranchLoad() {
         <BranchLoadGauge
           data={dashboard.charts.gauge}
           selectedBranch={selectedBranch}
+          forecastDays={forecastDays}
         />
       }
       topRight={

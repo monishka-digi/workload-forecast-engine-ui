@@ -1,113 +1,95 @@
-import { useMemo } from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-
-import { Doughnut } from "react-chartjs-2";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
 import useDashboardFilters from "../../../context/useDashboardFilters";
 import { filterRowsByBranch } from "../../../utils/branchFilters";
-import { buildBranchColorMap, getBranchColor } from "../../../utils/branchColors";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 import "./BranchLoadGauge.css";
 
 export default function BranchLoadGauge({
   data = [],
   selectedBranch = "ALL",
+  forecastDays = 30,
 }) {
   const { branchOptions } = useDashboardFilters();
+
   const scopedData =
     selectedBranch === "ALL"
       ? data
       : filterRowsByBranch(data, selectedBranch);
-  const rows = scopedData.length ? scopedData : data;
 
-  const colorMap = useMemo(
-    () => buildBranchColorMap(branchOptions, rows.map((item) => item.id)),
-    [branchOptions, rows],
+  const rows = [...(scopedData.length ? scopedData : data)].sort(
+    (left, right) => Number(right.load ?? 0) - Number(left.load ?? 0),
   );
 
-  const backgroundColors = rows.map((item) => getBranchColor(item.id, colorMap));
+  const averageLoad = rows.length
+    ? rows.reduce((sum, item) => sum + Number(item.load ?? 0), 0) / rows.length
+    : 0;
 
-  const chartData = {
-    labels: rows.map((x) => x.branch),
-
-    datasets: [
-      {
-        data: rows.map((x) => x.load),
-
-        backgroundColor: backgroundColors,
-        hoverBackgroundColor: backgroundColors,
-
-        borderWidth: 1,
-      },
-    ],
-  };
+  const branchLabel =
+    selectedBranch === "ALL"
+      ? "All Branches"
+      : branchOptions.find((option) => option.value === selectedBranch)?.label ??
+        selectedBranch;
 
   return (
     <div className="branchGaugeCard">
       <div className="branchGaugeHeader">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          <h3>Branch Load Gauge</h3>
+        <div className="branchGaugeTitleGroup">
+          <h3>Branch Load by Branch</h3>
 
           <InfoTooltip
             position="bottom"
-            content="Shows relative share of overall workload/demand split between Nagpur and Chennai branches, giving a quick at-a-glance view of which branch is carrying more of the total load."
+            content="This chart shows the predicted load percentage for each branch across the selected horizon. It mirrors the bay utilization view so you can compare branch pressure at a glance."
           >
             <span className="infoIcon">i</span>
           </InfoTooltip>
         </div>
+
+        <span>
+          {branchLabel} | Avg {averageLoad.toFixed(1)}% | {forecastDays} Days
+        </span>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
-          flex: 1,
-          minHeight: 0,
-        }}
-      >
-        <div className="branchGaugeBody">
-          <div
-            style={{
-              width: "100%",
-              maxWidth: 420,
-              aspectRatio: "1 / 1",
-            }}
-          >
-            <Doughnut
-              data={chartData}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: "58%",
+      <div className="branchGaugeBody">
+        {rows.map((item) => (
+          <div key={item.id} className="gaugeRow">
+            <div className="gaugeInfo">
+              <h4>{item.branch}</h4>
+              <p>
+                {item.geography} | {Math.ceil(Number(item.jobs ?? 0))} jobs |{" "}
+                {item.capacity} bays
+              </p>
+            </div>
 
-                plugins: {
-                  legend: {
-                    position: "right",
-                    align: "center",
+            <div className="gaugeBarContainer">
+              <div className="gaugeTrack">
+                <div
+                  className={`gaugeFill ${
+                    item.load >= 90
+                      ? "danger"
+                      : item.load >= 75
+                        ? "warning"
+                        : "normal"
+                  }`}
+                  style={{
+                    width: `${Math.min(Number(item.load ?? 0), 100)}%`,
+                  }}
+                />
+              </div>
 
-                    labels: {
-                      boxWidth: 16,
-                      boxHeight: 16,
-                      padding: 14,
-                      usePointStyle: false,
-                      color: "var(--text)",
-                    },
-                  },
-                },
-              }}
-            />
+              <span
+                className={
+                  item.load >= 90
+                    ? "dangerText"
+                    : item.load >= 75
+                      ? "warningText"
+                      : "normalText"
+                }
+              >
+                {Number(item.load ?? 0).toFixed(1)}%
+              </span>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );
