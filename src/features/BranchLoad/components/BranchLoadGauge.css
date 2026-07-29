@@ -14,7 +14,15 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap: 16px;
     margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.branchGaugeTitleGroup {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .branchGaugeHeader h3{
@@ -27,19 +35,22 @@
 .branchGaugeHeader span{
     color: var(--text);
     font-size:13px;
+    white-space: nowrap;
 }
 
 .branchGaugeBody{
     display:flex;
+    flex-direction: column;
     flex:1;
     min-height:0;
-    align-items:center;
-    justify-content:center;
+    align-items:stretch;
+    justify-content:flex-start;
+    overflow-y: auto;
 }
 
 .gaugeRow{
     display:grid;
-    grid-template-columns:130px 1fr;
+    grid-template-columns:minmax(130px, 220px) 1fr;
     gap:18px;
     align-items:center;
     padding:18px 0;
@@ -100,6 +111,14 @@
     );
 }
 
+.gaugeFill.warning{
+    background:linear-gradient(
+        90deg,
+        #ffd000 0%,
+        #ff8a3d 100%
+    );
+}
+
 .gaugeFill.danger{
     background:linear-gradient(
         90deg,
@@ -116,9 +135,31 @@
     font-weight:600;
 }
 
+.warningText{
+    width:58px;
+    text-align:right;
+    color:#ffb347;
+    font-weight:700;
+}
+
 .dangerText{
     width:58px;
     text-align:right;
     color:#ff5f5f;
     font-weight:700;
+}
+
+@media (max-width: 768px) {
+    .gaugeRow {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .gaugeBarContainer {
+        align-items: flex-start;
+    }
+
+    .branchGaugeHeader span {
+        white-space: normal;
+    }
 }
