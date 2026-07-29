@@ -1,0 +1,33 @@
+.costStackedCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.costStackedEmpty {
+  color: var(--text-secondary);
+  font-size: 14px;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.costStackedCard h3 {
+  margin: 0 0 16px 0;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.costStackedCanvasWrap {
+  height: 300px;
+  position: relative;
+}
+
+.costStackedNote {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin: 12px 0 0 0;
+}

@@ -15,6 +15,9 @@ export default function DashboardLayout({
   bottomLeft,
   bottomRight,
 
+  footerLeft,
+  footerRight,
+
   table,
 }) {
   const renderRow = (left, right) => {
@@ -53,6 +56,9 @@ export default function DashboardLayout({
 
       {/* Third Row */}
       {renderRow(bottomLeft, bottomRight)}
+
+      {/* Fourth Row */}
+      {renderRow(footerLeft, footerRight)}
 
       {table}
     </>

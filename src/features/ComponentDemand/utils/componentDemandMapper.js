@@ -30,6 +30,32 @@ const formatCurrency = (value) =>
     maximumFractionDigits: 0,
   }).format(toNumber(value));
 
+// Shared category color map so the same category reads as the same color
+// across CategoryDemandChart, BranchCategoryMixChart, and the trend chart.
+// Falls back to the existing mix-chart palette for any category not listed.
+const CATEGORY_COLORS = {
+  Engine: "#f5b400",
+  Hydraulic: "#12BE83",
+  Electrical: "#8bc34a",
+  Transmission: "#cddc39",
+  Undercarriage: "#66bb6a",
+  // Cooling: "#a5d6a7",
+};
+
+const CATEGORY_COLOR_FALLBACK = [
+  "#f5b400",
+  "#12BE83",
+  "#8bc34a",
+  "#cddc39",
+  "#66bb6a",
+  "#a5d6a7",
+  "#7cb342",
+  "#d4e157",
+];
+
+const colorForCategory = (label, index) =>
+  CATEGORY_COLORS[label] || CATEGORY_COLOR_FALLBACK[index % CATEGORY_COLOR_FALLBACK.length];
+
 const buildHeatmap = (rows = []) => {
   const grouped = {};
 
@@ -55,17 +81,6 @@ const buildBranchCategoryMix = (rows = []) => {
   const branches = [...new Set(rows.map((item) => formatBranchLabel(item.branch_name)))];
   const categories = [...new Set(rows.map((item) => item.category))];
 
-  const colors = [
-    "#f5b400",
-    "#12BE83",
-    "#8bc34a",
-    "#cddc39",
-    "#66bb6a",
-    "#a5d6a7",
-    "#7cb342",
-    "#d4e157",
-  ];
-
   return {
     labels: branches,
     datasets: categories.map((category, index) => ({
@@ -77,7 +92,7 @@ const buildBranchCategoryMix = (rows = []) => {
 
         return row ? toNumber(row.predicted_qty_30d) : 0;
       }),
-      backgroundColor: colors[index % colors.length],
+      backgroundColor: colorForCategory(category, index),
       borderRadius: 4,
       borderSkipped: false,
     })),
@@ -92,11 +107,16 @@ const buildCategoryDemandFromRows = (rows = []) => {
     totals.set(category, (totals.get(category) ?? 0) + toNumber(item.predicted_qty_30d));
   });
 
+  const labels = Array.from(totals.keys());
+
   return {
-    labels: Array.from(totals.keys()),
+    labels,
     datasets: [
       {
+        label: "Predicted Qty",
         data: Array.from(totals.values()),
+        backgroundColor: labels.map((label, i) => colorForCategory(label, i)),
+        borderRadius: 6,
       },
     ],
   };
@@ -120,36 +140,189 @@ const buildAccuracyChart = (rows = []) => ({
   ],
 });
 
-const buildTrendChart = (trendRows = []) => ({
-  labels: trendRows.map((item) =>
+/**
+ * cost_impact_stacked_bar rows look like:
+ *   { period_date, Engine: 197, Hydraulic: 219, Electrical: 162, Transmission: 554 }
+ * i.e. one row per period with a numeric field per category. Categories are
+ * derived from the row keys themselves (excluding period_date) rather than
+ * hardcoded, so a category added to the API response shows up automatically.
+ *
+ * Note: per the API's own data_quality_flags, Hydraulic and Transmission
+ * have no matched unit_cost data in this model run, so these figures are
+ * quantity-shaped, not a validated cost figure, for those two categories.
+ */
+const buildCostImpactStackedBar = (rows = []) => {
+  if (rows.length === 0) return { labels: [], datasets: [] };
+
+  const categories = Object.keys(rows[0]).filter((key) => key !== "period_date");
+  const labels = rows.map((row) =>
+    new Date(row.period_date).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+    }),
+  );
+
+  return {
+    labels,
+    datasets: categories.map((category, index) => ({
+      label: category,
+      data: rows.map((row) => toNumber(row[category])),
+      backgroundColor: colorForCategory(category, index),
+      borderRadius: 4,
+      borderSkipped: false,
+      stack: "cost",
+    })),
+  };
+};
+
+/**
+ * machine_type_to_category_sankey has casing/whitespace variants of the same
+ * machine type (e.g. "CAT 336D" / "Cat 336D" / "cat 336d") flagged in the
+ * API's own data_quality_flags as a naming mismatch. Merges those into one
+ * canonical node (first-seen casing wins) and sums their values, rather than
+ * showing near-duplicate rows in the diagram.
+ *
+ * Returns { fromNodes, toNodes, links } — a plain normalized link list, not
+ * a Chart.js data object, since Chart.js has no built-in sankey chart type.
+ * MachineCategorySankey renders this directly as SVG.
+ */
+const buildSankey = (links = []) => {
+  const merged = new Map(); // "canonicalFrom|to" -> summed value
+  const canonicalNames = new Map(); // lowercase key -> first-seen display name
+
+  links.forEach((link) => {
+    const key = link.from.trim().toLowerCase();
+    if (!canonicalNames.has(key)) canonicalNames.set(key, link.from.trim());
+    const canonicalFrom = canonicalNames.get(key);
+    const mergedKey = `${canonicalFrom}|${link.to}`;
+    merged.set(mergedKey, (merged.get(mergedKey) ?? 0) + link.value);
+  });
+
+  const normalizedLinks = Array.from(merged, ([mergedKey, value]) => {
+    const [from, to] = mergedKey.split("|");
+    return { from, to, value };
+  });
+
+  return {
+    fromNodes: Array.from(new Set(normalizedLinks.map((l) => l.from))),
+    toNodes: Array.from(new Set(normalizedLinks.map((l) => l.to))),
+    links: normalizedLinks,
+  };
+};
+
+/**
+ * Builds the trend chart's Chart.js data object plus the index of the row
+ * where the forecast begins ("today"), so the component can drop a marker
+ * there without needing to re-parse dates itself.
+ *
+ * IMPORTANT: actual_qty is null on forecast-period rows in the API response.
+ * Previously this went through toNumber() and became 0, which made the
+ * "Actual Qty" line visibly crash to zero right at the forecast boundary
+ * instead of just stopping. Forecast rows are now left as null (and Actual
+ * Qty is only ever read from non-forecast rows), so the line correctly ends
+ * rather than dropping to zero.
+ *
+ * @param {Array<{period_date, predicted_qty, predicted_qty_p10, predicted_qty_p90, actual_qty, is_forecast}>} trendRows
+ * @param {string} [todayMarker] - graph_data.current_date_marker, e.g. "2026-07-24"
+ * @returns {{ data: object, todayIndex: number }}
+ */
+const buildTrendChart = (trendRows = [], todayMarker) => {
+  const labels = trendRows.map((item) =>
     new Date(item.period_date).toLocaleDateString("en-IN", {
       day: "2-digit",
       month: "short",
     }),
-  ),
-  datasets: [
-    {
-      label: "Forecast Qty",
-      data: trendRows.map((item) => toNumber(item.predicted_qty)),
-      borderColor: "#f5b400",
-      backgroundColor: "rgba(245,180,0,0.10)",
-      borderWidth: 2,
-      pointRadius: 3,
-      tension: 0.4,
-      fill: false,
+  );
+
+  const todayIndex = todayMarker
+    ? trendRows.findIndex((item) => item.period_date === todayMarker)
+    : trendRows.findIndex((item) => item.is_forecast);
+
+  // Actual Qty: only for real history. Forecast-period rows stay null so the
+  // line stops instead of dropping to zero.
+  const actualData = trendRows.map((item) => (item.is_forecast ? null : toNumber(item.actual_qty)));
+
+  // Forecast Qty: only for forecast rows, but also carries the last actual
+  // point (the row immediately before the first forecast row) so the dashed
+  // segment connects to the solid line instead of floating separately.
+  const forecastData = trendRows.map((item, i) => {
+    if (item.is_forecast) return toNumber(item.predicted_qty);
+    const next = trendRows[i + 1];
+    if (next && next.is_forecast) return toNumber(item.actual_qty);
+    return null;
+  });
+
+  const p90Data = trendRows.map((item) => (item.is_forecast ? toNumber(item.predicted_qty_p90) : null));
+  const p10Data = trendRows.map((item) => (item.is_forecast ? toNumber(item.predicted_qty_p10) : null));
+
+  const todayPoint = trendRows.map((item, i) =>
+    i === todayIndex ? toNumber(item.predicted_qty ?? item.actual_qty) : null,
+  );
+
+  return {
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Actual Qty",
+          data: actualData,
+          borderColor: "#12BE83",
+          backgroundColor: "rgba(18,190,131,0.10)",
+          borderWidth: 2,
+          pointRadius: 3,
+          tension: 0.4,
+          fill: false,
+          spanGaps: false,
+        },
+        {
+          label: "Forecast Qty",
+          data: forecastData,
+          borderColor: "#f5b400",
+          backgroundColor: "rgba(245,180,0,0.10)",
+          borderWidth: 2,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          tension: 0.4,
+          fill: false,
+          spanGaps: true,
+        },
+        {
+          label: "P90",
+          data: p90Data,
+          borderColor: "transparent",
+          backgroundColor: "rgba(245,180,0,0.12)",
+          fill: "+1",
+          pointRadius: 0,
+          borderWidth: 0,
+          spanGaps: true,
+        },
+        {
+          label: "P10",
+          data: p10Data,
+          borderColor: "transparent",
+          backgroundColor: "rgba(245,180,0,0.12)",
+          fill: false,
+          pointRadius: 0,
+          borderWidth: 0,
+          spanGaps: true,
+        },
+        {
+          label: "Forecast Start",
+          data: todayPoint,
+          borderColor: "transparent",
+          backgroundColor: "#ffffff",
+          pointBackgroundColor: "#f5b400",
+          pointBorderColor: "#ffffff",
+          pointBorderWidth: 2,
+          pointRadius: 6,
+          pointHoverRadius: 7,
+          showLine: false,
+        },
+      ],
     },
-    {
-      label: "Actual Qty",
-      data: trendRows.map((item) => toNumber(item.actual_qty)),
-      borderColor: "#12BE83",
-      backgroundColor: "rgba(18,190,131,0.10)",
-      borderWidth: 2,
-      pointRadius: 3,
-      tension: 0.4,
-      fill: false,
-    },
-  ],
-});
+    todayIndex,
+  };
+};
 
 export const mapComponentDemandData = (
   response,
@@ -183,6 +356,8 @@ export const mapComponentDemandData = (
     "forecast_vs_actual_by_category",
     horizonSuffix,
   );
+  const costImpactRows = graph_data.cost_impact_stacked_bar || [];
+  const sankeyLinks = graph_data.machine_type_to_category_sankey || [];
 
   const scopedBranchRows = isAllBranches(branchId)
     ? branchCategoryHeatmap
@@ -251,7 +426,10 @@ export const mapComponentDemandData = (
         labels: categoryBar.map((item) => item.label),
         datasets: [
           {
+            label: "Predicted Qty",
             data: categoryBar.map((item) => toNumber(item.value)),
+            backgroundColor: categoryBar.map((item, i) => colorForCategory(item.label, i)),
+            borderRadius: 6,
           },
         ],
       }
@@ -260,11 +438,27 @@ export const mapComponentDemandData = (
   const branchCategoryMix = buildBranchCategoryMix(branchRows);
   const heatmap = buildHeatmap(branchRows);
 
-  const trendCategory = categoryBar[0]?.label || "Engine";
-  const trend = trendLines[trendCategory] || [];
-  const trendChart = buildTrendChart(trend);
+  // Built for every category (rather than picking one) so the trend chart
+  // component can offer a category switcher. Categories with no history
+  // (e.g. "Undercarriage": []) are dropped rather than rendering an empty chart.
+  const trendByCategory = {};
+  Object.entries(trendLines).forEach(([category, rows]) => {
+    if (Array.isArray(rows) && rows.length > 0) {
+      trendByCategory[category] = buildTrendChart(rows, graph_data.current_date_marker);
+    }
+  });
+  const trendCategories = Object.keys(trendByCategory);
+  // Default selection: highest 30-day demand category, falling back to
+  // whichever comes first in category_demand_bar_30d, then the first
+  // category that actually has trend history.
+  const defaultTrendCategory =
+    [...categoryBar].sort((a, b) => toNumber(b.value) - toNumber(a.value))[0]?.label ||
+    categoryBar[0]?.label ||
+    trendCategories[0];
 
   const accuracyChart = buildAccuracyChart(forecastVsActual);
+  const costImpactChart = buildCostImpactStackedBar(costImpactRows);
+  const sankey = buildSankey(sankeyLinks);
 
   const alerts = filterRowsByBranch(stockout_risk_alerts, branchId).map((item) => ({
     id: item.alert_id,
@@ -310,11 +504,15 @@ export const mapComponentDemandData = (
     kpis,
     alerts,
     charts: {
-      trend: trendChart,
+      trendByCategory,
+      trendCategories,
+      defaultTrendCategory,
       categoryDemand,
       branchCategoryMix,
       heatmap,
       accuracy: accuracyChart,
+      costImpact: costImpactChart,
+      sankey,
     },
     table: {
       rows: predictionTable,

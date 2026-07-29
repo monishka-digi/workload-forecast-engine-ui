@@ -81,7 +81,11 @@ const buildSkillChart = (rows = [], currentHorizon = 30) => ({
   ],
 });
 
-const buildBranchGapChart = (rows = [], currentHorizon = 30) => ({
+// Renamed from buildBranchGapChart: the old name collided conceptually with
+// the unrelated top-level `branchGapSummary` array (a different shape, built
+// separately below), which made `charts.branchGapSummary` easy to mistake
+// for the same thing and easy to forget to wire up (it was never rendered).
+const buildBranchHeadcountBar = (rows = [], currentHorizon = 30) => ({
   labels: rows.map((item) => formatBranchLabel(item.branch_name)),
   branchIds: rows.map((item) => item.branch_id),
   datasets: [
@@ -109,6 +113,37 @@ const buildBranchGapChart = (rows = [], currentHorizon = 30) => ({
     },
   ],
 });
+
+const buildGeographyWorkforceChart = (rows = []) => ({
+  labels: rows.map((item) => item.region),
+  datasets: [
+    {
+      label: "Required",
+      data: rows.map((item) => toNumber(item.total_required)),
+      backgroundColor: "#f5b400",
+      borderRadius: 6,
+      maxBarThickness: 32,
+    },
+    {
+      label: "Available",
+      data: rows.map((item) => toNumber(item.total_available)),
+      backgroundColor: "#12BE83",
+      borderRadius: 6,
+      maxBarThickness: 32,
+    },
+  ],
+});
+
+const buildHiringPipelineRows = (rows = []) =>
+  rows.map((item) => ({
+    skillLevel: item.skill_level,
+    shortfall30d: toNumber(item.shortfall_30d),
+    shortfall60d: toNumber(item.shortfall_60d),
+    shortfall90d: toNumber(item.shortfall_90d),
+    recommendedHires: toNumber(item.recommended_hires),
+    avgOnboardingWeeks: toNumber(item.avg_onboarding_weeks),
+    urgency: item.urgency,
+  }));
 
 const buildHeatmapMatrix = (rows = [], currentHorizon = 30) => {
   const skillLevels = Array.from(
@@ -176,6 +211,7 @@ export const mapTechnicianDemandData = (
     "forecast_horizon_days",
   );
   const overtimeRows = graph_data.overtime_risk_line || [];
+  const geographyRows = graph_data.geography_workforce_heatmap || [];
   const tableRows = Object.values(forecast_table || {}).flat();
 
   const skillLevelLabels = (filter_definitions.skill_level_options || [])
@@ -220,6 +256,8 @@ export const mapTechnicianDemandData = (
     gap: toNumber(item.gap),
     gapPct: toNumber(item.gap_pct),
   }));
+
+  const hiringPipelineRows = buildHiringPipelineRows(hiring_pipeline);
 
   const requiredKey = `total_technicians_required_${currentHorizon}d`;
   const gapKey = `total_headcount_gap_${currentHorizon}d`;
@@ -330,6 +368,7 @@ export const mapTechnicianDemandData = (
     kpis,
     planning,
     branchGapSummary,
+    hiringPipeline: hiringPipelineRows,
     charts: {
       skill: {
         ...buildSkillChart(skillRows, selectedHorizon),
@@ -340,7 +379,10 @@ export const mapTechnicianDemandData = (
         forecastHorizonDays: selectedHorizon,
       },
       branchGap: buildHeatmapMatrix(heatmapRows, selectedHorizon),
-      branchGapSummary: buildBranchGapChart(branchRows, selectedHorizon),
+      // Renamed from `branchGapSummary` (see buildBranchHeadcountBar comment)
+      // to stop colliding with the top-level `branchGapSummary` array above.
+      branchGapBar: buildBranchHeadcountBar(branchRows, selectedHorizon),
+      geographyWorkforce: buildGeographyWorkforceChart(geographyRows),
       overtimeRisk: {
         labels: overtimeRows.map((item) =>
           new Date(item.period_date).toLocaleDateString("en-IN", {
@@ -358,6 +400,21 @@ export const mapTechnicianDemandData = (
             tension: 0.3,
             borderWidth: 2,
             pointRadius: 3,
+          },
+          {
+            // Previously discarded entirely — every row in overtime_risk_line
+            // carries its own `threshold` value (constant at 25 in this
+            // payload, but read per-row rather than hardcoded in case it
+            // varies by period in a future response).
+            label: "Threshold",
+            data: overtimeRows.map((item) => toNumber(item.threshold)),
+            borderColor: "#ef4444",
+            backgroundColor: "transparent",
+            borderDash: [6, 4],
+            fill: false,
+            tension: 0,
+            borderWidth: 1.5,
+            pointRadius: 0,
           },
         ],
       },
