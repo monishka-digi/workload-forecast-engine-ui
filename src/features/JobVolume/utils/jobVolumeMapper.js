@@ -192,6 +192,7 @@ export const mapJobVolumeData = (
 
   /* -------------------------------------------------------------------------- */
   /*                              BRANCH CHART                                  */
+  /* Filter by branch, but render the dominant job type on the Job Volume page. */
   /* -------------------------------------------------------------------------- */
 
   const selectedBranches = isAllBranches(branchId)
@@ -199,14 +200,35 @@ export const mapJobVolumeData = (
     : filterRowsByBranch(branches, branchId);
 
   const branchScope = selectedBranches.length ? selectedBranches : branches;
+  const sortedBranchScope = [...branchScope].sort(
+    (a, b) =>
+      Number(b[branchJobsKey] ?? b.predicted_jobs_30d ?? 0) -
+      Number(a[branchJobsKey] ?? a.predicted_jobs_30d ?? 0),
+  );
 
   const branchChart = {
-    labels: branchScope.map((item) => formatBranchLabel(item.branch_name)),
-    branchIds: branchScope.map((item) => item.branch_id),
+    labels: sortedBranchScope.map(
+      (item) => item.dominant_job_type || "Unspecified",
+    ),
+    branchIds: sortedBranchScope.map((item) => item.branch_id),
+    details: sortedBranchScope.map((item) => ({
+      branchName: formatBranchLabel(item.branch_name),
+      dominantJobType: item.dominant_job_type || "Unspecified",
+      predictedJobs: Number(
+        item[branchJobsKey] ?? item.predicted_jobs_30d ?? 0,
+      ),
+      confidence:
+        item.confidence_pct ??
+        item.prediction_confidence_pct ??
+        item.confidence ??
+        item.prediction_confidence,
+      load: item.load_pct,
+      capacity: item.capacity_rating,
+    })),
     datasets: [
       {
         label: "Predicted Jobs",
-        data: branchScope.map(
+        data: sortedBranchScope.map(
           (item) =>
             Math.ceil(
               Number(item[branchJobsKey] ?? item.predicted_jobs_30d ?? 0),
@@ -219,6 +241,47 @@ export const mapJobVolumeData = (
       },
     ],
   };
+
+  /* -------------------------------------------------------------------------- */
+  /*                    JOB NAME CHART (for Job Volume page)                    */
+  /*  Shows job names on y-axis, grouped by job type, filtered by branch        */
+  /*  Data is still filtered by branchScope and respects forecasting days       */
+  /* -------------------------------------------------------------------------- */
+
+  const jobNameAggregation = branchScope.reduce((acc, branch) => {
+    const jobName = branch.dominant_job_type || "Unspecified";
+    const value = Number(branch[branchJobsKey] ?? branch.predicted_jobs_30d ?? 0);
+
+    if (!acc[jobName]) {
+      acc[jobName] = { total: 0, branchIds: [] };
+    }
+    acc[jobName].total += value;
+    acc[jobName].branchIds.push(branch.branch_id);
+
+    return acc;
+  }, {});
+
+  const sortedJobNames = Object.entries(jobNameAggregation).sort(
+    (a, b) => b[1].total - a[1].total
+  );
+
+  const jobNameChart = {
+    labels: sortedJobNames.map(([jobName]) => jobName),
+    branchIds: sortedJobNames.map(([, agg]) => agg.branchIds),
+    datasets: [
+      {
+        label: "Predicted Jobs",
+        data: sortedJobNames.map(([, agg]) => Math.ceil(agg.total)),
+        backgroundColor: "#f5b400",
+        borderRadius: 8,
+        borderSkipped: false,
+        maxBarThickness: 24,
+      },
+    ],
+  };
+
+  // Keep jobTypeChart for backwards compatibility
+  const jobTypeChart = jobNameChart;
 
   /* -------------------------------------------------------------------------- */
   /*                             CAPACITY PRESSURE                              */
@@ -300,6 +363,7 @@ export const mapJobVolumeData = (
       forecast: forecastChart,
       machineMix,
       branch: branchChart,
+      jobType: jobTypeChart,
       capacity,
 
       // Additional graph data passed through for future use
