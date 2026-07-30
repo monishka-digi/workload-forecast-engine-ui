@@ -1,0 +1,29 @@
+.trendChartTabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.trendChartTab {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: 5px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.trendChartTab:hover {
+  color: var(--text);
+}
+
+.trendChartTab--active {
+  color: var(--text);
+  border-color: var(--accent, #f5b400);
+  border-width: 2px;
+  background: rgba(245, 180, 0, 0.08);
+}

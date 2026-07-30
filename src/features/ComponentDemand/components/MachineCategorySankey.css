@@ -1,0 +1,10 @@
+.sankeyCardBody {
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+}
+
+.sankeyLabel {
+  font-size: 11px;
+  fill: var(--text-secondary, #64748b);
+}

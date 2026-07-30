@@ -88,34 +88,55 @@ export const mapBranchLoadData = (
     breach: item[`load_status_${horizon}`] === "CRITICAL",
   }));
 
-  const trend = graph_data?.load_forecast_timeseries || [];
+  const capacityTrend = graph_data?.capacity_vs_demand_trend || graph_data?.load_forecast_timeseries || [];
+  const firstForecastIndex = capacityTrend.findIndex((row) => row.is_forecast);
 
   const trendChart = {
-    labels: trend.map((item) =>
+    labels: capacityTrend.map((item) =>
       new Date(item.period_date).toLocaleDateString("en-IN", {
         day: "2-digit",
         month: "short",
       }),
     ),
-    periodDates: trend.map((item) => item.period_date),
+    periodDates: capacityTrend.map((item) => item.period_date),
+    rawRows: capacityTrend,
+    firstForecastIndex,
     datasets: [
       {
-        label: "Forecast",
-        data: trend.map((item) => Number(item.max_load_pct?.toFixed(1) ?? 0)),
-        borderColor: "#f5b400",
-        backgroundColor: "#f5b400",
-        tension: 0.4,
-        borderWidth: 3,
-        pointRadius: 4,
+        label: "Capacity",
+        data: capacityTrend.map((item) => Number(item.capacity_hours ?? 0)),
+        borderColor: "#2a78d6",
+        backgroundColor: "rgba(42,120,214,0.12)",
+        tension: 0.3,
+        borderWidth: 2,
+        pointRadius: 0,
+        fill: true,
       },
       {
-        label: "Actual",
-        data: trend.map((item) => Number(item.avg_load_pct?.toFixed(1) ?? 0)),
-        borderColor: "#12BE83",
-        backgroundColor: "#12BE83",
-        tension: 0.4,
-        borderWidth: 3,
-        pointRadius: 4,
+        label: "Demand (actual)",
+        data: capacityTrend.map((item, index) =>
+          firstForecastIndex === -1 || index <= firstForecastIndex ? Number(item.required_hours ?? 0) : null,
+        ),
+        borderColor: "#eb6834",
+        backgroundColor: "#eb6834",
+        tension: 0.3,
+        borderWidth: 2,
+        pointRadius: 3,
+        fill: false,
+      },
+      {
+        label: "Demand (forecast)",
+        data: capacityTrend.map((item, index) =>
+          firstForecastIndex === -1 || index >= firstForecastIndex ? Number(item.required_hours ?? 0) : null,
+        ),
+        borderColor: "#eb6834",
+        backgroundColor: "#eb6834",
+        tension: 0.3,
+        borderWidth: 2,
+        borderDash: [6, 4],
+        pointStyle: "triangle",
+        pointRadius: 3,
+        fill: false,
       },
     ],
   };

@@ -7,6 +7,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import annotationPlugin from "chartjs-plugin-annotation";
 
 import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
@@ -23,11 +24,16 @@ ChartJS.register(
   LineElement,
   Tooltip,
   Legend,
+  annotationPlugin,
 );
 
-export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) {
+export default function BranchLoadTrendChart({
+  chart,
+  selectedBranch = "ALL",
+}) {
   const { theme } = useTheme();
   const colors = getChartColors(theme);
+
   const branchFilteredChart = useMemo(() => {
     if (isAllBranches(selectedBranch) || !chart?.branchIds) {
       return chart;
@@ -53,6 +59,8 @@ export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) 
     };
   }, [chart, selectedBranch]);
 
+  if (!chart) return null;
+
   return (
     <div className="branchTrendCard">
       <div className="branchTrendHeader">
@@ -63,17 +71,17 @@ export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) 
             gap: 8,
           }}
         >
-          <h3>Load trend — breach branches</h3>
+          <h3>Capacity vs Demand Trend</h3>
 
           <InfoTooltip
             position="bottom"
-            content="Tracks forecasted vs. actual utilization % (Y-axis) over time specifically for branches that are flagged as breaching capacity thresholds. This shows forecasts accuracy for the branches most at risk of capacity breach"
+            content="Tracks total capacity against required demand over time. The solid demand line shows historical values, and the dashed segment shows the forecast beyond the first forecast period."
           >
             <span className="infoIcon">i</span>
           </InfoTooltip>
         </div>
 
-        <span>forecast vs actual</span>
+        <span>capacity vs demand</span>
       </div>
 
       <div className="branchTrendBody">
@@ -82,12 +90,10 @@ export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) 
           options={{
             responsive: true,
             maintainAspectRatio: false,
-
             plugins: {
               legend: {
                 position: "top",
                 align: "end",
-
                 labels: {
                   color: colors.text,
                   boxWidth: 14,
@@ -100,18 +106,41 @@ export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) 
                 titleColor: colors.tooltipText,
                 bodyColor: colors.tooltipText,
               },
+              annotation:
+                branchFilteredChart?.firstForecastIndex >= 0
+                  ? {
+                      annotations: {
+                        forecastStartLine: {
+                          type: "line",
+                          xMin: branchFilteredChart.firstForecastIndex,
+                          xMax: branchFilteredChart.firstForecastIndex,
+                          borderColor: colors.muted,
+                          borderWidth: 1.5,
+                          borderDash: [6, 4],
+                          label: {
+                            display: true,
+                            content: "Forecast starts",
+                            position: "start",
+                            backgroundColor:
+                              theme === "dark" ? "#333" : "#f5f5f5",
+                            color: theme === "dark" ? "#fff" : "#333",
+                            font: { size: 10 },
+                            yAdjust: -10,
+                          },
+                        },
+                      },
+                    }
+                  : undefined,
             },
-
             interaction: {
               intersect: false,
               mode: "index",
             },
-
             scales: {
               x: {
                 title: {
                   display: true,
-                  text: "Time",
+                  text: "Date",
                   color: colors.text,
                   font: {
                     size: 12,
@@ -121,16 +150,14 @@ export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) 
                 ticks: {
                   color: colors.muted,
                 },
-
                 grid: {
                   color: colors.grid,
                 },
               },
-
               y: {
                 title: {
                   display: true,
-                  text: "Load %",
+                  text: "Hours",
                   color: colors.text,
                   font: {
                     size: 12,
@@ -139,13 +166,10 @@ export default function BranchLoadTrendChart({ chart, selectedBranch = "ALL" }) 
                 },
                 ticks: {
                   color: colors.muted,
-                  callback: (v) => `${v}%`,
                 },
-
                 grid: {
                   color: colors.grid,
                 },
-
                 min: 0,
               },
             },

@@ -4,12 +4,16 @@ import DashboardLayout from "../../components/Common/DashboardLayout";
 import KpiCard from "../../components/Common/KpiCard";
 import useDashboardFilters from "../../context/useDashboardFilters";
 import BranchGapChart from "./components/BranchGapChart";
+import BranchGapSummary from "./components/BranchGapSummary";
+import BranchHeadcountGapChart from "./components/BranchHeadcountGapChart";
+import GeographyWorkforceChart from "./components/GeographyWorkforceChart";
 import HeadcountTrendChart from "./components/HeadcountTrendChart";
+import HiringPipelineTable from "./components/HiringPipelineTable";
+import OvertimeRiskChart from "./components/OvertimeRiskChart";
 import SkillDemandChart from "./components/SkillDemandChart";
 import TechnicianDemandTable from "./components/TechnicianDemandTable";
 import WorkforcePlanning from "./components/WorkforcePlanning";
 import useTechnicianDemand from "./hooks/useTechnicianDemand";
-import BranchGapSummary from "./components/BranchGapSummary";
 
 export default function TechnicianDemand() {
   const { forecastDays, selectedBranch, setBranchOptions } =
@@ -54,22 +58,33 @@ export default function TechnicianDemand() {
         ) : null
       }
       middleRight={
-        dashboard ? (
-          <BranchGapChart
-            data={dashboard.charts.branchGap}
-            summary={dashboard.branchGapSummary}
-            selectedBranch={selectedBranch}
-          />
-        ) : null
+        dashboard ? <BranchGapChart data={dashboard.charts.branchGap} /> : null
       }
       bottomLeft={
         dashboard ? (
           <BranchGapSummary summary={dashboard.branchGapSummary} />
         ) : null
       }
-      bottomRight={null}
+      bottomRight={
+        dashboard ? (
+          <BranchHeadcountGapChart data={dashboard.charts.branchGapBar} />
+        ) : null
+      }
+      footerLeft={
+        dashboard ? <OvertimeRiskChart data={dashboard.charts.overtimeRisk} /> : null
+      }
+      footerRight={
+        dashboard ? (
+          <GeographyWorkforceChart data={dashboard.charts.geographyWorkforce} />
+        ) : null
+      }
       table={
-        dashboard ? <TechnicianDemandTable rows={dashboard.table.rows} /> : null
+        dashboard ? (
+          <>
+            <TechnicianDemandTable rows={dashboard.table.rows} />
+            <HiringPipelineTable rows={dashboard.hiringPipeline} />
+          </>
+        ) : null
       }
     />
   );
