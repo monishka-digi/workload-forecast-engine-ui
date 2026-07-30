@@ -122,7 +122,7 @@ export const mapJobVolumeData = (
     },
 
     {
-      id: "forecast_accuracy",
+      id: "actual_jobs",
       title: `Actual Jobs (${forecastDays}D)`,
       value: actualJobCountTotal,
       subText: "From forecast trend line",
