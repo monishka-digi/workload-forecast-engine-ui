@@ -46,6 +46,10 @@ export const mapJobVolumeData = (
   const monsoonOverlay = graph_data?.monsoon_impact_overlay || [];
   const forecastVsActual = graph_data?.forecast_vs_actual_accuracy || [];
   const branchJobsKey = `predicted_jobs_${horizonSuffix}`;
+  const actualJobCountTotal = trend.reduce(
+    (sum, item) => sum + Number(item.actual_job_count ?? 0),
+    0,
+  );
 
   // Flatten all priority buckets from forecast_table into a single array
   const tableRows = Object.values(forecast_table || {}).flat();
@@ -119,11 +123,11 @@ export const mapJobVolumeData = (
 
     {
       id: "forecast_accuracy",
-      title: "Forecast Accuracy",
-      value: `${summary.forecast_accuracy_pct}%`,
-      subText: `MAPE ${model_performance?.mape ?? summary[`mape_last_${horizonSuffix}`] ?? summary.mape_last_30d}%`,
-      positive: summary.forecast_accuracy_pct >= 90,
-      alert: summary.forecast_accuracy_pct < 80,
+      title: `Actual Jobs (${forecastDays}D)`,
+      value: actualJobCountTotal,
+      subText: "From forecast trend line",
+      positive: true,
+      alert: false,
     },
   ];
 
