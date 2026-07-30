@@ -10,10 +10,12 @@ export default function CapacityPressure({
   selectedBranch = "ALL",
 }) {
   const scopedData =
-    selectedBranch === "ALL"
-      ? data
-      : filterRowsByBranch(data, selectedBranch);
+    selectedBranch === "ALL" ? data : filterRowsByBranch(data, selectedBranch);
   const rows = scopedData.length ? scopedData : data;
+
+  const roundOffJobs = (jobCount) => {
+   return Math.round(jobCount);
+  };
 
   const chartTitleStyle = {
     display: "flex",
@@ -24,23 +26,23 @@ export default function CapacityPressure({
     color: "var(--text)",
     lineHeight: 1.2,
   };
-  
+
   return (
     <Card
-          title={
-            <div style={chartTitleStyle}>
-              <span style={chartTitleStyle}>Capacity Pressure</span>
-    
-              <InfoTooltip
-                position="bottom"
-                content="Branch utilization as a share of total capacity — predicted job count against maximum capacity for each branch, shows each branch's predicted job volume as a % of its total capacity."
-              >
-                <span className="infoIcon">i</span>
-              </InfoTooltip>
-            </div>
-          }
-          height="clamp(360px, 40vw, 470px)"
-        >         21   
+      title={
+        <div style={chartTitleStyle}>
+          <span style={chartTitleStyle}>Capacity Pressure</span>
+
+          <InfoTooltip
+            position="bottom"
+            content="Branch utilization as a share of total capacity — predicted job count against maximum capacity for each branch, shows each branch's predicted job volume as a % of its total capacity."
+          >
+            <span className="infoIcon">i</span>
+          </InfoTooltip>
+        </div>
+      }
+      height="clamp(360px, 40vw, 470px)"
+    >
       <div className="dashboardChartCard__body">
         <div className="capacityPressureList">
           {rows.map((branch) => (
@@ -48,8 +50,7 @@ export default function CapacityPressure({
               key={branch.id}
               branch={branch.branch}
               value={branch.load}
-              jobs={branch.jobs}
-              // rating={branch.rating}
+              jobs={roundOffJobs(branch.jobs)}
               color={branch.color}
               breach={branch.breach}
             />
