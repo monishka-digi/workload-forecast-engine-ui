@@ -34,41 +34,78 @@ export default function ForecastChart({ data }) {
     display: true,
     text: "Jobs",
   };
+  options.scales.y.suggestedMax = data.suggestedMax;
+  options.plugins.legend.labels.filter = (legendItem, chartData) => {
+    const role = chartData.datasets[legendItem.datasetIndex]?.chartRole;
+    return role === "historicalPrediction" || role === "actual";
+  };
+  options.plugins.tooltip = {
+    ...options.plugins.tooltip,
+    filter: (tooltipItem) => {
+      const point = data.points?.[tooltipItem.dataIndex];
+      const role = tooltipItem.dataset.chartRole;
 
-  // Find the index of the last non-null point in the "Actual" dataset.
-  // Assumes one dataset is labeled/identifiable as actual data.
-  const actualDataset = data.datasets.find((ds) => ds.label === "Actual");
+      return (
+        (role === "historicalPrediction" && !point?.isForecast) ||
+        (role === "forecastPrediction" && point?.isForecast)
+      );
+    },
+    callbacks: {
+      title: (items) => items[0]?.label ?? "",
+      label: (context) => {
+        const point = data.points?.[context.dataIndex];
+        if (!point) return "";
 
-  let lastActualIndex = -1;
-  if (actualDataset) {
-    for (let i = actualDataset.data.length - 1; i >= 0; i--) {
-      if (actualDataset.data[i] !== null && actualDataset.data[i] !== undefined) {
-        lastActualIndex = i;
-        break;
-      }
-    }
-  }
+        const formatValue = (value) =>
+          value === null || value === undefined ? "N/A" : Number(value);
 
-  if (lastActualIndex > -1) {
+        if (point.isForecast) {
+          return [
+            `Forecast Jobs: ${formatValue(point.prediction)} jobs`,
+            `Lower Bound (P10): ${formatValue(point.p10)}`,
+            `Upper Bound (P90): ${formatValue(point.p90)}`,
+          ];
+        }
+
+        const variance = Number(point.actual ?? 0) - Number(point.prediction ?? 0);
+        const varianceLabel = `${variance >= 0 ? "+" : ""}${variance}`;
+        return [
+          `Prediction: ${formatValue(point.prediction)}`,
+          `Actual: ${formatValue(point.actual)}`,
+          `Variance: ${varianceLabel}`,
+        ];
+      },
+    },
+  };
+
+  if (data.forecastStartIndex > -1) {
     options.plugins = {
       ...options.plugins,
       annotation: {
         annotations: {
+          forecastRegion: {
+            type: "box",
+            xMin: data.forecastStartIndex,
+            xMax: data.labels.length - 1,
+            backgroundColor:
+              theme === "dark" ? "rgba(255, 255, 255, 0.06)" : "rgba(0, 0, 0, 0.06)",
+            borderWidth: 0,
+          },
           forecastStartLine: {
             type: "line",
-            xMin: lastActualIndex,
-            xMax: lastActualIndex,
+            xMin: data.forecastStartIndex,
+            xMax: data.forecastStartIndex,
             borderColor: theme === "dark" ? "#888" : "#555",
             borderWidth: 1.5,
             borderDash: [6, 4],
             label: {
               display: true,
               content: "Forecast starts",
-              position: "start",
+              position: "end",
               backgroundColor: theme === "dark" ? "#333" : "#f5f5f5",
               color: theme === "dark" ? "#fff" : "#333",
               font: { size: 10 },
-              yAdjust: -10,
+              yAdjust: 18,
             },
           },
         },
@@ -83,7 +120,7 @@ export default function ForecastChart({ data }) {
           <h3 className="dashboardChartCard__title">Job Demand Trend</h3>
           <InfoTooltip
             position="bottom"
-            content="Forecasted vs. actual job volume over time. Actual values are shown only where historical data exists, while the forecast extends across the entire prediction horizon. This chart helps compare predicted workload against actual job counts week over week."
+            content="Historical actuals and model predictions are shown separately. The dashed divider marks the forecast start, with the shaded area showing the future P10-P90 prediction range."
           >
             <span className="infoIcon">i</span>
           </InfoTooltip>

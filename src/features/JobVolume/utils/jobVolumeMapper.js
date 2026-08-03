@@ -150,6 +150,18 @@ export const mapJobVolumeData = (
   /*                              FORECAST CHART                                */
   /* -------------------------------------------------------------------------- */
 
+  const firstForecastIndex = trend.findIndex(
+    (item) => item.is_forecast === true,
+  );
+  const forecastValues = trend.flatMap((item) => [
+    item.predicted_job_count,
+    item.predicted_job_count_p90,
+  ]);
+  const maximumForecastValue = Math.max(
+    0,
+    ...forecastValues.map((value) => Number(value ?? 0)),
+  );
+
   const forecastChart = {
     labels: trend.map((item) =>
       new Date(item.period_date).toLocaleDateString("en-IN", {
@@ -158,23 +170,39 @@ export const mapJobVolumeData = (
       })
     ),
     periodDates: trend.map((item) => item.period_date),
+    forecastStartIndex: firstForecastIndex,
+    suggestedMax: maximumForecastValue * 1.12,
+    points: trend.map((item) => ({
+      isForecast: item.is_forecast === true,
+      prediction: item.predicted_job_count,
+      actual: item.actual_job_count,
+      p10: item.predicted_job_count_p10,
+      p90: item.predicted_job_count_p90,
+    })),
 
     datasets: [
       {
-        label: "Forecast",
-        data: trend.map((item) => item.predicted_job_count),
+        label: "Forecast / Prediction",
+        chartRole: "historicalPrediction",
+        data: trend.map((item) =>
+          item.is_forecast === false ? item.predicted_job_count : null,
+        ),
         borderColor: "#f5b400",
-        backgroundColor: "rgba(245,180,0,0.15)",
+        backgroundColor: "#f5b400",
         borderWidth: 3,
         pointRadius: 3,
         pointHoverRadius: 5,
         tension: 0.4,
         fill: false,
+        animation: { duration: 0 },
       },
 
       {
         label: "Actual",
-        data: trend.map((item) => item.actual_job_count),
+        chartRole: "actual",
+        data: trend.map((item) =>
+          item.is_forecast === false ? item.actual_job_count : null,
+        ),
         borderColor: "#34d6b8",
         backgroundColor: "#34d6b8",
         borderWidth: 3,
@@ -182,6 +210,64 @@ export const mapJobVolumeData = (
         pointHoverRadius: 6,
         tension: 0.4,
         fill: false,
+        animation: { duration: 0 },
+      },
+
+      // The transparent lower line and shaded upper line form the forecast-only
+      // P10-P90 confidence band. It is omitted from the legend and tooltips.
+      {
+        label: "Forecast P10",
+        chartRole: "confidenceLower",
+        data: trend.map((item) =>
+          item.is_forecast === true
+            ? item.predicted_job_count_p10 ?? null
+            : null,
+        ),
+        borderColor: "transparent",
+        backgroundColor: "transparent",
+        pointRadius: 0,
+        pointHoverRadius: 0,
+        borderWidth: 0,
+        fill: false,
+        animation: { duration: 0 },
+      },
+
+      {
+        label: "Forecast P90",
+        chartRole: "confidenceUpper",
+        data: trend.map((item) =>
+          item.is_forecast === true
+            ? item.predicted_job_count_p90 ?? null
+            : null,
+        ),
+        borderColor: "transparent",
+        backgroundColor: "rgba(245, 180, 0, 0.16)",
+        pointRadius: 0,
+        pointHoverRadius: 0,
+        borderWidth: 0,
+        fill: "-1",
+        animation: { duration: 0 },
+      },
+
+      {
+        label: "Forecast / Prediction",
+        chartRole: "forecastPrediction",
+        data: trend.map((item, index) =>
+          item.is_forecast === true || index === firstForecastIndex - 1
+            ? item.predicted_job_count
+            : null,
+        ),
+        borderColor: "#f5b400",
+        backgroundColor: "#ffffff",
+        pointBorderColor: "#f5b400",
+        pointBorderWidth: 2,
+        borderWidth: 3,
+        pointRadius: (context) =>
+          trend[context.dataIndex]?.is_forecast === true ? 4 : 0,
+        pointHoverRadius: 6,
+        tension: 0.4,
+        fill: false,
+        animation: { duration: 650 },
       },
     ],
   };
