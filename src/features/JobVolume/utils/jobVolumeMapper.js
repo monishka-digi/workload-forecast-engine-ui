@@ -13,6 +13,21 @@ const pickHorizonValue = (row, baseKey, horizonSuffix) =>
   row?.[`${baseKey}_30d`] ??
   0;
 
+const getLoadStatusColor = (status) => {
+  switch (String(status || "").toUpperCase()) {
+    case "CRITICAL":
+      return "#ef5a5a";
+    case "HIGH":
+      return "#f59e0b";
+    case "MEDIUM":
+      return "#4b8df8";
+    case "LOW":
+      return "#34d6b8";
+    default:
+      return "#f5b400";
+  }
+};
+
 export const mapJobVolumeData = (
   response,
   forecastDays = 30,
@@ -227,6 +242,7 @@ export const mapJobVolumeData = (
         item.confidence ??
         item.prediction_confidence,
       load: item.load_pct,
+      loadStatus: item.load_status,
       capacity: item.capacity_rating,
     })),
     datasets: [
@@ -238,7 +254,9 @@ export const mapJobVolumeData = (
               Number(item[branchJobsKey] ?? item.predicted_jobs_30d ?? 0),
             ),
         ),
-        backgroundColor: "#f5b400",
+        backgroundColor: sortedBranchScope.map((item) =>
+          getLoadStatusColor(item.load_status),
+        ),
         borderRadius: 8,
         borderSkipped: false,
         maxBarThickness: 24,

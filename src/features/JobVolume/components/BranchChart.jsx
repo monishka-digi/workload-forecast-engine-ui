@@ -40,6 +40,20 @@ export default function BranchChart({ data, selectedBranch = "ALL" }) {
             datasets: data.datasets.map((dataset) => ({
               ...dataset,
               data: matchingIndices.map((index) => dataset.data[index]),
+              ...(Array.isArray(dataset.backgroundColor)
+                ? {
+                    backgroundColor: matchingIndices.map(
+                      (index) => dataset.backgroundColor[index],
+                    ),
+                  }
+                : {}),
+              ...(Array.isArray(dataset.borderColor)
+                ? {
+                    borderColor: matchingIndices.map(
+                      (index) => dataset.borderColor[index],
+                    ),
+                  }
+                : {}),
             })),
           };
         })();
@@ -64,15 +78,16 @@ export default function BranchChart({ data, selectedBranch = "ALL" }) {
         return `${numericValue <= 1 ? numericValue * 100 : numericValue}%`;
       };
 
-      return [
-        `Branch: ${detail.branchName || "N/A"}`,
-        `Dominant Job Type: ${detail.dominantJobType}`,
-        `Predicted Jobs: ${detail.predictedJobs}`,
-        `Confidence: ${formatConfidence(detail.confidence)}`,
-        `Load: ${detail.load ?? "N/A"}${detail.load == null ? "" : "%"}`
-      ];
-    },
-  };
+        return [
+          `Branch: ${detail.branchName || "N/A"}`,
+          `Dominant Job Type: ${detail.dominantJobType}`,
+          `Predicted Jobs: ${detail.predictedJobs}`,
+          `Confidence: ${formatConfidence(detail.confidence)}`,
+          `Load Status: ${detail.loadStatus || "N/A"}`,
+          `Load: ${detail.load ?? "N/A"}${detail.load == null ? "" : "%"}` 
+        ];
+      },
+    };
 
   const chartTitleStyle = {
     display: "flex",
