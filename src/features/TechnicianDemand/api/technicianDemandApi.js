@@ -24,9 +24,13 @@ export const getTechnicianDemandDashboard = async (
 
   const data = await response.json();
 
-  if (!data.success) {
-    throw new Error(data.message || "Technician Demand API returned an error");
+  if (data && typeof data === "object") {
+    if (data.success === false) {
+      throw new Error(data.message || "Technician Demand API returned an error");
+    }
+
+    return data.result ?? data;
   }
 
-  return data.result;
+  throw new Error("Technician Demand API returned an unexpected response");
 };

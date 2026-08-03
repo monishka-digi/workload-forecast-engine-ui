@@ -11,6 +11,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
+import annotationPlugin from "chartjs-plugin-annotation";
 
 import Card from "../../../components/Common/Card";
 import { useTheme } from "../../../context/ThemeContext";
@@ -20,39 +21,7 @@ import "../../JobVolume/components/dashboardChartCard.css";
 import "./CategoryDemandTrendChart.css";
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend, Filler);
-
-/**
- * Draws a dashed vertical guide line + "Forecast starts" label at the x
- * position of todayIndex. Registered per-chart via the `plugins` prop
- * (react-chartjs-2) rather than globally, since todayIndex changes per
- * category selected.
- */
-const buildTodayLinePlugin = (todayIndex, colors) => ({
-  id: "todayLine",
-  afterDraw(chart) {
-    if (todayIndex == null || todayIndex < 0) return;
-    const xScale = chart.scales.x;
-    const yScale = chart.scales.y;
-    const x = xScale.getPixelForValue(todayIndex);
-    const ctx = chart.ctx;
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.setLineDash([4, 4]);
-    ctx.moveTo(x, yScale.top);
-    ctx.lineTo(x, yScale.bottom);
-    ctx.strokeStyle = colors.muted || "rgba(148,163,184,0.6)";
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    ctx.fillStyle = colors.muted || "rgba(148,163,184,0.9)";
-    ctx.font = "11px sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("Forecast starts", x, yScale.top - 6);
-    ctx.restore();
-  },
-});
+ChartJS.register(annotationPlugin);
 
 /**
  * @param {object} props
@@ -89,6 +58,8 @@ export default function CategoryDemandTrendChart({ trendByCategory = {}, categor
 
   const active = trendByCategory[activeCategory];
   if (!active) return null;
+  const forecastStartIndex = active.todayIndex;
+  const showForecastStartLine = forecastStartIndex != null && forecastStartIndex >= 0;
 
   const options = {
     responsive: true,
@@ -117,6 +88,30 @@ export default function CategoryDemandTrendChart({ trendByCategory = {}, categor
         bodyColor: colors.tooltipText,
         filter: (item) => ["Actual Qty", "Forecast Qty"].includes(item.dataset.label),
       },
+      annotation:
+        !showForecastStartLine
+          ? undefined
+          : {
+              annotations: {
+                forecastStartLine: {
+                  type: "line",
+                  xMin: forecastStartIndex,
+                  xMax: forecastStartIndex,
+                  borderColor: theme === "dark" ? "#888" : "#555",
+                  borderWidth: 1.5,
+                  borderDash: [6, 4],
+                  label: {
+                    display: true,
+                    content: "Forecast starts",
+                    position: "start",
+                    backgroundColor: theme === "dark" ? "#333" : "#f5f5f5",
+                    color: theme === "dark" ? "#fff" : "#333",
+                    font: { size: 10 },
+                    yAdjust: -10,
+                  },
+                },
+              },
+            },
     },
     interaction: {
       mode: "index",
@@ -177,7 +172,7 @@ export default function CategoryDemandTrendChart({ trendByCategory = {}, categor
       </div>
       <div className="dashboardChartCard__body">
         <div className="dashboardChartCard__chartShell">
-          <Line data={active.data} options={options} plugins={[buildTodayLinePlugin(active.todayIndex, colors)]} />
+          <Line data={active.data} options={options} />
         </div>
       </div>
     </Card>
