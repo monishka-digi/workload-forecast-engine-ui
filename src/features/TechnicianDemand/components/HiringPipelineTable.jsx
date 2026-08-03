@@ -1,10 +1,17 @@
 import "./HiringPipelineTable.css";
+import useDashboardFilters from "../../../context/useDashboardFilters";
+import { formatRoundedValue } from "../../../utils/formatRoundedValue";
 
 /**
  * @param {object} props
  * @param {Array<{skillLevel, shortfall30d, shortfall60d, shortfall90d, recommendedHires, avgOnboardingWeeks, urgency}>} props.rows - dashboard.hiringPipeline
  */
 export default function HiringPipelineTable({ rows = [] }) {
+  const { forecastDays } = useDashboardFilters();
+  const selectedHorizon = Number(forecastDays) || 30;
+  const shortfallKey = `shortfall_${selectedHorizon}d`;
+  const shortfallLabel = `SHORTFALL (${selectedHorizon}D)`;
+
   return (
     <div className="hiringTableCard">
       <div className="hiringTableHeader">
@@ -17,9 +24,7 @@ export default function HiringPipelineTable({ rows = [] }) {
           <thead>
             <tr>
               <th>SKILL LEVEL</th>
-              <th>SHORTFALL (30D)</th>
-              <th>SHORTFALL (60D)</th>
-              <th>SHORTFALL (90D)</th>
+              <th>{shortfallLabel}</th>
               <th>RECOMMENDED HIRES</th>
               <th>AVG ONBOARDING</th>
               <th>URGENCY</th>
@@ -30,9 +35,7 @@ export default function HiringPipelineTable({ rows = [] }) {
             {rows.map((row) => (
               <tr key={row.skillLevel}>
                 <td>{row.skillLevel}</td>
-                <td>{row.shortfall30d.toFixed(1)}</td>
-                <td>{row.shortfall60d.toFixed(1)}</td>
-                <td>{row.shortfall90d.toFixed(1)}</td>
+                <td>{formatRoundedValue(row[shortfallKey] ?? row.shortfall30d, 1)}</td>
                 <td>{row.recommendedHires}</td>
                 <td>{row.avgOnboardingWeeks} wk</td>
                 <td>

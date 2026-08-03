@@ -441,6 +441,8 @@ export const mapTechnicianDemandData = (
       },
       headcountTrend: {
         ...buildLineChart(trendRows),
+        current_date_marker: graph_data.current_date_marker ?? null,
+        forecastFlags: trendRows.map((item) => Boolean(item.is_forecast)),
         forecastHorizonDays: selectedHorizon,
       },
       branchGap: buildHeatmapMatrix(heatmapRows, selectedHorizon),
@@ -458,6 +460,8 @@ export const mapTechnicianDemandData = (
             month: "short",
           }),
         ),
+        periodDates: overtimeRows.map((item) => item.period_date),
+        current_date_marker: graph_data.current_date_marker ?? null,
         datasets: [
           {
             label: "Overtime Utilization",

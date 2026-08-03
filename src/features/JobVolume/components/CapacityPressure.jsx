@@ -3,6 +3,7 @@ import Card from "../../../components/Common/Card";
 import GaugeRow from "./GaugeRow";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
 import { filterRowsByBranch } from "../../../utils/branchFilters";
+import { formatRoundedValue } from "../../../utils/formatRoundedValue";
 import "./dashboardChartCard.css";
 
 export default function CapacityPressure({
@@ -12,10 +13,6 @@ export default function CapacityPressure({
   const scopedData =
     selectedBranch === "ALL" ? data : filterRowsByBranch(data, selectedBranch);
   const rows = scopedData.length ? scopedData : data;
-
-  const roundOffJobs = (jobCount) => {
-   return Math.round(jobCount);
-  };
 
   const chartTitleStyle = {
     display: "flex",
@@ -50,7 +47,7 @@ export default function CapacityPressure({
               key={branch.id}
               branch={branch.branch}
               value={branch.load}
-              jobs={roundOffJobs(branch.jobs)}
+              jobs={formatRoundedValue(branch.jobs)}
               color={branch.color}
               breach={branch.breach}
             />

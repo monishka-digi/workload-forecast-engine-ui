@@ -234,9 +234,11 @@ const buildTrendChart = (trendRows = [], todayMarker) => {
     }),
   );
 
+  const forecastStartIndex = trendRows.findIndex((item) => item.is_forecast);
   const todayIndex = todayMarker
     ? trendRows.findIndex((item) => item.period_date === todayMarker)
-    : trendRows.findIndex((item) => item.is_forecast);
+    : forecastStartIndex;
+  const resolvedTodayIndex = todayIndex >= 0 ? todayIndex : forecastStartIndex;
 
   // Actual Qty: only for real history. Forecast-period rows stay null so the
   // line stops instead of dropping to zero.
@@ -256,7 +258,7 @@ const buildTrendChart = (trendRows = [], todayMarker) => {
   const p10Data = trendRows.map((item) => (item.is_forecast ? toNumber(item.predicted_qty_p10) : null));
 
   const todayPoint = trendRows.map((item, i) =>
-    i === todayIndex ? toNumber(item.predicted_qty ?? item.actual_qty) : null,
+    i === resolvedTodayIndex ? toNumber(item.predicted_qty ?? item.actual_qty) : null,
   );
 
   return {
@@ -320,7 +322,7 @@ const buildTrendChart = (trendRows = [], todayMarker) => {
         },
       ],
     },
-    todayIndex,
+    todayIndex: resolvedTodayIndex,
   };
 };
 
