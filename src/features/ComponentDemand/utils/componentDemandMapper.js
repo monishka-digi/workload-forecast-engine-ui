@@ -3,6 +3,7 @@ import {
   formatBranchLabel,
   isAllBranches,
 } from "../../../utils/branchFilters";
+import { formatIsoDateLabel } from "../../../utils/formatIsoDateLabel";
 
 const toNumber = (value) => Number(value ?? 0);
 
@@ -155,12 +156,7 @@ const buildCostImpactStackedBar = (rows = []) => {
   if (rows.length === 0) return { labels: [], datasets: [] };
 
   const categories = Object.keys(rows[0]).filter((key) => key !== "period_date");
-  const labels = rows.map((row) =>
-    new Date(row.period_date).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-    }),
-  );
+  const labels = rows.map((row) => formatIsoDateLabel(row.period_date));
 
   return {
     labels,
@@ -210,6 +206,60 @@ const buildSankey = (links = []) => {
   };
 };
 
+const buildTrendRowsWithMarker = (trendRows = [], currentDateMarker) => {
+  if (!currentDateMarker) {
+    return {
+      rows: trendRows,
+      markerIndex: trendRows.findIndex((item) => item.is_forecast),
+    };
+  }
+
+  const exactIndex = trendRows.findIndex((item) => item.period_date === currentDateMarker);
+  if (exactIndex >= 0) {
+    return {
+      rows: trendRows,
+      markerIndex: exactIndex,
+    };
+  }
+
+  const markerRow = {
+    period_date: currentDateMarker,
+    predicted_qty: null,
+    predicted_qty_p10: null,
+    predicted_qty_p90: null,
+    actual_qty: null,
+    is_forecast: true,
+  };
+
+  const markerDate = new Date(`${currentDateMarker}T00:00:00`);
+  if (Number.isNaN(markerDate.getTime())) {
+    return {
+      rows: trendRows,
+      markerIndex: trendRows.findIndex((item) => item.is_forecast),
+    };
+  }
+
+  const insertIndex = trendRows.findIndex((item) => {
+    const itemDate = new Date(`${item.period_date}T00:00:00`);
+    return !Number.isNaN(itemDate.getTime()) && itemDate.getTime() > markerDate.getTime();
+  });
+
+  if (insertIndex < 0) {
+    return {
+      rows: [...trendRows, markerRow],
+      markerIndex: trendRows.length,
+    };
+  }
+
+  const rows = [...trendRows];
+  rows.splice(insertIndex, 0, markerRow);
+
+  return {
+    rows,
+    markerIndex: insertIndex,
+  };
+};
+
 /**
  * Builds the trend chart's Chart.js data object plus the index of the row
  * where the forecast begins ("today"), so the component can drop a marker
@@ -227,37 +277,30 @@ const buildSankey = (links = []) => {
  * @returns {{ data: object, todayIndex: number }}
  */
 const buildTrendChart = (trendRows = [], todayMarker) => {
-  const labels = trendRows.map((item) =>
-    new Date(item.period_date).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-    }),
-  );
+  const { rows, markerIndex } = buildTrendRowsWithMarker(trendRows, todayMarker);
+  const labels = rows.map((item) => formatIsoDateLabel(item.period_date));
 
-  const forecastStartIndex = trendRows.findIndex((item) => item.is_forecast);
-  const todayIndex = todayMarker
-    ? trendRows.findIndex((item) => item.period_date === todayMarker)
-    : forecastStartIndex;
-  const resolvedTodayIndex = todayIndex >= 0 ? todayIndex : forecastStartIndex;
+  const forecastStartIndex = rows.findIndex((item) => item.is_forecast);
+  const resolvedTodayIndex = markerIndex >= 0 ? markerIndex : forecastStartIndex;
 
   // Actual Qty: only for real history. Forecast-period rows stay null so the
   // line stops instead of dropping to zero.
-  const actualData = trendRows.map((item) => (item.is_forecast ? null : toNumber(item.actual_qty)));
+  const actualData = rows.map((item) => (item.is_forecast ? null : toNumber(item.actual_qty)));
 
   // Forecast Qty: only for forecast rows, but also carries the last actual
   // point (the row immediately before the first forecast row) so the dashed
   // segment connects to the solid line instead of floating separately.
-  const forecastData = trendRows.map((item, i) => {
+  const forecastData = rows.map((item, i) => {
     if (item.is_forecast) return toNumber(item.predicted_qty);
-    const next = trendRows[i + 1];
+    const next = rows[i + 1];
     if (next && next.is_forecast) return toNumber(item.actual_qty);
     return null;
   });
 
-  const p90Data = trendRows.map((item) => (item.is_forecast ? toNumber(item.predicted_qty_p90) : null));
-  const p10Data = trendRows.map((item) => (item.is_forecast ? toNumber(item.predicted_qty_p10) : null));
+  const p90Data = rows.map((item) => (item.is_forecast ? toNumber(item.predicted_qty_p90) : null));
+  const p10Data = rows.map((item) => (item.is_forecast ? toNumber(item.predicted_qty_p10) : null));
 
-  const todayPoint = trendRows.map((item, i) =>
+  const todayPoint = rows.map((item, i) =>
     i === resolvedTodayIndex ? toNumber(item.predicted_qty ?? item.actual_qty) : null,
   );
 

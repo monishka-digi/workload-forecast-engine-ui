@@ -455,7 +455,7 @@ export const mapTechnicianDemandData = (
       geographyWorkforce: buildGeographyWorkforceChart(geographyRows),
       overtimeRisk: {
         labels: overtimeRows.map((item) =>
-          new Date(item.period_date).toLocaleDateString("en-IN", {
+          new Date(`${item.period_date}T00:00:00`).toLocaleDateString("en-IN", {
             day: "2-digit",
             month: "short",
           }),
