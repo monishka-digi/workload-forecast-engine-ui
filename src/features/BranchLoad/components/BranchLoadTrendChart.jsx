@@ -59,6 +59,25 @@ export default function BranchLoadTrendChart({
     };
   }, [chart, selectedBranch]);
 
+  const forecastStartIndex = useMemo(() => {
+    if (!branchFilteredChart) return -1;
+
+    if (
+      branchFilteredChart.current_date_marker &&
+      Array.isArray(branchFilteredChart.periodDates)
+    ) {
+      const markerIndex = branchFilteredChart.periodDates.findIndex(
+        (periodDate) => periodDate === branchFilteredChart.current_date_marker,
+      );
+
+      if (markerIndex >= 0) return markerIndex;
+    }
+
+    return branchFilteredChart.firstForecastIndex ?? -1;
+  }, [branchFilteredChart]);
+
+  const showForecastStartLine = forecastStartIndex >= 0;
+
   if (!chart) return null;
 
   return (
@@ -106,14 +125,13 @@ export default function BranchLoadTrendChart({
                 titleColor: colors.tooltipText,
                 bodyColor: colors.tooltipText,
               },
-              annotation:
-                branchFilteredChart?.firstForecastIndex >= 0
+              annotation: showForecastStartLine
                   ? {
                       annotations: {
                         forecastStartLine: {
                           type: "line",
-                          xMin: branchFilteredChart.firstForecastIndex,
-                          xMax: branchFilteredChart.firstForecastIndex,
+                          xMin: forecastStartIndex,
+                          xMax: forecastStartIndex,
                           borderColor: colors.muted,
                           borderWidth: 1.5,
                           borderDash: [6, 4],

@@ -1,22 +1,11 @@
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
 import { useMemo } from "react";
 import { Bar } from "react-chartjs-2";
 
-import Card from "../../../components/Common/Card";
-import { useTheme } from "../../../context/ThemeContext";
 import { getGroupedHorizontalBarOptions } from "../../../config/chartOptions";
+import Card from "../../../components/Common/Card";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import { useTheme } from "../../../context/ThemeContext";
 import "../../JobVolume/components/dashboardChartCard.css";
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export default function GeographyWorkforceChart({ data }) {
   const { theme } = useTheme();
@@ -32,6 +21,22 @@ export default function GeographyWorkforceChart({ data }) {
   };
 
   const options = useMemo(() => getGroupedHorizontalBarOptions(theme), [theme]);
+  const hoverOptions = useMemo(
+    () => ({
+      ...options,
+      interaction: {
+        mode: "index",
+        intersect: false,
+        axis: "y",
+      },
+      hover: {
+        mode: "index",
+        intersect: false,
+        axis: "y",
+      },
+    }),
+    [options],
+  );
 
   if (!data) return null;
 
@@ -54,7 +59,7 @@ export default function GeographyWorkforceChart({ data }) {
     >
       <div className="dashboardChartCard__body">
         <div className="dashboardChartCard__chartShell">
-          <Bar data={data} options={options} />
+          <Bar data={data} options={hoverOptions} />
         </div>
       </div>
     </Card>

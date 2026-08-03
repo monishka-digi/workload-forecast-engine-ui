@@ -1,5 +1,6 @@
 import "./TechnicianDemandTable.css";
 import InfoTooltip from "../../../components/Common/InfoTooltip";
+import { formatRoundedValue } from "../../../utils/formatRoundedValue";
 
 export default function TechnicianDemandTable({ rows = [] }) {
   return (
@@ -79,7 +80,7 @@ export default function TechnicianDemandTable({ rows = [] }) {
                           : "low"
                     }`}
                   >
-                    {Number(row.shortfall).toFixed(1)}
+                    {formatRoundedValue(row.shortfall, 1)}
                   </span>
                 </td>
 

@@ -1,5 +1,6 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
+import { useMemo } from "react";
 import { Doughnut } from "react-chartjs-2";
 
 import { getDoughnutOptions } from "../../../config/chartOptions";
@@ -40,6 +41,52 @@ export default function MachineMixChart({ data, selectedBranch = "ALL" }) {
         })();
 
   const totalJobs = filteredData.total ?? 0;
+  const sliceValuePlugin = useMemo(
+    () => ({
+      id: "sliceValueLabels",
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        const dataset = chart.data.datasets[0];
+        const meta = chart.getDatasetMeta(0);
+
+        if (!dataset || !meta?.data?.length) return;
+
+        ctx.save();
+        ctx.fillStyle = theme === "dark" ? "#ffffff" : "#111827";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "600 12px Inter, system-ui, sans-serif";
+
+        meta.data.forEach((arc, index) => {
+          const value = dataset.data[index];
+          const numericValue = Number(value ?? 0);
+
+          if (!numericValue) return;
+
+          const properties = arc.getProps(
+            ["x", "y", "startAngle", "endAngle", "innerRadius", "outerRadius"],
+            true,
+          );
+
+          const angle = (properties.startAngle + properties.endAngle) / 2;
+          const radius = properties.innerRadius + (properties.outerRadius - properties.innerRadius) * 0.58;
+          const x = properties.x + Math.cos(angle) * radius;
+          const y = properties.y + Math.sin(angle) * radius;
+
+          const label = String(numericValue);
+          const textWidth = ctx.measureText(label).width;
+          const availableWidth = (properties.outerRadius - properties.innerRadius) * 0.9;
+
+          if (textWidth > availableWidth) return;
+
+          ctx.fillText(label, x, y);
+        });
+
+        ctx.restore();
+      },
+    }),
+    [theme],
+  );
 
   return (
     <div className="dashboardChartCard">
@@ -60,7 +107,11 @@ export default function MachineMixChart({ data, selectedBranch = "ALL" }) {
 
       <div className="dashboardChartCard__body">
         <div className="dashboardChartCard__chartShell">
-          <Doughnut data={filteredData} options={getDoughnutOptions(theme)} />
+          <Doughnut
+            data={filteredData}
+            options={getDoughnutOptions(theme)}
+            plugins={[sliceValuePlugin]}
+          />
         </div>
       </div>
     </div>

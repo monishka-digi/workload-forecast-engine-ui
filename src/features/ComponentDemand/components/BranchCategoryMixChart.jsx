@@ -38,7 +38,7 @@ export default function BranchCategoryMixChart({ data }) {
   const datasetOptions = {
     categoryPercentage: isSingleBranch ? 0.38 : labelCount <= 3 ? 0.58 : 0.72,
     barPercentage: isSingleBranch ? 0.55 : labelCount <= 3 ? 0.75 : 0.9,
-    maxBarThickness: isSingleBranch ? 22 : 42,
+    maxBarThickness: isSingleBranch ? 55 : 42,
   };
 
   const options = useMemo(

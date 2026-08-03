@@ -10,6 +10,18 @@ const pick = (...values) =>
 
 const toNumber = (value) => Number(value ?? 0);
 
+const pickField = (row = {}, keys = []) => {
+  for (const key of keys) {
+    if (row?.[key] !== undefined && row?.[key] !== null) {
+      return row[key];
+    }
+  }
+
+  return null;
+};
+
+const asArray = (value) => (Array.isArray(value) ? value : []);
+
 const formatPercent = (value) => `${toNumber(value).toFixed(1)}%`;
 
 const formatDate = (value) =>
@@ -81,38 +93,84 @@ const buildSkillChart = (rows = [], currentHorizon = 30) => ({
   ],
 });
 
-// Renamed from buildBranchGapChart: the old name collided conceptually with
-// the unrelated top-level `branchGapSummary` array (a different shape, built
-// separately below), which made `charts.branchGapSummary` easy to mistake
-// for the same thing and easy to forget to wire up (it was never rendered).
-const buildBranchHeadcountBar = (rows = [], currentHorizon = 30) => ({
-  labels: rows.map((item) => formatBranchLabel(item.branch_name)),
-  branchIds: rows.map((item) => item.branch_id),
-  datasets: [
-    {
-      label: `Required (${currentHorizon}D)`,
-      data: rows.map((item) =>
-        toNumber(
-          item.required ??
-            item[`required_${Number(currentHorizon) || 30}d`] ??
-            item.required_30d,
+const buildBranchWorkforceForecastBar = (rows = [], currentHorizon = 30) => {
+  const sortedRows = [...rows].sort(
+    (left, right) => Math.abs(toNumber(right.gap)) - Math.abs(toNumber(left.gap)),
+  );
+
+  return {
+    labels: sortedRows.map((item) => formatBranchLabel(item.branch_name)),
+    branchIds: sortedRows.map((item) => item.branch_id),
+    rows: sortedRows.map((item) => {
+      const required = toNumber(
+        pickField(item, [
+          "forecasted_required",
+          `required_${Number(currentHorizon) || 30}d`,
+          "required_30d",
+          "required",
+        ]),
+      );
+      const available = toNumber(
+        pickField(item, [
+          "effective_available_headcount",
+          `available_${Number(currentHorizon) || 30}d`,
+          "available_30d",
+          "available",
+        ]),
+      );
+      const gap =
+        item.gap !== undefined && item.gap !== null ? toNumber(item.gap) : required - available;
+
+      return {
+        branchId: item.branch_id,
+        branchName: formatBranchLabel(item.branch_name),
+        required,
+        available,
+        currentlyWorking: toNumber(item.currently_working),
+        currentlyFree: toNumber(item.currently_free),
+        totalTechnicians: toNumber(item.total_technicians),
+        gap,
+        gapPct: toNumber(item.gap_pct),
+        forecastHorizonDays: Number(item.forecast_horizon_days ?? currentHorizon) || 30,
+      };
+    }),
+    datasets: [
+      {
+        label: "Workforce Gap",
+        data: sortedRows.map((item) => {
+          if (item.gap !== undefined && item.gap !== null) {
+            return toNumber(item.gap);
+          }
+
+          const required = toNumber(
+            pickField(item, [
+              "forecasted_required",
+              `required_${Number(currentHorizon) || 30}d`,
+              "required_30d",
+              "required",
+            ]),
+          );
+          const available = toNumber(
+            pickField(item, [
+              "effective_available_headcount",
+              `available_${Number(currentHorizon) || 30}d`,
+              "available_30d",
+              "available",
+            ]),
+          );
+
+          return required - available;
+        }),
+        backgroundColor: sortedRows.map((item) =>
+          toNumber(item.gap) > 0 ? "#ef4444" : "#12BE83",
         ),
-      ),
-      backgroundColor: "#f5b400",
-      borderRadius: 6,
-      maxBarThickness: 24,
-    },
-    {
-      label: "Available",
-      data: rows.map((item) =>
-        toNumber(item.available ?? item[`available_${Number(currentHorizon) || 30}d`]),
-      ),
-      backgroundColor: "#12BE83",
-      borderRadius: 6,
-      maxBarThickness: 24,
-    },
-  ],
-});
+        borderRadius: 6,
+        borderSkipped: false,
+        maxBarThickness: 24,
+      },
+    ],
+  };
+};
 
 const buildGeographyWorkforceChart = (rows = []) => ({
   labels: rows.map((item) => item.region),
@@ -199,19 +257,22 @@ export const mapTechnicianDemandData = (
   );
   const selectedHorizon = Number(currentHorizon) || 30;
   const skillRows = filterDataByPeriod(
-    graph_data.skill_mix_required_vs_available_bar || [],
+    asArray(graph_data.skill_mix_required_vs_available_bar),
     selectedHorizon,
     "forecast_horizon_days",
   );
-  const trendRows = graph_data.headcount_requirement_trend || [];
-  const gapRows = graph_data.branch_headcount_gap_bar || [];
+  const trendRows = asArray(graph_data.headcount_requirement_trend);
+  const gapRows =
+    asArray(graph_data.branch_workforce_forecast_bar).length > 0
+      ? asArray(graph_data.branch_workforce_forecast_bar)
+      : asArray(graph_data.branch_headcount_gap_bar);
   const heatmapRows = filterDataByPeriod(
-    graph_data.skill_demand_by_job_type_stacked || [],
+    asArray(graph_data.skill_demand_by_job_type_stacked),
     selectedHorizon,
     "forecast_horizon_days",
   );
-  const overtimeRows = graph_data.overtime_risk_line || [];
-  const geographyRows = graph_data.geography_workforce_heatmap || [];
+  const overtimeRows = asArray(graph_data.overtime_risk_line);
+  const geographyRows = asArray(graph_data.geography_workforce_heatmap);
   const tableRows = Object.values(forecast_table || {}).flat();
 
   const skillLevelLabels = (filter_definitions.skill_level_options || [])
@@ -248,7 +309,11 @@ export const mapTechnicianDemandData = (
   const scopedGapRows = isAllBranches(branchId)
     ? gapRows
     : filterRowsByBranch(gapRows, branchId);
-  const branchRows = scopedGapRows.length ? scopedGapRows : gapRows;
+  const branchRows = filterDataByPeriod(
+    scopedGapRows.length ? scopedGapRows : gapRows,
+    selectedHorizon,
+    "forecast_horizon_days",
+  );
 
   const branchGapSummary = branchRows.map((item) => ({
     branchId: item.branch_id,
@@ -376,12 +441,17 @@ export const mapTechnicianDemandData = (
       },
       headcountTrend: {
         ...buildLineChart(trendRows),
+        current_date_marker: graph_data.current_date_marker ?? null,
+        forecastFlags: trendRows.map((item) => Boolean(item.is_forecast)),
         forecastHorizonDays: selectedHorizon,
       },
       branchGap: buildHeatmapMatrix(heatmapRows, selectedHorizon),
-      // Renamed from `branchGapSummary` (see buildBranchHeadcountBar comment)
-      // to stop colliding with the top-level `branchGapSummary` array above.
-      branchGapBar: buildBranchHeadcountBar(branchRows, selectedHorizon),
+      branchWorkforceForecast: buildBranchWorkforceForecastBar(
+        branchRows,
+        selectedHorizon,
+      ),
+      // Kept for backward compatibility with the current TechnicianDemand view.
+      branchGapBar: buildBranchWorkforceForecastBar(branchRows, selectedHorizon),
       geographyWorkforce: buildGeographyWorkforceChart(geographyRows),
       overtimeRisk: {
         labels: overtimeRows.map((item) =>
@@ -390,6 +460,8 @@ export const mapTechnicianDemandData = (
             month: "short",
           }),
         ),
+        periodDates: overtimeRows.map((item) => item.period_date),
+        current_date_marker: graph_data.current_date_marker ?? null,
         datasets: [
           {
             label: "Overtime Utilization",

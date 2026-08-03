@@ -99,6 +99,7 @@ export const mapBranchLoadData = (
       }),
     ),
     periodDates: capacityTrend.map((item) => item.period_date),
+    current_date_marker: graph_data?.current_date_marker ?? null,
     rawRows: capacityTrend,
     firstForecastIndex,
     datasets: [
