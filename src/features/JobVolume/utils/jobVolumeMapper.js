@@ -16,13 +16,13 @@ const pickHorizonValue = (row, baseKey, horizonSuffix) =>
 const getLoadStatusColor = (status) => {
   switch (String(status || "").toUpperCase()) {
     case "CRITICAL":
-      return "#ef5a5a";
+      return "#ef4444";
     case "HIGH":
-      return "#f59e0b";
+      return "#ffb300"
     case "MEDIUM":
-      return "#4b8df8";
+      return "#3dd8b2"
     case "LOW":
-      return "#34d6b8";
+      return "#a7a8a7";
     default:
       return "#f5b400";
   }
